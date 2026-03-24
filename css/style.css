@@ -100,16 +100,22 @@ body {
     color: #1a1a2e;
 }
 
-.sketch-btn.active {
-    background: var(--accent-color);
-    color: white;
-    border-color: var(--accent-color);
+.sketch-btn.active,
+.sketch-btn.active:hover {
+    background: var(--accent-color) !important;
+    color: white !important;
+    border-color: var(--accent-color) !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
-.dark .sketch-btn.active {
-    background: var(--accent-color);
-    color: #1a1a2e;
-    border-color: var(--accent-color);
+.dark .sketch-btn.active,
+.dark .sketch-btn.active:hover {
+    background: var(--accent-color) !important;
+    color: #1a1a2e !important;
+    border-color: var(--accent-color) !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 /* 手绘下划线 */

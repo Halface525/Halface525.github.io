@@ -107,14 +107,17 @@ function showPage(pageName) {
 // 文章筛选功能
 function filterArticles(category) {
     const articles = document.querySelectorAll('#article-list article');
-    const buttons = document.querySelectorAll('#writing .sketch-btn');
+    const filterContainer = document.getElementById('article-filters');
+    if (!filterContainer) return;
+    
+    const buttons = filterContainer.querySelectorAll('.sketch-btn');
     
     buttons.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.textContent.includes(category === 'all' ? '全部' : 
-            category === 'tech' ? '技术' : 
-            category === 'life' ? '生活' : '思考')) {
+        const filterValue = btn.dataset.filter;
+        if (filterValue === category) {
             btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
         }
     });
     
@@ -218,81 +221,184 @@ const articlesData = {
     }
 };
 
-// 简单的 Markdown 解析器
-function parseMarkdown(md) {
-    // 移除 YAML 前置数据（如果有）
-    md = md.replace(/^---[\s\S]*?---/, '');
+// 解析 YAML Front Matter
+function parseYAMLFrontMatter(md) {
+    const frontMatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
+    const match = md.match(frontMatterRegex);
     
-    // 转换标题
-    md = md.replace(/^### (.*$)/gim, '<h3 class="text-2xl font-bold mt-8 mb-4">$1</h3>');
-    md = md.replace(/^## (.*$)/gim, '<h2 class="text-3xl font-bold mt-10 mb-6 sketch-underline">$1</h2>');
-    md = md.replace(/^# (.*$)/gim, '<h1 class="text-4xl font-bold mb-8">$1</h1>');
+    if (!match) {
+        return { metadata: {}, content: md };
+    }
     
-    // 转换粗体和斜体
-    md = md.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
-    md = md.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    md = md.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    const yamlText = match[1];
+    const content = md.slice(match[0].length);
     
-    // 转换引用
-    md = md.replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-gray-400 pl-4 my-6 italic opacity-80">$1</blockquote>');
+    // 简单的 YAML 解析
+    const metadata = {};
+    const lines = yamlText.split('\n');
+    let currentKey = null;
+    let currentList = null;
     
-    // 转换代码块
-    md = md.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto my-6"><code>$2</code></pre>');
+    for (const line of lines) {
+        const trimmed = line.trim();
+        
+        // 列表项
+        if (trimmed.startsWith('- ')) {
+            if (currentList) {
+                currentList.push(trimmed.slice(2).trim());
+            }
+            continue;
+        }
+        
+        // 键值对
+        const colonIndex = trimmed.indexOf(':');
+        if (colonIndex > 0) {
+            const key = trimmed.slice(0, colonIndex).trim();
+            let value = trimmed.slice(colonIndex + 1).trim();
+            
+            // 如果值是空的，可能是列表的开始
+            if (value === '') {
+                currentList = [];
+                metadata[key] = currentList;
+            } else {
+                // 移除引号
+                if ((value.startsWith('"') && value.endsWith('"')) || 
+                    (value.startsWith("'") && value.endsWith("'"))) {
+                    value = value.slice(1, -1);
+                }
+                metadata[key] = value;
+                currentList = null;
+            }
+            currentKey = key;
+        }
+    }
     
-    // 转换行内代码
-    md = md.replace(/`([^`]+)`/g, '<code class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm">$1</code>');
-    
-    // 转换列表
-    md = md.replace(/^\d+\.\s+(.*$)/gim, '<li class="ml-6 mb-2">$1</li>');
-    md = md.replace(/^- (.*$)/gim, '<li class="ml-6 mb-2 list-disc">$1</li>');
-    
-    // 转换链接
-    md = md.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-500 hover:underline">$1</a>');
-    
-    // 转换水平线
-    md = md.replace(/^---$/gim, '<hr class="my-8 border-t-2 border-gray-300">');
-    
-    // 转换段落（需要在其他转换之后）
-    md = md.replace(/\n\n/g, '</p><p class="mb-4 leading-relaxed">');
-    
-    // 包装整个内容
-    md = '<p class="mb-4 leading-relaxed">' + md + '</p>';
-    
-    // 清理多余的空段落
-    md = md.replace(/<p class="mb-4 leading-relaxed"><\/p>/g, '');
-    md = md.replace(/<p class="mb-4 leading-relaxed">\s*<\/p>/g, '');
-    
-    return md;
+    return { metadata, content };
 }
 
-// 显示文章详情
-async function showArticle(articleId) {
-    const article = articlesData[articleId];
-    if (!article) return;
+// 改进的 Markdown 解析器
+function parseMarkdown(md) {
+    const { metadata, content } = parseYAMLFrontMatter(md);
     
+    let html = content;
+    
+    // 转换标题（日记风格的日期标题特殊处理）
+    html = html.replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold mt-6 mb-3 opacity-80">$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold mt-8 mb-4 sketch-underline">$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mb-6">$1</h1>');
+    
+    // 转换粗体和斜体
+    html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // 转换引用
+    html = html.replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-gray-400 pl-4 my-6 italic opacity-80 text-lg">$1</blockquote>');
+    
+    // 转换代码块
+    html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto my-6"><code>$2</code></pre>');
+    
+    // 转换行内代码
+    html = html.replace(/`([^`]+)`/g, '<code class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm">$1</code>');
+    
+    // 保留数学公式标记，让 MathJax 处理
+    // 块级公式 $$...$$ 和 \[...\] 保持原样
+    // 行内公式 $...$ 和 \(...\) 保持原样
+    
+    // 转换列表
+    html = html.replace(/^\d+\.\s+(.*$)/gim, '<li class="ml-6 mb-2">$1</li>');
+    html = html.replace(/^- (.*$)/gim, '<li class="ml-6 mb-2 list-disc">$1</li>');
+    
+    // 转换链接
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-500 hover:underline">$1</a>');
+    
+    // 转换表格
+    html = html.replace(/\|(.+)\|\n\|[-:\s|]+\|\n((?:\|.+\|\n?)+)/g, function(match, header, rows) {
+        const headers = header.split('|').map(h => h.trim()).filter(h => h);
+        const rowData = rows.trim().split('\n').map(row => {
+            return row.split('|').map(cell => cell.trim()).filter(cell => cell);
+        });
+        
+        let tableHtml = '<table class="w-full border-collapse my-6">';
+        tableHtml += '<thead><tr>';
+        headers.forEach(h => {
+            tableHtml += `<th class="border-2 border-gray-300 px-4 py-2 bg-gray-100 dark:bg-gray-800 font-bold">${h}</th>`;
+        });
+        tableHtml += '</tr></thead><tbody>';
+        
+        rowData.forEach(row => {
+            tableHtml += '<tr>';
+            row.forEach(cell => {
+                tableHtml += `<td class="border-2 border-gray-300 px-4 py-2">${cell}</td>`;
+            });
+            tableHtml += '</tr>';
+        });
+        tableHtml += '</tbody></table>';
+        return tableHtml;
+    });
+    
+    // 转换水平线
+    html = html.replace(/^---$/gim, '<div class="my-8 flex items-center gap-4"><div class="flex-1 h-px bg-gray-300"></div><span class="text-gray-400">✦</span><div class="flex-1 h-px bg-gray-300"></div></div>');
+    
+    // 转换段落（需要在其他转换之后）
+    html = html.replace(/\n\n/g, '</p><p class="mb-4 leading-relaxed">');
+    
+    // 包装整个内容
+    html = '<p class="mb-4 leading-relaxed">' + html + '</p>';
+    
+    // 清理多余的空段落
+    html = html.replace(/<p class="mb-4 leading-relaxed"><\/p>/g, '');
+    html = html.replace(/<p class="mb-4 leading-relaxed">\s*<\/p>/g, '');
+    
+    return { metadata, html };
+}
+
+// 显示文章详情（支持 YAML Front Matter）
+async function showArticle(articleId, filePath, sectionName = '半文') {
     try {
         // 获取 Markdown 文件内容
-        const response = await fetch(article.file);
+        const response = await fetch(filePath);
         if (!response.ok) throw new Error('Failed to load article');
         const mdContent = await response.text();
         
-        // 解析 Markdown
-        const htmlContent = parseMarkdown(mdContent);
+        // 解析 Markdown（包含 YAML Front Matter）
+        const { metadata, html } = parseMarkdown(mdContent);
         
         // 构建文章头部信息
-        const headerHtml = `
-            <div class="mb-8 pb-8 border-b-2 border-gray-200">
-                <div class="flex flex-wrap gap-4 mb-4 text-sm opacity-60">
-                    <span>📅 ${article.date}</span>
-                    <span>🏷️ ${article.category}</span>
-                    <span>⏱️ ${article.readTime}</span>
-                </div>
-            </div>
-        `;
+        let headerHtml = '<div class="mb-8 pb-8 border-b-2 border-gray-200">';
+        
+        // 如果有元数据，显示它
+        if (metadata.data) {
+            headerHtml += `<div class="flex flex-wrap gap-4 mb-4 text-sm opacity-60">`;
+            headerHtml += `<span>📅 ${metadata.data}</span>`;
+            
+            if (metadata.auther) {
+                headerHtml += `<span>✍️ ${metadata.auther}</span>`;
+            }
+            
+            if (metadata.tags && Array.isArray(metadata.tags)) {
+                headerHtml += `<span>🏷️ ${metadata.tags.join(' · ')}</span>`;
+            }
+            
+            if (metadata.lastdate && metadata.lastdate !== metadata.data) {
+                headerHtml += `<span>📝 更新于 ${metadata.lastdate}</span>`;
+            }
+            
+            headerHtml += `</div>`;
+        }
+        
+        headerHtml += '</div>';
         
         // 更新文章内容
         const contentContainer = document.getElementById('article-content');
-        contentContainer.innerHTML = headerHtml + htmlContent;
+        contentContainer.innerHTML = headerHtml + html;
+        
+        // 触发 MathJax 渲染公式
+        if (window.MathJax) {
+            MathJax.typesetPromise([contentContainer]).catch((err) => {
+                console.error('MathJax rendering error:', err);
+            });
+        }
         
         // 隐藏所有页面
         document.querySelectorAll('.page').forEach(page => {
@@ -305,7 +411,8 @@ async function showArticle(articleId) {
         }, 50);
         
         // 更新标题
-        document.title = `${article.title} - 半文 - Halface`;
+        const title = metadata.title || articleId;
+        document.title = `${title} - ${sectionName} - Halface`;
         
         // 滚动到顶部
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -316,24 +423,46 @@ async function showArticle(articleId) {
     }
 }
 
-// 返回文章列表
+// 从文件路径显示文章（用于新格式的文章）
+async function showArticleFromFile(filePath, category) {
+    // 根据文件路径判断所属板块
+    let sectionName = '半文';
+    if (filePath.includes('/study/') || filePath.includes('\\study\\')) {
+        sectionName = '半学';
+    }
+    await showArticle(filePath, filePath, sectionName);
+}
+
+// 返回文章列表（根据来源页面返回对应板块）
 function backToArticles() {
     // 隐藏文章详情页
     document.getElementById('article-detail').classList.remove('active');
     
-    // 显示半文页面
+    // 根据当前标题判断返回哪个页面
+    const currentTitle = document.title;
+    let targetPage = 'writing';
+    let targetBtn = 'btn-writing';
+    let pageTitle = '半文';
+    
+    if (currentTitle.includes('半学') || currentTitle.includes('机器学习') || currentTitle.includes('数学建模')) {
+        targetPage = 'study';
+        targetBtn = 'btn-study';
+        pageTitle = '半学';
+    }
+    
+    // 显示对应页面
     setTimeout(() => {
-        document.getElementById('writing').classList.add('active');
+        document.getElementById(targetPage).classList.add('active');
     }, 50);
     
     // 更新标题
-    document.title = '半文 - Halface';
+    document.title = `${pageTitle} - Halface`;
     
     // 更新导航按钮状态
     document.querySelectorAll('.sketch-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    document.getElementById('btn-writing').classList.add('active');
+    document.getElementById(targetBtn).classList.add('active');
 }
 
 // 页面加载完成后初始化
@@ -361,4 +490,105 @@ document.addEventListener('DOMContentLoaded', () => {
     updateRelativeTimes();
     // 每分钟更新一次时间
     setInterval(updateRelativeTimes, 60000);
+    
+    // 初始化订阅表单
+    initSubscribeForm();
 });
+
+// 订阅表单处理
+function initSubscribeForm() {
+    const form = document.getElementById('subscribe-form');
+    const message = document.getElementById('subscribe-message');
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('subscribe-email').value;
+            
+            // 获取已有的订阅列表
+            let subscribers = JSON.parse(localStorage.getItem('subscribers') || '[]');
+            
+            // 检查是否已订阅
+            if (subscribers.includes(email)) {
+                message.textContent = '该邮箱已订阅过了！';
+                message.className = 'mt-4 text-sm relative z-10 text-yellow-600';
+            } else {
+                // 添加新订阅
+                subscribers.push(email);
+                localStorage.setItem('subscribers', JSON.stringify(subscribers));
+                
+                message.textContent = '订阅成功！感谢你的关注 ✨';
+                message.className = 'mt-4 text-sm relative z-10 text-green-600';
+                
+                // 清空输入框
+                document.getElementById('subscribe-email').value = '';
+            }
+            
+            message.classList.remove('hidden');
+            
+            // 3秒后隐藏消息
+            setTimeout(() => {
+                message.classList.add('hidden');
+            }, 3000);
+        });
+    }
+}
+
+// 技术博客文章筛选
+function filterTechArticles(category) {
+    const articles = document.querySelectorAll('#tech-article-list article');
+    const filterContainer = document.getElementById('tech-filters');
+    if (!filterContainer) return;
+    
+    const buttons = filterContainer.querySelectorAll('.sketch-btn');
+    
+    // 更新按钮状态
+    buttons.forEach(btn => {
+        const filterValue = btn.dataset.filter;
+        if (filterValue === category) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // 筛选文章
+    articles.forEach(article => {
+        if (category === 'all' || article.dataset.category === category) {
+            article.style.display = 'block';
+            setTimeout(() => {
+                article.style.opacity = '1';
+                article.style.transform = 'translateY(0)';
+            }, 50);
+        } else {
+            article.style.opacity = '0';
+            article.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                article.style.display = 'none';
+            }, 300);
+        }
+    });
+}
+
+// 获取分类标签
+function getCategoryLabel(category) {
+    const labels = {
+        'all': '全部',
+        'frontend': '前端',
+        'backend': '后端',
+        'ai': 'AI'
+    };
+    return labels[category] || '全部';
+}
+
+// 显示技术博客文章详情
+function showTechArticle(articleId) {
+    // 暂时显示提示，后续可以添加详细文章页面
+    const messages = {
+        'react-hooks-guide': 'React Hooks 文章详情页面即将上线！',
+        'css-performance': 'CSS 性能优化文章详情页面即将上线！',
+        'nodejs-microservices': 'Node.js 微服务文章详情页面即将上线！',
+        'llm-fine-tuning': '大模型微调文章详情页面即将上线！'
+    };
+    alert(messages[articleId] || '文章详情即将上线！');
+}
