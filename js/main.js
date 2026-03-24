@@ -430,7 +430,10 @@ async function showArticleFromFile(filePath, category) {
     if (filePath.includes('/study/') || filePath.includes('\\study\\')) {
         sectionName = '半学';
     }
-    await showArticle(filePath, filePath, sectionName);
+    // 对文件路径进行编码，处理空格和特殊字符（包括中文冒号）
+    const encodedPath = filePath.split('/').map(part => encodeURIComponent(part)).join('/');
+    console.log('Loading article from:', encodedPath);
+    await showArticle(filePath, encodedPath, sectionName);
 }
 
 // 返回文章列表（根据来源页面返回对应板块）
