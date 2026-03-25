@@ -359,7 +359,8 @@ async function showArticle(articleId, filePath, sectionName = '半文') {
         // 获取 Markdown 文件内容
         // 构建完整 URL（处理相对路径）
         const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
-        const fullUrl = new URL(filePath, baseUrl).href;
+        // 使用字符串拼接而不是 URL 构造函数，避免自动编码
+        const fullUrl = baseUrl + filePath;
         console.log('Full URL:', fullUrl);
         
         const response = await fetch(fullUrl);
