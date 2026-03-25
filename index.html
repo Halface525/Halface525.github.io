@@ -129,34 +129,41 @@
             <h2 class="text-3xl font-bold mb-6 sketch-underline">最近更新 ✨</h2>
             <div class="space-y-4">
                 <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('study')">
-                    <span class="text-2xl">🧠</span>
+                    <span class="text-2xl">✅</span>
                     <div>
-                        <div class="font-bold">新增 14 篇技术博客文章</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-24T22:00:00"></span> · 半学</div>
+                        <div class="font-bold">修复 GitHub Pages 文章加载问题</div>
+                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-25T17:30:00"></span> · 半学</div>
                     </div>
                 </div>
                 <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('study')">
-                    <span class="text-2xl">📐</span>
+                    <span class="text-2xl"></span>
                     <div>
                         <div class="font-bold">支持 LaTeX 数学公式渲染</div>
                         <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-24T21:30:00"></span> · 半学</div>
                     </div>
                 </div>
-                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('study')">
-                    <span class="text-2xl">📊</span>
-                    <div>
-                        <div class="font-bold">支持 Markdown 表格渲染</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-24T21:00:00"></span> · 半学</div>
-                    </div>
-                </div>
                 <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('writing')">
                     <span class="text-2xl">📝</span>
                     <div>
-                        <div class="font-bold">新增 3 篇半思文章</div>
+                        <div class="font-bold">新增 3 篇半思文章 + 1 篇半读</div>
                         <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-24T20:30:00"></span> · 半文</div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- 订阅区域 -->
+        <div class="mt-16 sketch-border bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 p-8 text-center relative overflow-hidden transition-colors duration-500">
+            <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-yellow-300 dark:bg-blue-500 rounded-full opacity-30 blur-2xl transition-colors duration-500"></div>
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-300 dark:bg-purple-500 rounded-full opacity-30 blur-2xl transition-colors duration-500"></div>
+            
+            <h3 class="text-2xl font-bold mb-4 relative z-10">订阅更新 ✉️</h3>
+            <p class="mb-6 relative z-10" style="color: var(--ink-color); opacity: 0.7;">有新文章发布时，第一时间通知你</p>
+            <form id="subscribe-form" class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto relative z-10">
+                <input type="email" id="subscribe-email" placeholder="输入你的邮箱..." class="sketch-input flex-1" required>
+                <button type="submit" class="sketch-btn bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-200">订阅</button>
+            </form>
+            <div id="subscribe-message" class="mt-4 text-sm relative z-10 hidden"></div>
         </div>
     </section>
 
@@ -236,6 +243,105 @@
         <div class="text-center mb-16">
             <h2 class="text-5xl font-bold mb-4 sketch-underline inline-block">半学</h2>
             <p class="text-xl mt-4" style="color: var(--ink-color); opacity: 0.7;">路漫漫其修远兮，吾将上下而求索 💻</p>
+        </div>
+
+        <!-- 学习路径时间线 -->
+        <div class="sketch-border p-8 relative overflow-hidden mb-16">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-blue-200 to-purple-200 dark:from-blue-700 dark:to-purple-700 rounded-full opacity-30 blur-3xl transition-colors duration-500"></div>
+            
+            <h3 class="text-3xl font-bold mb-8 flex items-center gap-3 relative z-10">
+                <span class="text-4xl">🚀</span>
+                我的学习路径
+            </h3>
+
+            <div class="relative z-10">
+                <!-- 时间线 -->
+                <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600"></div>
+
+                <!-- 学习节点 1 -->
+                <div class="relative pl-16 pb-8 group">
+                    <div class="absolute left-3 top-1 w-6 h-6 bg-blue-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
+                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-sm font-bold text-blue-600 dark:text-blue-400">2026.01 - 至今</span>
+                            <span class="sketch-tag text-xs">进行中</span>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">深度学习</h4>
+                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
+                            深入学习神经网络架构、Transformer、大语言模型，探索深度学习在计算机视觉和自然语言处理中的应用。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs sketch-tag">PyTorch</span>
+                            <span class="text-xs sketch-tag">Transformer</span>
+                            <span class="text-xs sketch-tag">CNN</span>
+                            <span class="text-xs sketch-tag">RNN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学习节点 2 -->
+                <div class="relative pl-16 pb-8 group">
+                    <div class="absolute left-3 top-1 w-6 h-6 bg-purple-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
+                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-sm font-bold text-purple-600 dark:text-purple-400">2025.10 - 2026.01</span>
+                            <span class="sketch-tag text-xs bg-purple-100 text-purple-800">已完成</span>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">机器学习基础</h4>
+                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
+                            系统学习监督学习、无监督学习、强化学习基础算法，掌握 Scikit-learn 和基础神经网络。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs sketch-tag">Python</span>
+                            <span class="text-xs sketch-tag">Scikit-learn</span>
+                            <span class="text-xs sketch-tag">回归/分类</span>
+                            <span class="text-xs sketch-tag">聚类</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学习节点 3 -->
+                <div class="relative pl-16 pb-8 group">
+                    <div class="absolute left-3 top-1 w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
+                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-sm font-bold text-green-600 dark:text-green-400">2025.02 - 2025.10</span>
+                            <span class="sketch-tag text-xs bg-green-100 text-green-800">已完成</span>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">数学建模</h4>
+                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
+                            学习线性代数、概率统计、优化理论，参加数学建模竞赛，将数学应用于实际问题求解。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs sketch-tag">MATLAB</span>
+                            <span class="text-xs sketch-tag">线性代数</span>
+                            <span class="text-xs sketch-tag">概率统计</span>
+                            <span class="text-xs sketch-tag">优化算法</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学习节点 4 -->
+                <div class="relative pl-16 group">
+                    <div class="absolute left-3 top-1 w-6 h-6 bg-gray-400 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
+                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-sm font-bold text-gray-600 dark:text-gray-400">2024.09 - 2025.02</span>
+                            <span class="sketch-tag text-xs bg-gray-100 text-gray-800">已完成</span>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">编程入门</h4>
+                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
+                            从零开始学习编程，掌握 Python 基础语法、数据结构和算法，完成多个练手项目。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs sketch-tag">Python</span>
+                            <span class="text-xs sketch-tag">数据结构</span>
+                            <span class="text-xs sketch-tag">算法</span>
+                            <span class="text-xs sketch-tag">Git</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- 技术博客文章列表 -->
@@ -506,105 +612,6 @@
                 </article>
             </div>
         </div>
-
-        <!-- 学习路径时间线 -->
-        <div class="sketch-border p-8 relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-blue-200 to-purple-200 dark:from-blue-700 dark:to-purple-700 rounded-full opacity-30 blur-3xl transition-colors duration-500"></div>
-            
-            <h3 class="text-3xl font-bold mb-8 flex items-center gap-3 relative z-10">
-                <span class="text-4xl">🚀</span>
-                我的学习路径
-            </h3>
-
-            <div class="relative z-10">
-                <!-- 时间线 -->
-                <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600"></div>
-
-                <!-- 学习节点 1 -->
-                <div class="relative pl-16 pb-8 group">
-                    <div class="absolute left-3 top-1 w-6 h-6 bg-blue-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
-                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-sm font-bold text-blue-600 dark:text-blue-400">2026.01 - 至今</span>
-                            <span class="sketch-tag text-xs">进行中</span>
-                        </div>
-                        <h4 class="font-bold text-lg mb-2">深度学习</h4>
-                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
-                            深入学习神经网络架构、Transformer、大语言模型，探索深度学习在计算机视觉和自然语言处理中的应用。
-                        </p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="text-xs sketch-tag">PyTorch</span>
-                            <span class="text-xs sketch-tag">Transformer</span>
-                            <span class="text-xs sketch-tag">CNN</span>
-                            <span class="text-xs sketch-tag">RNN</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 学习节点 2 -->
-                <div class="relative pl-16 pb-8 group">
-                    <div class="absolute left-3 top-1 w-6 h-6 bg-purple-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
-                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-sm font-bold text-purple-600 dark:text-purple-400">2025.10 - 2026.01</span>
-                            <span class="sketch-tag text-xs bg-purple-100 text-purple-800">已完成</span>
-                        </div>
-                        <h4 class="font-bold text-lg mb-2">机器学习基础</h4>
-                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
-                            系统学习监督学习、无监督学习、强化学习基础算法，掌握 Scikit-learn 和基础神经网络。
-                        </p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="text-xs sketch-tag">Python</span>
-                            <span class="text-xs sketch-tag">Scikit-learn</span>
-                            <span class="text-xs sketch-tag">回归/分类</span>
-                            <span class="text-xs sketch-tag">聚类</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 学习节点 3 -->
-                <div class="relative pl-16 pb-8 group">
-                    <div class="absolute left-3 top-1 w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
-                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-sm font-bold text-green-600 dark:text-green-400">2025.02 - 2025.10</span>
-                            <span class="sketch-tag text-xs bg-green-100 text-green-800">已完成</span>
-                        </div>
-                        <h4 class="font-bold text-lg mb-2">数学建模</h4>
-                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
-                            学习线性代数、概率统计、优化理论，参加数学建模竞赛，将数学应用于实际问题求解。
-                        </p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="text-xs sketch-tag">MATLAB</span>
-                            <span class="text-xs sketch-tag">线性代数</span>
-                            <span class="text-xs sketch-tag">概率统计</span>
-                            <span class="text-xs sketch-tag">优化算法</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 学习节点 4 -->
-                <div class="relative pl-16 group">
-                    <div class="absolute left-3 top-1 w-6 h-6 bg-gray-400 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
-                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-sm font-bold text-gray-600 dark:text-gray-400">2024.09 - 2025.02</span>
-                            <span class="sketch-tag text-xs bg-gray-100 text-gray-800">已完成</span>
-                        </div>
-                        <h4 class="font-bold text-lg mb-2">编程入门</h4>
-                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
-                            从零开始学习编程，掌握 Python 基础语法、数据结构和算法，完成多个练手项目。
-                        </p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="text-xs sketch-tag">Python</span>
-                            <span class="text-xs sketch-tag">数据结构</span>
-                            <span class="text-xs sketch-tag">算法</span>
-                            <span class="text-xs sketch-tag">Git</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
 
     <!-- 半文 - 文章/文字 -->
@@ -734,19 +741,6 @@
             </article>
         </div>
 
-        <!-- 订阅区域 -->
-        <div class="mt-16 sketch-border bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 p-8 text-center relative overflow-hidden transition-colors duration-500">
-            <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-yellow-300 dark:bg-blue-500 rounded-full opacity-30 blur-2xl transition-colors duration-500"></div>
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-300 dark:bg-purple-500 rounded-full opacity-30 blur-2xl transition-colors duration-500"></div>
-            
-            <h3 class="text-2xl font-bold mb-4 relative z-10">订阅更新 ✉️</h3>
-            <p class="mb-6 relative z-10" style="color: var(--ink-color); opacity: 0.7;">有新文章发布时，第一时间通知你</p>
-            <form id="subscribe-form" class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto relative z-10">
-                <input type="email" id="subscribe-email" placeholder="输入你的邮箱..." class="sketch-input flex-1" required>
-                <button type="submit" class="sketch-btn bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-200">订阅</button>
-            </form>
-            <div id="subscribe-message" class="mt-4 text-sm relative z-10 hidden"></div>
-        </div>
     </section>
 
     <!-- 文章详情页 -->
@@ -773,7 +767,7 @@
             </div>
         </div>
         <div class="text-center mt-8 text-sm opacity-50">
-            © 2026 Made with ❤️ by Halface & Kimi | <span id="theme-status">当前：亮色模式</span>
+            © 2026 Made with ❤️ by Halface & Kimi | v1.0.0 | <span id="theme-status">当前：亮色模式</span>
         </div>
     </footer>
 
