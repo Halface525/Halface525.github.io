@@ -357,8 +357,13 @@ function parseMarkdown(md) {
 async function showArticle(articleId, filePath, sectionName = '半文') {
     try {
         // 获取 Markdown 文件内容
-        const response = await fetch(filePath);
-        if (!response.ok) throw new Error('Failed to load article');
+        // 构建完整 URL（处理相对路径）
+        const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
+        const fullUrl = new URL(filePath, baseUrl).href;
+        console.log('Full URL:', fullUrl);
+        
+        const response = await fetch(fullUrl);
+        if (!response.ok) throw new Error('Failed to load article (status: ' + response.status + ')');
         const mdContent = await response.text();
         
         // 解析 Markdown（包含 YAML Front Matter）
@@ -419,7 +424,8 @@ async function showArticle(articleId, filePath, sectionName = '半文') {
         
     } catch (error) {
         console.error('Error loading article:', error);
-        alert('文章加载失败，请稍后重试');
+        console.error('File path:', filePath);
+        alert('文章加载失败: ' + error.message + '\n路径: ' + filePath);
     }
 }
 
@@ -430,10 +436,9 @@ async function showArticleFromFile(filePath, category) {
     if (filePath.includes('/study/') || filePath.includes('\\study\\')) {
         sectionName = '半学';
     }
-    // 对文件路径进行编码，处理空格和特殊字符（包括中文冒号）
-    const encodedPath = filePath.split('/').map(part => encodeURIComponent(part)).join('/');
-    console.log('Loading article from:', encodedPath);
-    await showArticle(filePath, encodedPath, sectionName);
+    // GitHub Pages 上直接使用原始路径，因为文件名已经是安全的（使用下划线）
+    console.log('Loading article from:', filePath);
+    await showArticle(filePath, filePath, sectionName);
 }
 
 // 返回文章列表（根据来源页面返回对应板块）
