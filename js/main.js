@@ -414,11 +414,16 @@ async function showArticle(articleId, filePath, sectionName = '半文') {
         // 显示文章详情页
         setTimeout(() => {
             document.getElementById('article-detail').classList.add('active');
+            // 文章加载后初始化评论系统
+            initComments();
         }, 50);
         
         // 更新标题
         const title = metadata.title || articleId;
         document.title = `${title} - ${sectionName} - Halface`;
+        
+        // 添加浏览器历史记录，使返回键可用
+        history.pushState({ page: 'article', section: sectionName, filePath: filePath }, title, `#article-${encodeURIComponent(articleId)}`);
         
         // 滚动到顶部
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -502,6 +507,20 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 初始化订阅表单
     initSubscribeForm();
+    
+    // 初始化评论系统（Disqus 或自定义）
+    initComments();
+    
+    // 监听浏览器返回键
+    window.addEventListener('popstate', (event) => {
+        // 如果当前在文章详情页，返回到文章列表
+        if (document.getElementById('article-detail').classList.contains('active')) {
+            backToArticles();
+        }
+    });
+    
+    // 初始化鼠标跟随倾斜效果
+    initTiltEffect();
 });
 
 // 订阅表单处理
@@ -540,6 +559,94 @@ function initSubscribeForm() {
                 message.classList.add('hidden');
             }, 3000);
         });
+    }
+}
+
+// ========================================
+// Giscus 评论系统配置
+// ========================================
+// 使用方法：
+// 1. 在 GitHub 仓库启用 Discussions
+// 2. 安装 Giscus App: https://github.com/apps/giscus
+// 3. 访问 https://giscus.app 获取配置参数
+// 4. 替换下方的配置信息
+// 5. 将 GISCUS_CONFIG.enabled 改为 true
+
+const GISCUS_CONFIG = {
+    repo: 'Halface525/comments',                    // 仓库地址
+    repoId: 'R_kgDORxheUQ',                        // 从 giscus.app 获取
+    category: 'General',                            // 讨论分类名称
+    categoryId: 'DIC_kwDORxheUc4C5Vdr',            // 从 giscus.app 获取
+    mapping: 'pathname',                            // 映射方式: pathname, url, title
+    strict: '0',
+    reactionsEnabled: '1',                          // 启用表情反应
+    emitMetadata: '0',
+    inputPosition: 'bottom',                        // 输入框位置: top, bottom
+    theme: 'preferred_color_scheme',               // 主题跟随网站
+    lang: 'zh-CN',                                 // 语言
+    enabled: true                                  // 启用 Giscus
+};
+
+function loadGiscus() {
+    if (!GISCUS_CONFIG.enabled) return;
+    
+    const giscusContainer = document.getElementById('disqus_thread');
+    const commentsSection = document.getElementById('comments-section');
+    
+    if (!giscusContainer) return;
+    
+    // 隐藏自定义评论区域
+    if (commentsSection) {
+        commentsSection.style.display = 'none';
+    }
+    
+    // 检查是否已经加载过
+    if (giscusContainer.querySelector('.giscus')) return;
+    
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', GISCUS_CONFIG.repo);
+    script.setAttribute('data-repo-id', GISCUS_CONFIG.repoId);
+    script.setAttribute('data-category', GISCUS_CONFIG.category);
+    script.setAttribute('data-category-id', GISCUS_CONFIG.categoryId);
+    script.setAttribute('data-mapping', GISCUS_CONFIG.mapping);
+    script.setAttribute('data-strict', GISCUS_CONFIG.strict);
+    script.setAttribute('data-reactions-enabled', GISCUS_CONFIG.reactionsEnabled);
+    script.setAttribute('data-emit-metadata', GISCUS_CONFIG.emitMetadata);
+    script.setAttribute('data-input-position', GISCUS_CONFIG.inputPosition);
+    script.setAttribute('data-theme', GISCUS_CONFIG.theme);
+    script.setAttribute('data-lang', GISCUS_CONFIG.lang);
+    script.setAttribute('crossorigin', 'anonymous');
+    script.async = true;
+    
+    giscusContainer.appendChild(script);
+    console.log('Giscus loaded successfully');
+}
+
+// 评论功能初始化
+function initComments() {
+    if (GISCUS_CONFIG.enabled) {
+        loadGiscus();
+    } else {
+        console.log('Giscus 未启用，使用自定义评论 UI');
+    }
+}
+
+// 提交评论（自定义模式）
+function submitComment() {
+    const name = document.getElementById('comment-name')?.value;
+    const email = document.getElementById('comment-email')?.value;
+    const content = document.getElementById('comment-content')?.value;
+    
+    if (!name || !email || !content) {
+        alert('请填写完整信息');
+        return;
+    }
+    
+    if (GISCUS_CONFIG.enabled) {
+        alert('已启用 Giscus 评论系统，请使用上方的评论框');
+    } else {
+        alert('评论功能正在开发中，敬请期待！🎉\n\n配置 Giscus 后即可使用。\n\n步骤：\n1. GitHub 仓库启用 Discussions\n2. 安装 Giscus App\n3. 访问 giscus.app 获取 repo-id 和 category-id\n4. 在 main.js 中配置 GISCUS_CONFIG');
     }
 }
 
@@ -600,4 +707,31 @@ function showTechArticle(articleId) {
         'llm-fine-tuning': '大模型微调文章详情页面即将上线！'
     };
     alert(messages[articleId] || '文章详情即将上线！');
+}
+
+// 鼠标跟随倾斜效果 - 鼠标放在哪边哪边就低
+function initTiltEffect() {
+    const tiltElements = document.querySelectorAll('.sketch-border');
+    
+    tiltElements.forEach(element => {
+        element.addEventListener('mousemove', (e) => {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const mouseX = e.clientX;
+            
+            // 计算鼠标相对于元素中心的位置 (-1 到 1)
+            const percentX = (mouseX - centerX) / (rect.width / 2);
+            
+            // 鼠标在左边时左边低(正旋转)，在右边时右边低(负旋转)
+            // 最大旋转角度为 3 度
+            const rotation = percentX * 3;
+            
+            element.style.transform = `rotate(${rotation}deg)`;
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            // 鼠标离开时恢复原状
+            element.style.transform = '';
+        });
+    });
 }

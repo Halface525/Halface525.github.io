@@ -50,8 +50,8 @@ body {
 
 .sketch-border:hover {
     border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
-    transform: translateY(-2px) rotate(1deg);
     box-shadow: 5px 5px 0px var(--shadow-color);
+    /* 旋转效果由 JavaScript 动态控制 */
 }
 
 .dark .sketch-border:hover {
@@ -328,6 +328,39 @@ article.sketch-border {
     .nav-container {
         flex-direction: column;
         gap: 10px;
+    }
+}
+
+/* 文章详情页移动端适配 */
+@media (max-width: 768px) {
+    #article-detail {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    
+    #article-content {
+        padding: 20px !important;
+        /* 保留手绘边框，但禁用旋转和位移动画 */
+        transform: none !important;
+    }
+    
+    #article-content:hover {
+        /* 禁用 hover 时的旋转和位移 */
+        transform: none !important;
+        border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
+    }
+    
+    /* 确保文章内容不换行溢出 */
+    #article-content pre,
+    #article-content code,
+    #article-content table {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    
+    #article-content img {
+        max-width: 100%;
+        height: auto;
     }
 }
 

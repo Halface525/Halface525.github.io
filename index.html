@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -258,49 +260,28 @@
                 <!-- 时间线 -->
                 <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600"></div>
 
-                <!-- 学习节点 1 -->
+                <!-- 学习节点 1: 编程入门 (最早) -->
                 <div class="relative pl-16 pb-8 group">
-                    <div class="absolute left-3 top-1 w-6 h-6 bg-blue-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
+                    <div class="absolute left-3 top-1 w-6 h-6 bg-gray-400 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
                     <div class="sketch-border p-5 hover:shadow-lg transition-all">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="text-sm font-bold text-blue-600 dark:text-blue-400">2026.01 - 至今</span>
-                            <span class="sketch-tag text-xs">进行中</span>
+                            <span class="text-sm font-bold text-gray-600 dark:text-gray-400">2024.09 - 2025.02</span>
+                            <span class="sketch-tag text-xs bg-gray-100 text-gray-800">已完成</span>
                         </div>
-                        <h4 class="font-bold text-lg mb-2">深度学习</h4>
+                        <h4 class="font-bold text-lg mb-2">编程入门</h4>
                         <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
-                            深入学习神经网络架构、Transformer、大语言模型，探索深度学习在计算机视觉和自然语言处理中的应用。
-                        </p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="text-xs sketch-tag">PyTorch</span>
-                            <span class="text-xs sketch-tag">Transformer</span>
-                            <span class="text-xs sketch-tag">CNN</span>
-                            <span class="text-xs sketch-tag">RNN</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 学习节点 2 -->
-                <div class="relative pl-16 pb-8 group">
-                    <div class="absolute left-3 top-1 w-6 h-6 bg-purple-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
-                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-sm font-bold text-purple-600 dark:text-purple-400">2025.10 - 2026.01</span>
-                            <span class="sketch-tag text-xs bg-purple-100 text-purple-800">已完成</span>
-                        </div>
-                        <h4 class="font-bold text-lg mb-2">机器学习基础</h4>
-                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
-                            系统学习监督学习、无监督学习、强化学习基础算法，掌握 Scikit-learn 和基础神经网络。
+                            从零开始学习编程，掌握 Python 基础语法、数据结构和算法，完成多个练手项目。
                         </p>
                         <div class="flex flex-wrap gap-2">
                             <span class="text-xs sketch-tag">Python</span>
-                            <span class="text-xs sketch-tag">Scikit-learn</span>
-                            <span class="text-xs sketch-tag">回归/分类</span>
-                            <span class="text-xs sketch-tag">聚类</span>
+                            <span class="text-xs sketch-tag">数据结构</span>
+                            <span class="text-xs sketch-tag">算法</span>
+                            <span class="text-xs sketch-tag">Git</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 学习节点 3 -->
+                <!-- 学习节点 2: 数学建模 -->
                 <div class="relative pl-16 pb-8 group">
                     <div class="absolute left-3 top-1 w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
                     <div class="sketch-border p-5 hover:shadow-lg transition-all">
@@ -321,23 +302,44 @@
                     </div>
                 </div>
 
-                <!-- 学习节点 4 -->
-                <div class="relative pl-16 group">
-                    <div class="absolute left-3 top-1 w-6 h-6 bg-gray-400 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
+                <!-- 学习节点 3: 机器学习基础 -->
+                <div class="relative pl-16 pb-8 group">
+                    <div class="absolute left-3 top-1 w-6 h-6 bg-purple-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
                     <div class="sketch-border p-5 hover:shadow-lg transition-all">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="text-sm font-bold text-gray-600 dark:text-gray-400">2024.09 - 2025.02</span>
-                            <span class="sketch-tag text-xs bg-gray-100 text-gray-800">已完成</span>
+                            <span class="text-sm font-bold text-purple-600 dark:text-purple-400">2025.10 - 2026.01</span>
+                            <span class="sketch-tag text-xs bg-purple-100 text-purple-800">已完成</span>
                         </div>
-                        <h4 class="font-bold text-lg mb-2">编程入门</h4>
+                        <h4 class="font-bold text-lg mb-2">机器学习基础</h4>
                         <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
-                            从零开始学习编程，掌握 Python 基础语法、数据结构和算法，完成多个练手项目。
+                            系统学习监督学习、无监督学习、强化学习基础算法，掌握 Scikit-learn 和基础神经网络。
                         </p>
                         <div class="flex flex-wrap gap-2">
                             <span class="text-xs sketch-tag">Python</span>
-                            <span class="text-xs sketch-tag">数据结构</span>
-                            <span class="text-xs sketch-tag">算法</span>
-                            <span class="text-xs sketch-tag">Git</span>
+                            <span class="text-xs sketch-tag">Scikit-learn</span>
+                            <span class="text-xs sketch-tag">回归/分类</span>
+                            <span class="text-xs sketch-tag">聚类</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学习节点 4: 深度学习 (最新) -->
+                <div class="relative pl-16 group">
+                    <div class="absolute left-3 top-1 w-6 h-6 bg-blue-500 rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
+                    <div class="sketch-border p-5 hover:shadow-lg transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-sm font-bold text-blue-600 dark:text-blue-400">2026.01 - 至今</span>
+                            <span class="sketch-tag text-xs">进行中</span>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">深度学习</h4>
+                        <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">
+                            深入学习神经网络架构、Transformer、大语言模型，探索深度学习在计算机视觉和自然语言处理中的应用。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs sketch-tag">PyTorch</span>
+                            <span class="text-xs sketch-tag">Transformer</span>
+                            <span class="text-xs sketch-tag">CNN</span>
+                            <span class="text-xs sketch-tag">RNN</span>
                         </div>
                     </div>
                 </div>
@@ -751,6 +753,82 @@
         <article id="article-content" class="sketch-border p-8 md:p-12">
             <!-- 文章内容将在这里动态加载 -->
         </article>
+        
+        <!-- Disqus 评论预留区域 -->
+        <div id="disqus_thread"></div>
+        
+        <!-- 评论区域（可替换为 Disqus） -->
+        <div id="comments-section" class="mt-12 pt-8 border-t-4 border-gray-300 dark:border-gray-600">
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                <span>💬</span>
+                <span>评论</span>
+                <span id="comment-count" class="text-lg font-normal opacity-60">(0)</span>
+            </h3>
+            
+            <!-- 评论输入框（移动端响应式布局） -->
+            <div class="sketch-border p-4 sm:p-6 mb-8 bg-white dark:bg-gray-800 transition-colors duration-500">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+                    <input type="text" id="comment-name" placeholder="你的昵称" class="sketch-input" required>
+                    <input type="email" id="comment-email" placeholder="邮箱（不公开）" class="sketch-input" required>
+                </div>
+                <textarea id="comment-content" placeholder="写下你的评论..." class="sketch-input w-full h-32 resize-none mb-4" required></textarea>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <p class="text-xs opacity-50">✉️ 邮箱仅用于接收回复通知，不会公开</p>
+                    <button onclick="submitComment()" class="sketch-btn bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-200 w-full sm:w-auto">
+                        发表评论
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 评论列表 -->
+            <div id="comment-list" class="space-y-4 sm:space-y-6">
+                <!-- 示例评论 1 -->
+                <div class="sketch-border p-4 sm:p-5 bg-white dark:bg-gray-800 transition-colors duration-500">
+                    <div class="flex items-start gap-3 sm:gap-4">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold flex-shrink-0">
+                            K
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 sm:gap-3 mb-2 flex-wrap">
+                                <span class="font-bold text-sm sm:text-base">Kimi</span>
+                                <span class="text-xs opacity-50">2026-03-25</span>
+                            </div>
+                            <p class="mb-3 text-sm sm:text-base" style="color: var(--ink-color);">期待评论功能上线！很有创意的博客设计 🎨</p>
+                            <div class="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm">
+                                <button class="opacity-50 hover:opacity-100 transition-opacity">👍 3</button>
+                                <button class="opacity-50 hover:opacity-100 transition-opacity">回复</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 示例评论 2 -->
+                <div class="sketch-border p-4 sm:p-5 bg-white dark:bg-gray-800 transition-colors duration-500">
+                    <div class="flex items-start gap-3 sm:gap-4">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white font-bold flex-shrink-0">
+                            L
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 sm:gap-3 mb-2 flex-wrap">
+                                <span class="font-bold text-sm sm:text-base">Learner</span>
+                                <span class="text-xs opacity-50">2026-03-24</span>
+                            </div>
+                            <p class="mb-3 text-sm sm:text-base" style="color: var(--ink-color);">机器学习系列写得很详细，适合入门！</p>
+                            <div class="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm">
+                                <button class="opacity-50 hover:opacity-100 transition-opacity">👍 5</button>
+                                <button class="opacity-50 hover:opacity-100 transition-opacity">回复</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 空状态 -->
+            <div id="comment-empty" class="text-center py-8 sm:py-12 hidden">
+                <div class="text-4xl sm:text-5xl mb-4">💭</div>
+                <p class="opacity-60">还没有评论，来做第一个评论者吧！</p>
+            </div>
+        </div>
     </section>
 
     <!-- 页脚 -->
@@ -761,9 +839,15 @@
                 <div class="text-sm opacity-50">用不完美的线条，描绘完美的生活</div>
             </div>
             <div class="flex gap-4">
-                <a href="mailto:panqihao525@163.com" class="sketch-border p-3 hover:opacity-80 transition-colors text-2xl" title="邮箱">📧</a>
-                <a href="https://github.com/Halface525/Halface525.github.io" target="_blank" class="sketch-border p-3 hover:opacity-80 transition-colors text-2xl" title="GitHub">💻</a>
-                <a href="images/wechat-qr.jpg" target="_blank" class="sketch-border p-3 hover:opacity-80 transition-colors text-2xl" title="微信公众号">📱</a>
+                <a href="mailto:panqihao525@163.com" class="sketch-border p-3 hover:opacity-80 transition-colors text-2xl flex items-center justify-center w-12 h-12" title="邮箱">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a href="https://github.com/Halface525/Halface525.github.io" target="_blank" class="sketch-border p-3 hover:opacity-80 transition-colors text-2xl flex items-center justify-center w-12 h-12" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="images/wechat-qr.jpg" target="_blank" class="sketch-border p-3 hover:opacity-80 transition-colors text-2xl flex items-center justify-center w-12 h-12" title="微信公众号">
+                    <i class="fab fa-weixin"></i>
+                </a>
             </div>
         </div>
         <div class="text-center mt-8 text-sm opacity-50">
