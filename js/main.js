@@ -587,6 +587,9 @@ const GISCUS_CONFIG = {
     enabled: true                                  // 启用 Giscus
 };
 
+// 存储当前 Giscus 会话的 term，用于检测是否需要重新加载
+let currentGiscusTerm = '';
+
 function loadGiscus() {
     if (!GISCUS_CONFIG.enabled) return;
     
@@ -600,9 +603,24 @@ function loadGiscus() {
         commentsSection.style.display = 'none';
     }
     
-    // 检查是否已经加载过
-    if (giscusContainer.querySelector('.giscus')) return;
+    // 获取当前页面的唯一标识（使用完整 URL）
+    const currentUrl = window.location.href;
     
+    // 如果已经加载过且 URL 没有变化，不需要重新加载
+    if (giscusContainer.querySelector('.giscus') && currentGiscusTerm === currentUrl) {
+        return;
+    }
+    
+    // 清除旧的 Giscus 实例
+    giscusContainer.innerHTML = '';
+    currentGiscusTerm = currentUrl;
+    
+    // 创建 Giscus 容器
+    const giscusDiv = document.createElement('div');
+    giscusDiv.className = 'giscus';
+    giscusContainer.appendChild(giscusDiv);
+    
+    // 创建 Giscus 脚本
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
     script.setAttribute('data-repo', GISCUS_CONFIG.repo);
@@ -619,8 +637,8 @@ function loadGiscus() {
     script.setAttribute('crossorigin', 'anonymous');
     script.async = true;
     
-    giscusContainer.appendChild(script);
-    console.log('Giscus loaded successfully');
+    giscusDiv.appendChild(script);
+    console.log('Giscus loaded for:', currentUrl);
 }
 
 // 评论功能初始化
