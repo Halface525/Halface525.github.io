@@ -577,7 +577,7 @@ const GISCUS_CONFIG = {
     repoId: 'R_kgDORxheUQ',                        // 从 giscus.app 获取
     category: 'General',                            // 讨论分类名称
     categoryId: 'DIC_kwDORxheUc4C5Vdr',            // 从 giscus.app 获取
-    mapping: 'pathname',                            // 映射方式: pathname, url, title
+    mapping: 'url',                                 // 映射方式: url (使用完整URL，包含hash区分文章)
     strict: '0',
     reactionsEnabled: '1',                          // 启用表情反应
     emitMetadata: '0',
