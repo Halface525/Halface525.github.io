@@ -400,28 +400,33 @@ article.sketch-border {
 /* Giscus 容器 - 手绘风格边框 */
 .giscus {
     margin-top: 2rem;
+    width: 100%;
+    min-height: 400px;
 }
 
 .giscus-frame {
+    width: 100% !important;
+    min-height: 400px !important;
     border: 3px solid var(--border-color) !important;
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
+    border-radius: 30px 15px 30px 15px / 15px 30px 15px 30px !important;
     background: var(--card-bg) !important;
-    box-shadow: 3px 3px 0px var(--shadow-color) !important;
+    box-shadow: 4px 4px 0px var(--shadow-color) !important;
     transition: all 0.3s ease !important;
+    overflow: visible !important;
 }
 
 .giscus-frame:hover {
-    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px !important;
-    box-shadow: 5px 5px 0px var(--shadow-color) !important;
+    border-radius: 15px 30px 15px 30px / 30px 15px 30px 15px !important;
+    box-shadow: 6px 6px 0px var(--shadow-color) !important;
 }
 
 /* 暗黑模式下的 Giscus */
 .dark .giscus-frame {
-    box-shadow: 3px 3px 0px rgba(255,255,255,0.1) !important;
+    box-shadow: 4px 4px 0px rgba(255,255,255,0.1) !important;
 }
 
 .dark .giscus-frame:hover {
-    box-shadow: 5px 5px 0px rgba(255,255,255,0.15) !important;
+    box-shadow: 6px 6px 0px rgba(255,255,255,0.15) !important;
 }
 
 /* Giscus 加载动画 */
@@ -434,6 +439,7 @@ article.sketch-border {
     margin-top: 3rem;
     padding-top: 2rem;
     border-top: 3px dashed var(--border-color);
+    width: 100%;
 }
 
 /* 评论标题手绘风格 */
@@ -459,11 +465,18 @@ article.sketch-border {
     transform: rotate(-2deg);
 }
 
+/* 确保 Giscus iframe 有足够空间 */
+#disqus_thread .giscus {
+    margin: 0;
+    padding: 0;
+}
+
 /* 移动端 Giscus 适配 */
 @media (max-width: 768px) {
     .giscus-frame {
         border-radius: 20px 10px 20px 10px / 10px 20px 10px 20px !important;
         border-width: 2px !important;
+        min-height: 350px !important;
     }
     
     #disqus_thread {
