@@ -394,3 +394,84 @@ article.sketch-border {
     0%, 100% { opacity: 0; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.5); }
 }
+
+/* ==================== Giscus 评论系统样式定制 ==================== */
+
+/* Giscus 容器 - 手绘风格边框 */
+.giscus {
+    margin-top: 2rem;
+}
+
+.giscus-frame {
+    border: 3px solid var(--border-color) !important;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
+    background: var(--card-bg) !important;
+    box-shadow: 3px 3px 0px var(--shadow-color) !important;
+    transition: all 0.3s ease !important;
+}
+
+.giscus-frame:hover {
+    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px !important;
+    box-shadow: 5px 5px 0px var(--shadow-color) !important;
+}
+
+/* 暗黑模式下的 Giscus */
+.dark .giscus-frame {
+    box-shadow: 3px 3px 0px rgba(255,255,255,0.1) !important;
+}
+
+.dark .giscus-frame:hover {
+    box-shadow: 5px 5px 0px rgba(255,255,255,0.15) !important;
+}
+
+/* Giscus 加载动画 */
+.giscus-frame--loading {
+    opacity: 0.7;
+}
+
+/* 评论区域标题样式 */
+#disqus_thread {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 3px dashed var(--border-color);
+}
+
+/* 评论标题手绘风格 */
+#disqus_thread::before {
+    content: '💬 评论';
+    display: block;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--ink-color);
+    position: relative;
+}
+
+#disqus_thread::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 60px;
+    height: 3px;
+    background: var(--accent-color);
+    border-radius: 100% 50% 100% 50%;
+    transform: rotate(-2deg);
+}
+
+/* 移动端 Giscus 适配 */
+@media (max-width: 768px) {
+    .giscus-frame {
+        border-radius: 20px 10px 20px 10px / 10px 20px 10px 20px !important;
+        border-width: 2px !important;
+    }
+    
+    #disqus_thread {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+    }
+    
+    #disqus_thread::before {
+        font-size: 1.3rem;
+    }
+}

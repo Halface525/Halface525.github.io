@@ -61,7 +61,7 @@ web/
 - **MathJax 集成**：专业数学公式渲染
 - **响应式设计**：完美适配移动端和桌面端
 - **本地存储**：主题偏好、订阅邮箱本地保存
-- **Giscus 评论系统**：预留接口，可接入 GitHub Discussions
+- **Giscus 评论系统**：基于 GitHub Discussions 的评论系统，支持手绘风格定制
 
 ---
 
@@ -112,20 +112,27 @@ auther: 作者名
 
 ### Giscus 评论系统
 
-1. 在 GitHub 仓库启用 Discussions
-2. 安装 [Giscus App](https://github.com/apps/giscus)
-3. 访问 [giscus.app](https://giscus.app/zh-CN) 获取配置
-4. 修改 `js/main.js` 中的 `GISCUS_CONFIG`：
+Giscus 评论系统已配置完成，使用独立的 `comments` 仓库存储评论数据。
 
+**配置信息**（已内置在 `js/main.js`）：
 ```javascript
 const GISCUS_CONFIG = {
-    repo: 'your-username/your-repo',
-    repoId: 'YOUR_REPO_ID',
-    category: 'Announcements',
-    categoryId: 'YOUR_CATEGORY_ID',
-    enabled: true  // 改为 true 启用
+    repo: 'Halface525/comments',
+    repoId: 'R_kgDORxheUQ',
+    category: 'General',
+    categoryId: 'DIC_kwDORxheUc4C5Vdr',
+    mapping: 'pathname',
+    theme: 'preferred_color_scheme',
+    lang: 'zh-CN',
+    enabled: true
 };
 ```
+
+**如需自定义评论仓库：**
+1. 在 GitHub 新建仓库并启用 Discussions
+2. 安装 [Giscus App](https://github.com/apps/giscus)
+3. 访问 [giscus.app](https://giscus.app/zh-CN) 获取配置
+4. 修改 `js/main.js` 中的 `GISCUS_CONFIG`
 
 ### 订阅功能 (Formspree)
 
@@ -139,27 +146,46 @@ const GISCUS_CONFIG = {
 
 ---
 
-## 📌 v1.0.0 更新日志
+## 📌 版本更新日志
 
-### 🐛 问题修复
+### v1.1.0 (2026-03-26)
+
+#### ✨ 新增功能
+
+- **Giscus 评论系统**：接入基于 GitHub Discussions 的评论系统，支持 GitHub 账号登录
+- **手绘风格评论框**：为 Giscus 添加手绘风格边框和悬停动画，与网站整体风格统一
+- **评论数据独立存储**：使用独立的 `comments` 仓库存储评论，与博客仓库分离
+
+#### 🎨 样式改进
+
+- Giscus 评论框添加手绘不规则圆角边框
+- 悬停时边框形状变化动画
+- 暗黑/亮色主题自动适配
+- 移动端响应式优化
+
+---
+
+### v1.0.0 (2026-03-25)
+
+#### 🐛 问题修复
 
 - **修复 GitHub Pages 文章加载问题**：修正了文件路径解析逻辑，确保在 GitHub Pages 上能正确加载 Markdown 文章
 - **文件命名规范化**：将所有中文文件名改为数字序号-拼音格式，解决中文路径导致的加载失败问题
 
-### ✨ 新增功能
+#### ✨ 新增功能
 
 - **Giscus 评论系统预留接口**：在每篇文章底部添加评论区域 UI，预留 Giscus 评论系统配置接口
 - **Formspree 订阅表单**：将本地订阅功能替换为 Formspree 表单，支持真正的邮件订阅
 - **移动端适配优化**：评论输入框和卡片样式响应式优化，提升移动端浏览体验
 - **最新动态展示**：首页新增「最近更新」板块，展示网站最新动态
 
-### 🎨 界面改进
+#### 🎨 界面改进
 
 - 评论区域移动端响应式布局优化
 - 文章卡片间距和内边距自适应
 - 订阅表单按钮移动端全宽显示
 
-### 📚 内容更新
+#### 📚 内容更新
 
 - 机器学习系列：11篇文章
 - 数学建模系列：3篇文章
@@ -169,12 +195,12 @@ const GISCUS_CONFIG = {
 
 ## 🔮 未来计划
 
-- [ ] 接入 Giscus 评论系统
 - [ ] 文章搜索功能
 - [ ] 标签/分类筛选
 - [ ] RSS 订阅
 - [ ] 文章阅读量统计
 - [ ] 深色/浅色主题独立配色
+- [ ] 文章目录导航
 
 ---
 
@@ -197,3 +223,4 @@ MIT License
 ---
 
 *Made with ❤️ and ☕*
+*Last updated: 2026-03-26*
