@@ -94,31 +94,31 @@
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleSearch()"></div>
         
         <!-- 搜索框容器 -->
-        <div class="absolute top-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-4">
-            <div class="sketch-border bg-white dark:bg-gray-800 p-6 shadow-2xl">
+        <div class="absolute top-4 md:top-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-2 md:px-4">
+            <div class="sketch-border bg-white dark:bg-gray-800 p-4 md:p-6 shadow-2xl max-h-[90vh] md:max-h-none overflow-hidden flex flex-col">
                 <!-- 搜索输入框 -->
-                <div class="flex items-center gap-3 mb-4">
-                    <i class="fas fa-search text-xl opacity-50"></i>
+                <div class="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                    <i class="fas fa-search text-lg md:text-xl opacity-50"></i>
                     <input 
                         type="text" 
                         id="search-input" 
-                        placeholder="搜索文章标题、内容..." 
-                        class="flex-1 sketch-input text-lg"
+                        placeholder="搜索文章..." 
+                        class="flex-1 sketch-input text-base md:text-lg"
                         oninput="performSearch(this.value)"
                     >
-                    <button onclick="toggleSearch()" class="opacity-50 hover:opacity-100 transition-opacity">
-                        <i class="fas fa-times text-xl"></i>
+                    <button onclick="toggleSearch()" class="opacity-50 hover:opacity-100 transition-opacity p-1">
+                        <i class="fas fa-times text-lg md:text-xl"></i>
                     </button>
                 </div>
                 
                 <!-- 搜索结果 -->
-                <div id="search-results" class="max-h-[60vh] overflow-y-auto space-y-3">
+                <div id="search-results" class="flex-1 overflow-y-auto space-y-2 md:space-y-3 max-h-[60vh] md:max-h-[60vh]">
                     <!-- 搜索结果将在这里动态显示 -->
                 </div>
                 
                 <!-- 搜索提示 -->
-                <div id="search-hint" class="text-center text-sm opacity-50 mt-4">
-                    输入关键词搜索文章，支持标题和内容
+                <div id="search-hint" class="text-center text-xs md:text-sm opacity-50 mt-3 md:mt-4 flex-shrink-0">
+                    输入关键词搜索文章
                 </div>
             </div>
         </div>
