@@ -354,7 +354,7 @@ function parseMarkdown(md) {
 }
 
 // 显示文章详情（支持 YAML Front Matter）
-async function showArticle(articleId, filePath, sectionName = '半文') {
+async function showArticle(articleId, filePath, sectionName = '半文', cardTitle = '') {
     try {
         // 获取 Markdown 文件内容
         // 构建完整 URL（处理相对路径）
@@ -370,12 +370,18 @@ async function showArticle(articleId, filePath, sectionName = '半文') {
         // 解析 Markdown（包含 YAML Front Matter）
         const { metadata, html } = parseMarkdown(mdContent);
         
+        // 优先使用卡片标题，其次使用 metadata 中的标题
+        const displayTitle = cardTitle || metadata.title || articleId;
+        
         // 构建文章头部信息
         let headerHtml = '<div class="mb-8 pb-8 border-b-2 border-gray-200">';
         
+        // 显示文章标题（使用卡片上的标题，字体与卡片一致）
+        headerHtml += `<h1 class="text-3xl md:text-4xl font-bold mb-6 text-center" style="font-family: 'ZCOOL KuaiLe', cursive;">${displayTitle}</h1>`;
+        
         // 如果有元数据，显示它
         if (metadata.data) {
-            headerHtml += `<div class="flex flex-wrap gap-4 mb-4 text-sm opacity-60">`;
+            headerHtml += `<div class="flex flex-wrap gap-4 justify-center text-sm opacity-60">`;
             headerHtml += `<span>📅 ${metadata.data}</span>`;
             
             if (metadata.auther) {
@@ -419,7 +425,7 @@ async function showArticle(articleId, filePath, sectionName = '半文') {
         }, 50);
         
         // 更新标题
-        const title = metadata.title || articleId;
+        const title = displayTitle;
         document.title = `${title} - ${sectionName} - Halface`;
         
         // 添加浏览器历史记录，使返回键可用
@@ -442,9 +448,23 @@ async function showArticleFromFile(filePath, category) {
     if (filePath.includes('/study/') || filePath.includes('\\study\\')) {
         sectionName = '半学';
     }
-    // GitHub Pages 上直接使用原始路径，因为文件名已经是安全的（使用下划线）
-    console.log('Loading article from:', filePath);
-    await showArticle(filePath, filePath, sectionName);
+    
+    // 通过文件路径查找对应的卡片标题（支持 h3 和 h4 标题）
+    let cardTitle = '';
+    const articles = document.querySelectorAll('article[data-category]');
+    for (const article of articles) {
+        const onclickAttr = article.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(filePath)) {
+            // 先尝试查找 h4，如果没有则查找 h3
+            const titleElement = article.querySelector('h4') || article.querySelector('h3');
+            if (titleElement) {
+                cardTitle = titleElement.textContent.trim();
+                break;
+            }
+        }
+    }
+    
+    await showArticle(filePath, filePath, sectionName, cardTitle);
 }
 
 // 返回文章列表（根据来源页面返回对应板块）
@@ -753,3 +773,147 @@ function initTiltEffect() {
         });
     });
 }
+
+// ========================================
+// 全局搜索功能
+// ========================================
+
+// 文章索引数据（用于搜索）
+const searchIndex = [
+    // 机器学习文章
+    { title: '一些概念：从挑西瓜说起', file: 'content/study/ml/00-yixiegainian.md', category: 'ml', section: '半学', date: '2026.01.17' },
+    { title: '模型评估与选择', file: 'content/study/ml/01-moxingpingguyuxuanze.md', category: 'ml', section: '半学', date: '2026.01.17' },
+    { title: '线性模型', file: 'content/study/ml/02-xianxingmoxing.md', category: 'ml', section: '半学', date: '2026.01.18' },
+    { title: '决策树', file: 'content/study/ml/03-jueceshu.md', category: 'ml', section: '半学', date: '2026.01.19' },
+    { title: '神经网络', file: 'content/study/ml/04-shenjingwangluo.md', category: 'ml', section: '半学', date: '2026.01.20' },
+    { title: '支持向量机', file: 'content/study/ml/05-zhichixiangliangji.md', category: 'ml', section: '半学', date: '2026.01.21' },
+    { title: '贝叶斯分类器', file: 'content/study/ml/06-beiyesifenleiqi.md', category: 'ml', section: '半学', date: '2026.01.22' },
+    { title: '集成学习', file: 'content/study/ml/07-jichengxuexi.md', category: 'ml', section: '半学', date: '2026.01.23' },
+    { title: '分类器总结', file: 'content/study/ml/08-fenleiqi-zongjie.md', category: 'ml', section: '半学', date: '2026.01.24' },
+    { title: '聚类', file: 'content/study/ml/09-julei.md', category: 'ml', section: '半学', date: '2026.01.25' },
+    { title: '降维与度量学习', file: 'content/study/ml/10-jiangweiyuduliangxuexi.md', category: 'ml', section: '半学', date: '2026.01.26' },
+    // 数学建模文章
+    { title: '数学建模思想', file: 'content/study/modeling/00-shuxuejianmosixiang.md', category: 'modeling', section: '半学', date: '2026.01.03' },
+    { title: '线性规划', file: 'content/study/modeling/01-xianxingguihua.md', category: 'modeling', section: '半学', date: '2026.01.05' },
+    { title: '整数规划', file: 'content/study/modeling/02-zhengshuguihua.md', category: 'modeling', section: '半学', date: '2026.01.07' },
+    // 半思文章
+    { title: '写在某个夜晚', file: 'content/writing/thinking/01-xiezaimougeye.md', category: 'thinking', section: '半文', date: '2025.02.09' },
+    { title: '没有遗憾', file: 'content/writing/thinking/02-meiyouyihan.md', category: 'thinking', section: '半文', date: '2024.03.15' },
+    { title: '春分', file: 'content/writing/thinking/03-chunfen.md', category: 'thinking', section: '半文', date: '2024.03.16' },
+    // 半读文章
+    { title: '永远生猛的黄金时代', file: 'content/writing/reading/01-yongyuanshengmeng.md', category: 'reading', section: '半文', date: '2024.03.20' },
+    // 半游文章
+    { title: '满江红·游四姑娘山', file: 'content/writing/travel/01-manjianghong-siguniangshan.md', category: 'travel', section: '半文', date: '2025.08.15' },
+    { title: '水调歌头·剑门', file: 'content/writing/travel/02-shuidiaogetou-jianmen.md', category: 'travel', section: '半文', date: '2025.08.16' }
+];
+
+// 切换搜索弹窗显示/隐藏
+function toggleSearch() {
+    const modal = document.getElementById('search-modal');
+    const input = document.getElementById('search-input');
+    
+    if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        input.focus();
+    } else {
+        modal.classList.add('hidden');
+        input.value = '';
+        document.getElementById('search-results').innerHTML = '';
+        document.getElementById('search-hint').style.display = 'block';
+    }
+}
+
+// 执行搜索
+function performSearch(keyword) {
+    const resultsContainer = document.getElementById('search-results');
+    const hint = document.getElementById('search-hint');
+    
+    if (!keyword.trim()) {
+        resultsContainer.innerHTML = '';
+        hint.style.display = 'block';
+        return;
+    }
+    
+    hint.style.display = 'none';
+    
+    const lowerKeyword = keyword.toLowerCase();
+    const results = searchIndex.filter(item => 
+        item.title.toLowerCase().includes(lowerKeyword)
+    );
+    
+    if (results.length === 0) {
+        resultsContainer.innerHTML = `
+            <div class="text-center py-8">
+                <div class="text-4xl mb-2">🔍</div>
+                <p class="opacity-50">未找到相关内容</p>
+            </div>
+        `;
+        return;
+    }
+    
+    resultsContainer.innerHTML = results.map(item => `
+        <div class="sketch-border p-4 cursor-pointer hover:shadow-lg transition-all" onclick="openSearchResult('${item.file}', '${item.section}')">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-lg">${item.title}</h4>
+                <span class="sketch-tag text-xs">${item.section}</span>
+            </div>
+            <div class="flex items-center gap-2 text-sm opacity-50">
+                <span>${item.date}</span>
+                <span>·</span>
+                <span>${getCategoryLabel(item.category)}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 打开搜索结果
+function openSearchResult(filePath, sectionName) {
+    toggleSearch();
+    // 根据文件路径判断分类
+    let category = 'thinking';
+    if (sectionName === '半学') {
+        if (filePath.includes('/ml/')) {
+            category = 'ml';
+        } else if (filePath.includes('/modeling/')) {
+            category = 'modeling';
+        }
+    } else {
+        // 半文板块
+        if (filePath.includes('/thinking/')) {
+            category = 'thinking';
+        } else if (filePath.includes('/reading/')) {
+            category = 'reading';
+        } else if (filePath.includes('/travel/')) {
+            category = 'travel';
+        }
+    }
+    showArticleFromFile(filePath, category);
+}
+
+// 获取分类标签
+function getCategoryLabel(category) {
+    const labels = {
+        'ml': '机器学习',
+        'modeling': '数学建模',
+        'thinking': '半思',
+        'reading': '半读',
+        'travel': '半游'
+    };
+    return labels[category] || category;
+}
+
+// 键盘快捷键：ESC 关闭搜索，/ 打开搜索
+document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('search-modal');
+    
+    // ESC 关闭搜索
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        toggleSearch();
+    }
+    
+    // / 打开搜索（不在输入框时）
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        toggleSearch();
+    }
+});

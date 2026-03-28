@@ -71,6 +71,11 @@
                     <button class="sketch-btn" onclick="showPage('study')" id="btn-study">半学</button>
                     <button class="sketch-btn" onclick="showPage('writing')" id="btn-writing">半文</button>
                     
+                    <!-- 搜索按钮 -->
+                    <button class="sketch-btn" onclick="toggleSearch()" title="搜索">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
                     <!-- 暗黑模式切换按钮 -->
                     <div class="theme-toggle" onclick="toggleTheme()" title="切换主题">
                         <div class="theme-toggle-slider">
@@ -82,6 +87,42 @@
             </div>
         </div>
     </nav>
+
+    <!-- 全局搜索弹窗 -->
+    <div id="search-modal" class="fixed inset-0 z-[60] hidden">
+        <!-- 遮罩层 -->
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleSearch()"></div>
+        
+        <!-- 搜索框容器 -->
+        <div class="absolute top-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-4">
+            <div class="sketch-border bg-white dark:bg-gray-800 p-6 shadow-2xl">
+                <!-- 搜索输入框 -->
+                <div class="flex items-center gap-3 mb-4">
+                    <i class="fas fa-search text-xl opacity-50"></i>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        placeholder="搜索文章标题、内容..." 
+                        class="flex-1 sketch-input text-lg"
+                        oninput="performSearch(this.value)"
+                    >
+                    <button onclick="toggleSearch()" class="opacity-50 hover:opacity-100 transition-opacity">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- 搜索结果 -->
+                <div id="search-results" class="max-h-[60vh] overflow-y-auto space-y-3">
+                    <!-- 搜索结果将在这里动态显示 -->
+                </div>
+                
+                <!-- 搜索提示 -->
+                <div id="search-hint" class="text-center text-sm opacity-50 mt-4">
+                    输入关键词搜索文章，支持标题和内容
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- 主页 -->
     <section id="home" class="page active max-w-6xl mx-auto px-6 py-12">
@@ -130,25 +171,25 @@
             <div class="absolute -right-10 -top-10 w-40 h-40 bg-yellow-200 dark:bg-purple-600 rounded-full opacity-50 blur-3xl transition-colors duration-500"></div>
             <h2 class="text-3xl font-bold mb-6 sketch-underline">最近更新 ✨</h2>
             <div class="space-y-4">
+                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="toggleSearch()">
+                    <span class="text-2xl">🔍</span>
+                    <div>
+                        <div class="font-bold">新增全局搜索功能</div>
+                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-29T10:00:00"></span> · 全站</div>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('writing')">
+                    <span class="text-2xl">✈️</span>
+                    <div>
+                        <div class="font-bold">新增 2 篇半游诗词</div>
+                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-28T10:00:00"></span> · 半文</div>
+                    </div>
+                </div>
                 <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('study')">
                     <span class="text-2xl">💬</span>
                     <div>
                         <div class="font-bold">接入 Giscus 评论系统</div>
                         <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-26T21:00:00"></span> · 全站</div>
-                    </div>
-                </div>
-                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('study')">
-                    <span class="text-2xl">🎨</span>
-                    <div>
-                        <div class="font-bold">Giscus 样式定制 - 手绘风格边框</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-26T20:30:00"></span> · 样式</div>
-                    </div>
-                </div>
-                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('study')">
-                    <span class="text-2xl">✅</span>
-                    <div>
-                        <div class="font-bold">修复 GitHub Pages 文章加载问题</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-25T17:30:00"></span> · 半学</div>
                     </div>
                 </div>
                 <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('writing')">
@@ -368,187 +409,7 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-6" id="tech-article-list">
-                <!-- 机器学习文章 00 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/00-yixiegainian.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-900 dark:to-orange-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🍉</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">一些概念：从挑西瓜说起</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            像人一样学习的机器，通过"挑西瓜"案例解析机器学习基础术语与核心思想...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.17</span>
-                            <span>阅读 10 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 01 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/01-moxingpingguyuxuanze.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📊</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">模型评估与选择</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            经验误差与过拟合、评估方法、性能度量、比较检验，模型选择的基础工具箱...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.17</span>
-                            <span>阅读 15 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 02 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/02-xianxingmoxing.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📈</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">线性模型</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            线性回归、对数几率回归、线性判别分析，从基础到应用的完整解析...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.18</span>
-                            <span>阅读 12 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 03 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/03-jueceshu.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🌳</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">决策树</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            信息增益、增益率、基尼指数，ID3、C4.5、CART算法原理与实现...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.19</span>
-                            <span>阅读 12 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 04 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/04-shenjingwangluo.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-violet-100 to-purple-100 dark:from-violet-900 dark:to-purple-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🧠</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">神经网络</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            神经元模型、感知机与多层网络、误差逆传播算法、全局最小与局部最小...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.20</span>
-                            <span>阅读 15 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 05 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/05-zhichixiangliangji.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-yellow-100 to-amber-100 dark:from-yellow-900 dark:to-amber-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📏</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">支持向量机</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            间隔与支持向量、对偶问题、核函数、软间隔与正则化，SVM完整推导...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.21</span>
-                            <span>阅读 15 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 06 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/06-beiyesifenleiqi.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900 dark:to-cyan-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🎲</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">贝叶斯分类器</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            贝叶斯决策论、极大似然估计、朴素贝叶斯分类器、EM算法...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.22</span>
-                            <span>阅读 12 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 07 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/07-jichengxuexi.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900 dark:to-rose-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🤝</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">集成学习</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            Boosting、Bagging、随机森林、结合策略、多样性增强，集成学习全景...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.23</span>
-                            <span>阅读 14 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 08 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/08-fenleiqi-zongjie.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-slate-100 to-gray-100 dark:from-slate-800 dark:to-gray-800 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📝</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors">分类器总结</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            各分类器优缺点对比、适用场景分析、实验对比与选择建议...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.24</span>
-                            <span>阅读 10 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 09 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/09-julei.md', 'ml')">
-                    <div class="h-40 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900 dark:to-red-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🎯</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">聚类</h4>
-                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            距离计算、原型聚类、密度聚类、层次聚类，无监督学习核心算法...
-                        </p>
-                        <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.25</span>
-                            <span>阅读 12 min →</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- 机器学习文章 10 -->
+                <!-- 2026.01.26 - 降维与度量学习 -->
                 <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/10-jiangweiyuduliangxuexi.md', 'ml')">
                     <div class="h-40 bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-900 dark:to-blue-900 relative overflow-hidden transition-colors duration-500">
                         <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📉</div>
@@ -566,25 +427,187 @@
                     </div>
                 </article>
 
-                <!-- 数学建模文章 00 -->
-                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="modeling" onclick="showArticleFromFile('content/study/modeling/00-shuxuejianmosixiang.md', 'modeling')">
-                    <div class="h-40 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900 dark:to-indigo-900 relative overflow-hidden transition-colors duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">💡</div>
-                        <div class="absolute top-3 right-3 sketch-tag text-xs">数学建模</div>
+                <!-- 2026.01.25 - 聚类 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/09-julei.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900 dark:to-red-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🎯</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
                     </div>
                     <div class="p-5">
-                        <h4 class="text-lg font-bold mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">数学建模思想</h4>
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">聚类</h4>
                         <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                            蒙特卡洛法、动态规划、图论模型，数学建模中的四大经典思想解析...
+                            距离计算、原型聚类、密度聚类、层次聚类，无监督学习核心算法...
                         </p>
                         <div class="flex justify-between items-center text-xs opacity-50">
-                            <span>2026.01.03</span>
+                            <span>2026.01.25</span>
+                            <span>阅读 12 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.24 - 分类器总结 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/08-fenleiqi-zongjie.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-slate-100 to-gray-100 dark:from-slate-800 dark:to-gray-800 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📝</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors">分类器总结</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            各分类器优缺点对比、适用场景分析、实验对比与选择建议...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.24</span>
+                            <span>阅读 10 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.23 - 集成学习 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/07-jichengxuexi.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900 dark:to-rose-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🤝</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">集成学习</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            Boosting、Bagging、随机森林、结合策略、多样性增强，集成学习全景...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.23</span>
+                            <span>阅读 14 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.22 - 贝叶斯分类器 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/06-beiyesifenleiqi.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900 dark:to-cyan-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🎲</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">贝叶斯分类器</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            贝叶斯决策论、极大似然估计、朴素贝叶斯分类器、EM算法...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.22</span>
+                            <span>阅读 12 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.21 - 支持向量机 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/05-zhichixiangliangji.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-yellow-100 to-amber-100 dark:from-yellow-900 dark:to-amber-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📏</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">支持向量机</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            间隔与支持向量、对偶问题、核函数、软间隔与正则化，SVM完整推导...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.21</span>
                             <span>阅读 15 min →</span>
                         </div>
                     </div>
                 </article>
 
-                <!-- 数学建模文章 01 -->
+                <!-- 2026.01.20 - 神经网络 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/04-shenjingwangluo.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-violet-100 to-purple-100 dark:from-violet-900 dark:to-purple-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🧠</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">神经网络</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            神经元模型、感知机与多层网络、误差逆传播算法、全局最小与局部最小...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.20</span>
+                            <span>阅读 15 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.19 - 决策树 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/03-jueceshu.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🌳</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">决策树</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            信息增益、增益率、基尼指数，ID3、C4.5、CART算法原理与实现...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.19</span>
+                            <span>阅读 12 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.18 - 线性模型 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/02-xianxingmoxing.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📈</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">线性模型</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            线性回归、对数几率回归、线性判别分析，从基础到应用的完整解析...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.18</span>
+                            <span>阅读 12 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.17 - 模型评估与选择 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/01-moxingpingguyuxuanze.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📊</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">模型评估与选择</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            经验误差与过拟合、评估方法、性能度量、比较检验，模型选择的基础工具箱...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.17</span>
+                            <span>阅读 15 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.17 - 一些概念 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="ml" onclick="showArticleFromFile('content/study/ml/00-yixiegainian.md', 'ml')">
+                    <div class="h-40 bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-900 dark:to-orange-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">🍉</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">机器学习</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">一些概念：从挑西瓜说起</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            像人一样学习的机器，通过"挑西瓜"案例解析机器学习基础术语与核心思想...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.17</span>
+                            <span>阅读 10 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.05 - 线性规划 -->
                 <article class="sketch-border overflow-hidden group cursor-pointer" data-category="modeling" onclick="showArticleFromFile('content/study/modeling/01-xianxingguihua.md', 'modeling')">
                     <div class="h-40 bg-gradient-to-br from-lime-100 to-green-100 dark:from-lime-900 dark:to-green-900 relative overflow-hidden transition-colors duration-500">
                         <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">📐</div>
@@ -598,6 +621,24 @@
                         <div class="flex justify-between items-center text-xs opacity-50">
                             <span>2026.01.05</span>
                             <span>阅读 12 min →</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2026.01.03 - 数学建模思想 -->
+                <article class="sketch-border overflow-hidden group cursor-pointer" data-category="modeling" onclick="showArticleFromFile('content/study/modeling/00-shuxuejianmosixiang.md', 'modeling')">
+                    <div class="h-40 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900 dark:to-indigo-900 relative overflow-hidden transition-colors duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">💡</div>
+                        <div class="absolute top-3 right-3 sketch-tag text-xs">数学建模</div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="text-lg font-bold mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">数学建模思想</h4>
+                        <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                            蒙特卡洛法、动态规划、图论模型，数学建模中的四大经典思想解析...
+                        </p>
+                        <div class="flex justify-between items-center text-xs opacity-50">
+                            <span>2026.01.03</span>
+                            <span>阅读 15 min →</span>
                         </div>
                     </div>
                 </article>
@@ -641,7 +682,7 @@
 
         <!-- 文章列表 -->
         <div class="grid md:grid-cols-2 gap-8" id="article-list">
-            <!-- 半思03 - 春分 (最新) -->
+            <!-- 2026.03.22 - 春分 -->
             <article class="sketch-border overflow-hidden group cursor-pointer" data-category="thinking" onclick="showArticleFromFile('content/writing/thinking/03-chunfen.md', 'thinking')">
                 <div class="h-48 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 relative overflow-hidden transition-colors duration-500">
                     <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">🌸</div>
@@ -659,7 +700,25 @@
                 </div>
             </article>
 
-            <!-- 半思02 - 没有遗憾 -->
+            <!-- 2025.10.03 - 满江红·游四姑娘山 -->
+            <article class="sketch-border overflow-hidden group cursor-pointer" data-category="travel" onclick="showArticleFromFile('content/writing/travel/01-manjianghong-siguniangshan.md', 'travel')">
+                <div class="h-48 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 relative overflow-hidden transition-colors duration-500">
+                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">🏔️</div>
+                    <div class="absolute top-4 right-4 sketch-tag">半游</div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">满江红·游四姑娘山</h3>
+                    <p class="mb-4 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
+                        万里川西，云翻处、雪山巍峨。清秋至、长空如镜，草色生波...
+                    </p>
+                    <div class="flex justify-between items-center text-sm opacity-50">
+                        <span>2025.10.03</span>
+                        <span>阅读 3 min →</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 2025.09.21 - 没有遗憾 -->
             <article class="sketch-border overflow-hidden group cursor-pointer" data-category="thinking" onclick="showArticleFromFile('content/writing/thinking/02-meiyouyihan.md', 'thinking')">
                 <div class="h-48 bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900 dark:to-cyan-900 relative overflow-hidden transition-colors duration-500">
                     <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">🍃</div>
@@ -677,25 +736,7 @@
                 </div>
             </article>
 
-            <!-- 半思01 - 写在某个夜晚 (最早) -->
-            <article class="sketch-border overflow-hidden group cursor-pointer" data-category="thinking" onclick="showArticleFromFile('content/writing/thinking/01-xiezaimougeye.md', 'thinking')">
-                <div class="h-48 bg-gradient-to-br from-slate-100 to-gray-100 dark:from-slate-800 dark:to-gray-800 relative overflow-hidden transition-colors duration-500">
-                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">🌙</div>
-                    <div class="absolute top-4 right-4 sketch-tag">半思</div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-3 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors">写在某个夜晚</h3>
-                    <p class="mb-4 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                        人在吃饱喝足之后会思考人生的意义，在迷茫仿徨时会想起文字...
-                    </p>
-                    <div class="flex justify-between items-center text-sm opacity-50">
-                        <span>2025.02.09</span>
-                        <span>阅读 5 min →</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 半读02 - 永远生猛的黄金时代 -->
+            <!-- 2025.04.20 - 永远生猛的黄金时代 -->
             <article class="sketch-border overflow-hidden group cursor-pointer" data-category="reading" onclick="showArticleFromFile('content/writing/reading/01-yongyuanshengmeng.md', 'reading')">
                 <div class="h-48 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900 dark:to-red-900 relative overflow-hidden transition-colors duration-500">
                     <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">🔥</div>
@@ -713,41 +754,42 @@
                 </div>
             </article>
 
-            <!-- 半影 - 影视评论 -->
-            <article class="sketch-border overflow-hidden group cursor-pointer" data-category="movie" onclick="showArticle('movie-review')">
-                <div class="h-48 bg-gradient-to-br from-rose-100 to-pink-100 dark:from-rose-900 dark:to-pink-900 relative overflow-hidden transition-colors duration-500">
-                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">🎬</div>
-                    <div class="absolute top-4 right-4 sketch-tag">半影</div>
+            <!-- 2025.04.05 - 水调歌头·剑门 -->
+            <article class="sketch-border overflow-hidden group cursor-pointer" data-category="travel" onclick="showArticleFromFile('content/writing/travel/02-shuidiaogetou-jianmen.md', 'travel')">
+                <div class="h-48 bg-gradient-to-br from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 relative overflow-hidden transition-colors duration-500">
+                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">⛰️</div>
+                    <div class="absolute top-4 right-4 sketch-tag">半游</div>
                 </div>
                 <div class="p-6">
-                    <h3 class="text-xl font-bold mb-3 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">《星际穿越》：时间的诗学</h3>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-gray-600 dark:group-hover:text-gray-400 transition-colors">水调歌头·剑门</h3>
                     <p class="mb-4 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                        诺兰用五维空间讲述了一个关于爱与时间的科幻史诗，科学与情感的完美融合...
+                        踏裂苍苔去，振袂叩剑门。千峰列阵如卒，云海荡胸宽...
                     </p>
                     <div class="flex justify-between items-center text-sm opacity-50">
-                        <span>2024.03.18</span>
-                        <span>阅读 6 min →</span>
+                        <span>2025.04.05</span>
+                        <span>阅读 3 min →</span>
                     </div>
                 </div>
             </article>
 
-            <!-- 半游 - 旅行游记 -->
-            <article class="sketch-border overflow-hidden group cursor-pointer" data-category="travel" onclick="showArticle('travel-notes')">
-                <div class="h-48 bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900 dark:to-cyan-900 relative overflow-hidden transition-colors duration-500">
-                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">✈️</div>
-                    <div class="absolute top-4 right-4 sketch-tag">半游</div>
+            <!-- 2025.02.09 - 写在某个夜晚 -->
+            <article class="sketch-border overflow-hidden group cursor-pointer" data-category="thinking" onclick="showArticleFromFile('content/writing/thinking/01-xiezaimougeye.md', 'thinking')">
+                <div class="h-48 bg-gradient-to-br from-slate-100 to-gray-100 dark:from-slate-800 dark:to-gray-800 relative overflow-hidden transition-colors duration-500">
+                    <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">🌙</div>
+                    <div class="absolute top-4 right-4 sketch-tag">半思</div>
                 </div>
                 <div class="p-6">
-                    <h3 class="text-xl font-bold mb-3 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">成都三日：慢生活的艺术</h3>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors">写在某个夜晚</h3>
                     <p class="mb-4 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">
-                        在宽窄巷子品茶，在锦里看戏，在熊猫基地与国宝对视。成都教会我慢下来...
+                        人在吃饱喝足之后会思考人生的意义，在迷茫仿徨时会想起文字...
                     </p>
                     <div class="flex justify-between items-center text-sm opacity-50">
-                        <span>2024.03.10</span>
+                        <span>2025.02.09</span>
                         <span>阅读 5 min →</span>
                     </div>
                 </div>
             </article>
+
         </div>
 
     </section>
