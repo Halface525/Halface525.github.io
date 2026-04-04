@@ -752,6 +752,21 @@ function initTiltEffect() {
     const tiltElements = document.querySelectorAll('.sketch-border');
     
     tiltElements.forEach(element => {
+        // 跳过音乐播放器及其子元素
+        if (element.id === 'music-player' || element.closest('#music-player')) {
+            return;
+        }
+        
+        // 跳过播放器内部的按钮和卡片
+        if (element.classList.contains('music-control-btn') || 
+            element.classList.contains('music-play-btn') ||
+            element.classList.contains('music-mode-btn') ||
+            element.classList.contains('music-item') ||
+            element.closest('.music-controls') ||
+            element.closest('.music-playlist')) {
+            return;
+        }
+        
         element.addEventListener('mousemove', (e) => {
             const rect = element.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;

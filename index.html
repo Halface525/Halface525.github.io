@@ -71,11 +71,6 @@
                     <button class="sketch-btn" onclick="showPage('study')" id="btn-study">半学</button>
                     <button class="sketch-btn" onclick="showPage('writing')" id="btn-writing">半文</button>
                     
-                    <!-- 搜索按钮 -->
-                    <button class="sketch-btn" onclick="toggleSearch()" title="搜索">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    
                     <!-- 暗黑模式切换按钮 -->
                     <div class="theme-toggle" onclick="toggleTheme()" title="切换主题">
                         <div class="theme-toggle-slider">
@@ -83,6 +78,16 @@
                             <span class="theme-icon-moon">🌙</span>
                         </div>
                     </div>
+                    
+                    <!-- 搜索按钮 -->
+                    <button class="icon-btn" onclick="toggleSearch()" title="搜索">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- 音乐播放器按钮 -->
+                    <button id="nav-music-btn" class="icon-btn" onclick="MusicPlayer.togglePlayer()" title="音乐播放器">
+                        <i class="fas fa-music"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -121,6 +126,51 @@
                     输入关键词搜索文章
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- 音乐播放器 -->
+    <div id="music-player" class="music-player sketch-border minimized">
+        <!-- 完整播放器 -->
+        <div class="music-full">
+            <!-- 头部 -->
+            <div class="music-header">
+                <div class="music-cover">
+                    <span>🎵</span>
+                </div>
+                <div class="music-meta">
+                    <div id="music-title" class="music-title">未播放</div>
+                    <div id="music-artist" class="music-artist">-</div>
+                </div>
+                <button class="music-close" onclick="MusicPlayer.togglePlayer()">✕</button>
+            </div>
+            
+            <!-- 进度条 -->
+            <div class="music-progress-container">
+                <div class="music-progress-bar" onclick="MusicPlayer.seek(event.offsetX / this.offsetWidth)">
+                    <div id="music-progress" class="music-progress"></div>
+                </div>
+                <div class="music-time">
+                    <span id="music-current">0:00</span>
+                    <span id="music-total">0:00</span>
+                </div>
+            </div>
+            
+            <!-- 控制按钮 -->
+            <div class="music-controls">
+                <button id="music-mode-btn" class="sketch-btn music-mode-btn" onclick="MusicPlayer.toggleMode()" title="列表循环"><i class="fas fa-repeat"></i></button>
+                <button class="sketch-btn music-control-btn" onclick="MusicPlayer.prev()"><i class="fas fa-backward-step"></i></button>
+                <button id="music-play-btn" class="sketch-btn music-play-btn" onclick="MusicPlayer.toggle()"><i class="fas fa-play"></i></button>
+                <button class="sketch-btn music-control-btn" onclick="MusicPlayer.next()"><i class="fas fa-forward-step"></i></button>
+                <div class="music-volume-wrapper">
+                    <i id="music-volume-icon" class="fas fa-volume-high" onclick="MusicPlayer.toggleMute()" style="cursor: pointer;"></i>
+                    <input type="range" id="music-volume" min="0" max="1" step="0.1" value="0.5" 
+                           oninput="MusicPlayer.setVolume(this.value)">
+                </div>
+            </div>
+            
+            <!-- 播放列表 -->
+            <div id="music-playlist" class="music-playlist"></div>
         </div>
     </div>
 
@@ -171,6 +221,13 @@
             <div class="absolute -right-10 -top-10 w-40 h-40 bg-yellow-200 dark:bg-purple-600 rounded-full opacity-50 blur-3xl transition-colors duration-500"></div>
             <h2 class="text-3xl font-bold mb-6 sketch-underline">最近更新 ✨</h2>
             <div class="space-y-4">
+                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="MusicPlayer.togglePlayer()">
+                    <span class="text-2xl">🎵</span>
+                    <div>
+                        <div class="font-bold">新增背景音乐播放器</div>
+                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-04-04T16:00:00"></span> · 全站</div>
+                    </div>
+                </div>
                 <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="toggleSearch()">
                     <span class="text-2xl">🔍</span>
                     <div>
@@ -190,13 +247,6 @@
                     <div>
                         <div class="font-bold">接入 Giscus 评论系统</div>
                         <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-26T21:00:00"></span> · 全站</div>
-                    </div>
-                </div>
-                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('writing')">
-                    <span class="text-2xl">📝</span>
-                    <div>
-                        <div class="font-bold">新增 3 篇半思文章 + 1 篇半读</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-24T20:30:00"></span> · 半文</div>
                     </div>
                 </div>
             </div>
@@ -904,6 +954,26 @@
         </div>
     </footer>
 
+    <!-- Howler.js 音频库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <script src="js/music-player.js"></script>
     <script src="js/main.js"></script>
+    
+    <!-- 音乐播放器初始化 -->
+    <script>
+        // 页面加载后初始化播放器
+        document.addEventListener('DOMContentLoaded', () => {
+            MusicPlayer.init();
+        });
+        
+        // 首次点击后开始播放（解决浏览器自动播放限制）
+        let musicStarted = false;
+        document.addEventListener('click', () => {
+            if (!musicStarted && MusicPlayer.playlist.length > 0) {
+                MusicPlayer.play(0);
+                musicStarted = true;
+            }
+        }, { once: true });
+    </script>
 </body>
 </html>
