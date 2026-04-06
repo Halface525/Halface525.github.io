@@ -2,9 +2,21 @@
 const MusicPlayer = {
     // 播放列表 - 请在这里添加你的音乐
     playlist: [
-        { title: '董卓瑶', artist: '李志', src: 'audio/02董卓瑶.mp3' },
-        { title: '春末的南方城市', artist: '李志', src: 'audio/03春末的南方城市.mp3' },
-        { title: '下雨', artist: '李志', src: 'audio/04下雨.mp3' }
+        { title: '你离开了南京，从此没有人和我说话', artist: '李志', src: 'audio/01-nanjing.mp3' },
+        { title: '黑色信封', artist: '李志', src: 'audio/02-heixinfeng.mp3' },
+        { title: '董卓瑶', artist: '李志', src: 'audio/03-dongzhuoyao.mp3' },
+        { title: '青春', artist: '李志', src: 'audio/04-qingchun.mp3' },
+        { title: '关于郑州的记忆', artist: '李志', src: 'audio/05-zhengzhou.mp3' },
+        { title: '定西', artist: '李志', src: 'audio/06-dingxi.mp3' },
+        { title: '春末的南方城市', artist: '李志', src: 'audio/07-chunmo.mp3' },
+        { title: '下雨', artist: '李志', src: 'audio/08-xiayu.mp3' },
+        { title: '天空之城', artist: '李志', src: 'audio/09-tiankongzhicheng.mp3' },
+        { title: '山阴路的夏天', artist: '李志', src: 'audio/10-shanyinlu.mp3' },
+        { title: '杭州', artist: '李志', src: 'audio/11-hangzhou.mp3' },
+        { title: '这个世界会好吗', artist: '李志', src: 'audio/12-zhegeshijie.mp3' },
+        { title: '青春无处安放', artist: '赵雷', src: 'audio/13-qingchunwuchuanfang.mp3' },
+        { title: '和你在一起', artist: '李志', src: 'audio/14-henizaiyiqi.mp3' },
+        { title: '热河', artist: '李志', src: 'audio/15-rehe.mp3' }
     ],
     
     currentIndex: 0,
@@ -23,10 +35,11 @@ const MusicPlayer = {
         this.updateUI();
         this.bindEvents();
         
-        // 自动播放第一首歌
-        if (this.playlist.length > 0) {
-            this.play(0);
-        }
+        // 播放器功能已暂时禁用
+        // 如需恢复音乐播放，取消下面注释：
+        // if (this.playlist.length > 0) {
+        //     this.play(0);
+        // }
     },
     
     // 绑定事件
@@ -355,9 +368,14 @@ const MusicPlayer = {
     
     // 切换播放器显示/隐藏
     togglePlayer() {
-        const player = document.getElementById('music-player');
-        if (player) {
-            player.classList.toggle('minimized');
-        }
+        // 播放器功能已暂时禁用
+        alert('音乐播放器功能暂时关闭，正在寻找版权合规的音乐资源...');
+        return;
+        
+        // 如需恢复，取消上面代码并启用下面：
+        // const player = document.getElementById('music-player');
+        // if (player) {
+        //     player.classList.toggle('minimized');
+        // }
     }
 };
