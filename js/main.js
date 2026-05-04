@@ -543,6 +543,97 @@ document.addEventListener('DOMContentLoaded', () => {
     initTiltEffect();
 });
 
+// ==================== 半趣项目展示功能 ====================
+
+// 项目数据（示例）
+const projectsData = {
+    'project1': {
+        title: '半面记账',
+        icon: '💰',
+        description: '个人财务记账系统，帮助管理日常收支。',
+        details: `
+            <p class="mb-4">一个简洁实用的个人财务管理工具，支持收入支出记录、数据可视化分析。</p>
+            <h4 class="font-bold mb-2">主要功能</h4>
+            <ul class="list-disc list-inside mb-4 space-y-1">
+                <li>收支记录管理</li>
+                <li>月度财务报表</li>
+                <li>数据可视化图表</li>
+                <li>趋势分析</li>
+            </ul>
+            <h4 class="font-bold mb-2">技术栈</h4>
+            <p>React, Tailwind CSS, Vercel</p>
+        `,
+        link: 'https://finance-app-one-silk.vercel.app/',
+        github: '#'
+    },
+    'project2': {
+        title: '项目名称 2',
+        icon: '🚀',
+        description: '另一个展示项目，涉及 AI 和机器学习。',
+        details: `
+            <p class="mb-4">这是一个关于 AI 的项目...</p>
+            <h4 class="font-bold mb-2">项目亮点</h4>
+            <ul class="list-disc list-inside mb-4 space-y-1">
+                <li>使用了最新的 AI 技术</li>
+                <li>实现了自动化处理</li>
+                <li>性能优化显著</li>
+            </ul>
+        `,
+        link: '#',
+        github: '#'
+    },
+    'project3': {
+        title: '项目名称 3',
+        icon: '📱',
+        description: '移动端应用开发项目。',
+        details: `
+            <p class="mb-4">这是一个移动应用项目...</p>
+            <h4 class="font-bold mb-2">应用特色</h4>
+            <ul class="list-disc list-inside mb-4 space-y-1">
+                <li>跨平台支持</li>
+                <li>流畅的用户体验</li>
+                <li>精美的界面设计</li>
+            </ul>
+        `,
+        link: '#',
+        github: '#'
+    }
+};
+
+// 显示项目详情
+function showProjectDetail(projectId) {
+    const project = projectsData[projectId];
+    if (!project) return;
+
+    const modal = document.getElementById('project-detail-modal');
+    const title = document.getElementById('project-detail-title');
+    const content = document.getElementById('project-detail-content');
+
+    title.innerHTML = `<span class="mr-2">${project.icon}</span>${project.title}`;
+    content.innerHTML = `
+        <div class="space-y-4">
+            <p class="text-lg opacity-80">${project.description}</p>
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                ${project.details}
+            </div>
+            <div class="flex gap-4 pt-4">
+                ${project.link !== '#' ? `<a href="${project.link}" target="_blank" class="sketch-btn inline-block">查看项目</a>` : ''}
+                ${project.github !== '#' ? `<a href="${project.github}" target="_blank" class="sketch-btn inline-block">GitHub</a>` : ''}
+            </div>
+        </div>
+    `;
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+// 关闭项目详情
+function closeProjectDetail() {
+    const modal = document.getElementById('project-detail-modal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
 // 订阅表单处理
 function initSubscribeForm() {
     const form = document.getElementById('subscribe-form');

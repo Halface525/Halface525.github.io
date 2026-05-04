@@ -65,12 +65,17 @@
                     Halface
                 </div>
                 
-                <div class="flex items-center gap-4 flex-wrap justify-center">
-                    <button class="sketch-btn active" onclick="showPage('home')" id="btn-home">主页</button>
-                    <button class="sketch-btn" onclick="showPage('face')" id="btn-face">半面</button>
-                    <button class="sketch-btn" onclick="showPage('study')" id="btn-study">半学</button>
-                    <button class="sketch-btn" onclick="showPage('writing')" id="btn-writing">半文</button>
-                    
+                <!-- 第一行：五个栏目按钮 -->
+                <div class="flex items-center gap-2 md:gap-3 flex-nowrap justify-center mb-2">
+                    <button class="sketch-btn nav-btn active" onclick="showPage('home')" id="btn-home">主页</button>
+                    <button class="sketch-btn nav-btn" onclick="showPage('face')" id="btn-face">半面</button>
+                    <button class="sketch-btn nav-btn" onclick="showPage('study')" id="btn-study">半学</button>
+                    <button class="sketch-btn nav-btn" onclick="showPage('writing')" id="btn-writing">半文</button>
+                    <button class="sketch-btn nav-btn" onclick="showPage('fun')" id="btn-fun">半趣</button>
+                </div>
+                
+                <!-- 第二行：功能按钮 -->
+                <div class="flex items-center gap-2 justify-center">
                     <!-- 暗黑模式切换按钮 -->
                     <div class="theme-toggle" onclick="toggleTheme()" title="切换主题">
                         <div class="theme-toggle-slider">
@@ -926,6 +931,75 @@
             <div id="comment-empty" class="text-center py-8 sm:py-12 hidden">
                 <div class="text-4xl sm:text-5xl mb-4">💭</div>
                 <p class="opacity-60">还没有评论，来做第一个评论者吧！</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 半趣页面 -->
+    <section id="fun" class="page max-w-6xl mx-auto px-6 py-12">
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold mb-4 sketch-underline inline-block">半趣</h2>
+            <p class="text-xl mt-4" style="color: var(--ink-color); opacity: 0.7;">兴趣使然，玩物养志 🎮</p>
+        </div>
+
+        <!-- 项目展示网格 -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 项目卡片 1 -->
+            <div class="sketch-border sketch-card p-6 cursor-pointer group" onclick="showProjectDetail('project1')">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">💰</div>
+                <h3 class="text-xl font-bold mb-2">半面记账</h3>
+                <p class="text-sm opacity-70 mb-4">个人财务记账系统，帮助管理日常收支</p>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="sketch-tag text-xs">React</span>
+                    <span class="sketch-tag text-xs">Tailwind</span>
+                    <span class="sketch-tag text-xs">Vercel</span>
+                </div>
+            </div>
+
+            <!-- 项目卡片 2 -->
+            <div class="sketch-border sketch-card p-6 cursor-pointer group" onclick="showProjectDetail('project2')">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🚀</div>
+                <h3 class="text-xl font-bold mb-2">项目名称 2</h3>
+                <p class="text-sm opacity-70 mb-4">另一个有趣的项目描述...</p>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="sketch-tag text-xs">JavaScript</span>
+                    <span class="sketch-tag text-xs">AI</span>
+                </div>
+            </div>
+
+            <!-- 项目卡片 3 -->
+            <div class="sketch-border sketch-card p-6 cursor-pointer group" onclick="showProjectDetail('project3')">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">📱</div>
+                <h3 class="text-xl font-bold mb-2">项目名称 3</h3>
+                <p class="text-sm opacity-70 mb-4">移动端或小程序项目...</p>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="sketch-tag text-xs">React</span>
+                    <span class="sketch-tag text-xs">App</span>
+                </div>
+            </div>
+
+            <!-- 添加更多项目卡片 -->
+            <div class="sketch-border sketch-card p-6 border-dashed flex items-center justify-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" onclick="alert('点击编辑添加新项目')">
+                <div class="text-center opacity-50">
+                    <div class="text-4xl mb-2">+</div>
+                    <p>添加项目</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 项目详情弹窗 -->
+        <div id="project-detail-modal" class="fixed inset-0 z-[70] hidden">
+            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeProjectDetail()"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl px-4">
+                <div class="sketch-border bg-white dark:bg-gray-800 p-6 md:p-8 shadow-2xl max-h-[80vh] overflow-y-auto">
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 id="project-detail-title" class="text-2xl font-bold">项目详情</h3>
+                        <button onclick="closeProjectDetail()" class="text-2xl hover:opacity-70">✕</button>
+                    </div>
+                    <div id="project-detail-content">
+                        <!-- 动态加载项目详情 -->
+                    </div>
+                </div>
             </div>
         </div>
     </section>
