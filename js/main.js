@@ -567,19 +567,20 @@ const projectsData = {
         github: '#'
     },
     'project2': {
-        title: '项目名称 2',
-        icon: '🚀',
-        description: '另一个展示项目，涉及 AI 和机器学习。',
+        title: 'Imperium Civitatum',
+        icon: '🎮',
+        description: '一个关于历史/政治/地理的策略游戏。',
         details: `
-            <p class="mb-4">这是一个关于 AI 的项目...</p>
-            <h4 class="font-bold mb-2">项目亮点</h4>
+            <p class="mb-4">Imperium Civitatum 是一款探索历史文明与政治体系的策略游戏。</p>
+            <h4 class="font-bold mb-2">游戏特色</h4>
             <ul class="list-disc list-inside mb-4 space-y-1">
-                <li>使用了最新的 AI 技术</li>
-                <li>实现了自动化处理</li>
-                <li>性能优化显著</li>
+                <li>历史文明模拟</li>
+                <li>政治体系策略</li>
+                <li>地理扩张玩法</li>
+                <li>交互式决策</li>
             </ul>
         `,
-        link: '#',
+        link: 'https://halface525.github.io/imperium-civitatum',
         github: '#'
     },
     'project3': {
