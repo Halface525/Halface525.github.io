@@ -368,14 +368,9 @@ const MusicPlayer = {
     
     // 切换播放器显示/隐藏
     togglePlayer() {
-        // 播放器功能已暂时禁用
-        alert('音乐播放器功能暂时关闭，正在寻找版权合规的音乐资源...');
-        return;
-        
-        // 如需恢复，取消上面代码并启用下面：
-        // const player = document.getElementById('music-player');
-        // if (player) {
-        //     player.classList.toggle('minimized');
-        // }
+        const player = document.getElementById('music-player');
+        if (player) {
+            player.classList.toggle('minimized');
+        }
     }
 };
