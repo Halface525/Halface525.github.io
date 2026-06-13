@@ -14,20 +14,35 @@
 web/
 ├── index.html              # 主页面（单页应用）
 ├── css/
-│   └── style.css          # 手绘风格样式
+│   ├── variables.css       # CSS 变量与主题定义
+│   ├── style.css           # 手绘风格核心样式
+│   └── music-player.css    # 音乐播放器独立样式
 ├── js/
-│   └── main.js            # 交互逻辑
-├── images/                # 图片资源
-│   ├── avatar.png         # 头像
-│   └── wechat-qr.jpg      # 微信公众号二维码
-└── content/               # Markdown 文章内容
-    ├── study/             # 学习笔记
-    │   ├── ml/           # 机器学习系列（11篇）
-    │   └── modeling/     # 数学建模系列（3篇）
-    └── writing/          # 随笔文章
-        ├── thinking/     # 半思（3篇）
-        ├── reading/      # 半读（1篇）
-        └── travel/       # 半游（2篇）
+│   ├── config.js           # 全局配置（Giscus、项目数据、搜索索引）
+│   ├── utils.js            # 工具函数（相对时间、分类标签）
+│   ├── theme.js            # 主题切换 & 星空背景
+│   ├── router.js           # SPA 页面路由
+│   ├── markdown.js         # Markdown 解析器 & Front Matter
+│   ├── articles.js         # 文章加载 & 筛选
+│   ├── effects.js          # 视觉效果（卡片倾斜、鼠标拖尾）
+│   ├── search.js           # 全局搜索
+│   ├── comments.js         # Giscus 评论系统
+│   ├── projects.js         # 半趣项目展示
+│   ├── subscribe.js        # 订阅表单
+│   ├── main.js             # 应用入口 & 初始化
+│   └── music-player.js     # 音乐播放器
+├── images/                 # 图片资源
+│   ├── avatar.png          # 头像
+│   └── wechat-qr.jpg       # 微信公众号二维码
+├── audio/                  # 音乐文件（15首 MP3）
+└── content/                # Markdown 文章内容
+    ├── study/              # 学习笔记
+    │   ├── ml/            # 机器学习系列（11篇）
+    │   └── modeling/      # 数学建模系列（3篇）
+    └── writing/           # 随笔文章
+        ├── thinking/      # 半思（3篇）
+        ├── reading/       # 半读（1篇）
+        └── travel/        # 半游（2篇）
 ```
 
 ---

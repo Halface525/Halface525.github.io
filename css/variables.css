@@ -1,0 +1,23 @@
+/* ==================== CSS 变量 & 主题 ==================== */
+:root {
+    --paper-color: #fdfbf7;
+    --ink-color: #2c2c2c;
+    --accent-color: #ff6b6b;
+    --highlight: #ffe66d;
+    --card-bg: #ffffff;
+    --border-color: #2c2c2c;
+    --shadow-color: rgba(0,0,0,0.1);
+    --grid-color: #e5e5f7;
+}
+
+/* 暗黑模式变量 */
+.dark {
+    --paper-color: #1a1a2e;
+    --ink-color: #eaeaea;
+    --accent-color: #ff8585;
+    --highlight: #ffd93d;
+    --card-bg: #16213e;
+    --border-color: #eaeaea;
+    --shadow-color: rgba(0,0,0,0.3);
+    --grid-color: #2d2d44;
+}
