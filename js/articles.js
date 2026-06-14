@@ -2,72 +2,84 @@
 // 文章加载 & 筛选
 // ========================================
 
-// 半文板块文章筛选
-function filterArticles(category) {
-    const articles = document.querySelectorAll('#article-list article');
-    const filterContainer = document.getElementById('article-filters');
-    if (!filterContainer) return;
+// 渲染技术博客文章卡片（半学）
+function renderTechArticles(filter) {
+    const container = document.getElementById('tech-article-list');
+    if (!container) return;
 
-    const buttons = filterContainer.querySelectorAll('.sketch-btn');
+    const articles = filter === 'all'
+        ? techArticlesData
+        : techArticlesData.filter(a => a.category === filter);
 
-    buttons.forEach(btn => {
-        const filterValue = btn.dataset.filter;
-        if (filterValue === category) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
+    container.innerHTML = articles.map(a => `
+        <article class="sketch-border overflow-hidden group cursor-pointer" data-category="${a.category}" onclick="showArticleFromFile('${a.file}', '${a.category}')">
+            <div class="h-40 bg-gradient-to-br ${a.gradient} relative overflow-hidden transition-colors duration-500">
+                <div class="absolute inset-0 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-500">${a.emoji}</div>
+                <div class="absolute top-3 right-3 sketch-tag text-xs">${getCategoryLabel(a.category)}</div>
+            </div>
+            <div class="p-5">
+                <h4 class="text-lg font-bold mb-2 group-hover:text-${a.colorKey}-600 dark:group-hover:text-${a.colorKey}-400 transition-colors">${a.title}</h4>
+                <p class="text-sm mb-3 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">${a.desc}</p>
+                <div class="flex justify-between items-center text-xs opacity-50">
+                    <span>${a.date}</span>
+                    <span>阅读 ${a.readTime} →</span>
+                </div>
+            </div>
+        </article>
+    `).join('');
 
-    articles.forEach(article => {
-        if (category === 'all' || article.dataset.category === category) {
-            article.style.display = 'block';
-            setTimeout(() => {
-                article.style.opacity = '1';
-                article.style.transform = 'translateY(0)';
-            }, 50);
-        } else {
-            article.style.opacity = '0';
-            article.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                article.style.display = 'none';
-            }, 300);
-        }
-    });
+    // 更新筛选按钮激活状态
+    const filterContainer = document.getElementById('tech-filters');
+    if (filterContainer) {
+        filterContainer.querySelectorAll('.sketch-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+    }
 }
 
-// 技术博客文章筛选
+// 渲染半文文章卡片
+function renderWritingArticles(filter) {
+    const container = document.getElementById('article-list');
+    if (!container) return;
+
+    const articles = filter === 'all'
+        ? writingArticlesData
+        : writingArticlesData.filter(a => a.category === filter);
+
+    container.innerHTML = articles.map(a => `
+        <article class="sketch-border overflow-hidden group cursor-pointer" data-category="${a.category}" onclick="showArticleFromFile('${a.file}', '${a.category}')">
+            <div class="h-48 bg-gradient-to-br ${a.gradient} relative overflow-hidden transition-colors duration-500">
+                <div class="absolute inset-0 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-500">${a.emoji}</div>
+                <div class="absolute top-4 right-4 sketch-tag">${getCategoryLabel(a.category)}</div>
+            </div>
+            <div class="p-6">
+                <h3 class="text-xl font-bold mb-3 group-hover:text-${a.colorKey}-600 dark:group-hover:text-${a.colorKey}-400 transition-colors">${a.title}</h3>
+                <p class="mb-4 line-clamp-2" style="color: var(--ink-color); opacity: 0.7;">${a.desc}</p>
+                <div class="flex justify-between items-center text-sm opacity-50">
+                    <span>${a.date}</span>
+                    <span>阅读 ${a.readTime} →</span>
+                </div>
+            </div>
+        </article>
+    `).join('');
+
+    // 更新筛选按钮激活状态
+    const filterContainer = document.getElementById('article-filters');
+    if (filterContainer) {
+        filterContainer.querySelectorAll('.sketch-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+    }
+}
+
+// 半文板块文章筛选（触发重新渲染）
+function filterArticles(category) {
+    renderWritingArticles(category);
+}
+
+// 技术博客文章筛选（触发重新渲染）
 function filterTechArticles(category) {
-    const articles = document.querySelectorAll('#tech-article-list article');
-    const filterContainer = document.getElementById('tech-filters');
-    if (!filterContainer) return;
-
-    const buttons = filterContainer.querySelectorAll('.sketch-btn');
-
-    buttons.forEach(btn => {
-        const filterValue = btn.dataset.filter;
-        if (filterValue === category) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-
-    articles.forEach(article => {
-        if (category === 'all' || article.dataset.category === category) {
-            article.style.display = 'block';
-            setTimeout(() => {
-                article.style.opacity = '1';
-                article.style.transform = 'translateY(0)';
-            }, 50);
-        } else {
-            article.style.opacity = '0';
-            article.style.transform = 'translateY(10px)';
-            setTimeout(() => {
-                article.style.display = 'none';
-            }, 300);
-        }
-    });
+    renderTechArticles(category);
 }
 
 // 显示文章详情（通用）
@@ -152,18 +164,12 @@ async function showArticleFromFile(filePath, category) {
         sectionName = '半学';
     }
 
-    // 查找对应的卡片标题
+    // 从数据数组中查找文章标题
     let cardTitle = '';
-    const articles = document.querySelectorAll('article[data-category]');
-    for (const article of articles) {
-        const onclickAttr = article.getAttribute('onclick');
-        if (onclickAttr && onclickAttr.includes(filePath)) {
-            const titleElement = article.querySelector('h4') || article.querySelector('h3');
-            if (titleElement) {
-                cardTitle = titleElement.textContent.trim();
-                break;
-            }
-        }
+    const allArticles = [...techArticlesData, ...writingArticlesData];
+    const found = allArticles.find(a => a.file === filePath);
+    if (found) {
+        cardTitle = found.title;
     }
 
     await showArticle(filePath, filePath, sectionName, cardTitle);
@@ -194,4 +200,38 @@ function backToArticles() {
         btn.classList.remove('active');
     });
     document.getElementById(targetBtn).classList.add('active');
+}
+
+// ========================================
+// 动态渲染（在页面加载时调用）
+// ========================================
+
+// 渲染学习路径时间线
+function renderLearningTimeline() {
+    const container = document.getElementById('learning-timeline');
+    if (!container) return;
+
+    container.innerHTML = learningTimeline.map((item, index) => `
+        <div class="relative pl-16 ${index < learningTimeline.length - 1 ? 'pb-8' : ''} group">
+            <div class="absolute left-3 top-1 w-6 h-6 ${item.dotColor} rounded-full border-4 border-white dark:border-gray-800 group-hover:scale-125 transition-transform"></div>
+            <div class="sketch-border p-5 hover:shadow-lg transition-all">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-sm font-bold ${item.timeColor}">${item.time}</span>
+                    <span class="sketch-tag text-xs ${item.statusClass}">${item.status}</span>
+                </div>
+                <h4 class="font-bold text-lg mb-2">${item.title}</h4>
+                <p class="text-sm mb-3" style="color: var(--ink-color); opacity: 0.7;">${item.desc}</p>
+                <div class="flex flex-wrap gap-2">
+                    ${item.skills.map(s => '<span class="text-xs sketch-tag">' + s + '</span>').join('')}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// 初始化所有动态渲染的内容
+function initArticlesDisplay() {
+    renderTechArticles('all');
+    renderWritingArticles('all');
+    renderLearningTimeline();
 }

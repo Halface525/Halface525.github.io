@@ -28,8 +28,48 @@ const MusicPlayer = {
     volumeBeforeMute: 0.5,
     progressInterval: null,
     
+    // 创建播放器 DOM 结构
+    createDOM() {
+        const mount = document.getElementById('music-player');
+        if (!mount) return;
+        mount.className = 'music-player sketch-border minimized';
+        mount.innerHTML = `
+            <div class="music-full">
+                <div class="music-header">
+                    <div class="music-cover"><span>🎵</span></div>
+                    <div class="music-meta">
+                        <div id="music-title" class="music-title">未播放</div>
+                        <div id="music-artist" class="music-artist">-</div>
+                    </div>
+                    <button class="music-close" onclick="MusicPlayer.togglePlayer()">✕</button>
+                </div>
+                <div class="music-progress-container">
+                    <div class="music-progress-bar" onclick="MusicPlayer.seek(event.offsetX / this.offsetWidth)">
+                        <div id="music-progress" class="music-progress"></div>
+                    </div>
+                    <div class="music-time">
+                        <span id="music-current">0:00</span>
+                        <span id="music-total">0:00</span>
+                    </div>
+                </div>
+                <div class="music-controls">
+                    <button id="music-mode-btn" class="sketch-btn music-mode-btn" onclick="MusicPlayer.toggleMode()" title="列表循环"><i class="fas fa-repeat"></i></button>
+                    <button class="sketch-btn music-control-btn" onclick="MusicPlayer.prev()"><i class="fas fa-backward-step"></i></button>
+                    <button id="music-play-btn" class="sketch-btn music-play-btn" onclick="MusicPlayer.toggle()"><i class="fas fa-play"></i></button>
+                    <button class="sketch-btn music-control-btn" onclick="MusicPlayer.next()"><i class="fas fa-forward-step"></i></button>
+                    <div class="music-volume-wrapper">
+                        <i id="music-volume-icon" class="fas fa-volume-high" onclick="MusicPlayer.toggleMute()" style="cursor: pointer;"></i>
+                        <input type="range" id="music-volume" min="0" max="1" step="0.1" value="0.5" oninput="MusicPlayer.setVolume(this.value)">
+                    </div>
+                </div>
+                <div id="music-playlist" class="music-playlist"></div>
+            </div>
+        `;
+    },
+
     // 初始化
     init() {
+        this.createDOM();
         this.loadPreference();
         this.renderPlaylist();
         this.updateUI();

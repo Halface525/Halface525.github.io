@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 评论系统
     initComments();
 
+    // 文章列表 & 时间线动态渲染
+    initArticlesDisplay();
+
     // 浏览器返回键
     window.addEventListener('popstate', (event) => {
         if (document.getElementById('article-detail').classList.contains('active')) {

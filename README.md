@@ -18,19 +18,19 @@ web/
 │   ├── style.css           # 手绘风格核心样式
 │   └── music-player.css    # 音乐播放器独立样式
 ├── js/
-│   ├── config.js           # 全局配置（Giscus、项目数据、搜索索引）
+│   ├── config.js           # 全局数据（Giscus、文章数据、项目数据、搜索索引）
 │   ├── utils.js            # 工具函数（相对时间、分类标签）
 │   ├── theme.js            # 主题切换 & 星空背景
 │   ├── router.js           # SPA 页面路由
 │   ├── markdown.js         # Markdown 解析器 & Front Matter
-│   ├── articles.js         # 文章加载 & 筛选
+│   ├── articles.js         # 文章加载、筛选 & 动态渲染
 │   ├── effects.js          # 视觉效果（卡片倾斜、鼠标拖尾）
 │   ├── search.js           # 全局搜索
 │   ├── comments.js         # Giscus 评论系统
 │   ├── projects.js         # 半趣项目展示
 │   ├── subscribe.js        # 订阅表单
 │   ├── main.js             # 应用入口 & 初始化
-│   └── music-player.js     # 音乐播放器
+│   └── music-player.js     # 音乐播放器（含 DOM 生成）
 ├── images/                 # 图片资源
 │   ├── avatar.png          # 头像
 │   └── wechat-qr.jpg       # 微信公众号二维码
