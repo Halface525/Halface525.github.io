@@ -1,8 +1,8 @@
 # Halface 个人主页
 
-> 用不完美的线条，描绘完美的生活
+> 记录生活的半面，探索知识的半学，书写心灵的半文。
 
-一个手绘风格的个人博客网站，记录生活、学习与思考。
+一个杂志排版风格的个人博客网站，记录生活、学习与思考。
 
 🔗 **在线访问**: https://halface525.github.io
 
@@ -13,23 +13,13 @@
 ```
 web/
 ├── index.html              # 主页面（单页应用）
+├── magazine.html           # 杂志风格参考副本（独立可运行）
 ├── css/
-│   ├── variables.css       # CSS 变量与主题定义
-│   ├── style.css           # 手绘风格核心样式
-│   └── music-player.css    # 音乐播放器独立样式
+│   └── magazine.css        # 杂志风格核心样式（CSS变量、卡片、时间线、聚光灯）
 ├── js/
 │   ├── config.js           # 全局数据（Giscus、文章数据、项目数据、搜索索引）
-│   ├── utils.js            # 工具函数（相对时间、分类标签）
-│   ├── theme.js            # 主题切换 & 星空背景
-│   ├── router.js           # SPA 页面路由
-│   ├── markdown.js         # Markdown 解析器 & Front Matter
-│   ├── articles.js         # 文章加载、筛选 & 动态渲染
-│   ├── effects.js          # 视觉效果（卡片倾斜、鼠标拖尾）
-│   ├── search.js           # 全局搜索
-│   ├── comments.js         # Giscus 评论系统
-│   ├── projects.js         # 半趣项目展示
-│   ├── subscribe.js        # 订阅表单
-│   ├── main.js             # 应用入口 & 初始化
+│   ├── markdown.js         # Markdown 解析器 & YAML Front Matter
+│   ├── magazine.js         # 应用逻辑（主题/路由/渲染/搜索/聚光灯/评论）
 │   └── music-player.js     # 音乐播放器（含 DOM 生成）
 ├── images/                 # 图片资源
 │   ├── avatar.png          # 头像
@@ -49,18 +39,19 @@ web/
 
 ## 🎨 网站特色
 
-### 手绘风格设计
+### 杂志排版设计
 
-- 不规则圆角边框，模拟手绘效果
-- 手写体中文字体（ZCOOL KuaiLe、Ma Shan Zheng）
-- 点状网格背景
-- 涂鸦装饰与浮动动画
+- Playfair Display + Noto Serif SC 衬线字体，精致排版
+- 深红色 (#c41e3a) 强调色，1px 细线边框
+- 首字下沉 (drop-cap)、编号列表、细分隔线
+- 聚光灯透镜互动效果（鼠标跟随反色圆形）
+- 响应式杂志卡片，悬停浮起 + 阴影
 
 ### 暗黑/亮色双主题
 
 - 一键切换，支持跟随系统主题
-- 暗黑模式带有星空闪烁背景
-- 所有颜色使用 CSS 变量，切换流畅
+- CSS 变量驱动，所有组件无缝适配
+- 暗黑模式保留同等质感
 
 ### 三大核心板块
 
@@ -134,7 +125,7 @@ auther: 作者名
 
 Giscus 评论系统已配置完成，使用独立的 `comments` 仓库存储评论数据。
 
-**配置信息**（已内置在 `js/main.js`）：
+**配置信息**（已内置在 `js/config.js`）：
 
 ```javascript
 const GISCUS_CONFIG = {
@@ -169,6 +160,32 @@ const GISCUS_CONFIG = {
 ---
 
 ## 📌 版本更新日志
+
+### v2.0.0 (2026-06-16)
+
+#### 🎨 重大变更
+
+- **杂志排版风格**：手绘风格全面替换为杂志排版设计
+- **字体系统**：Playfair Display（标题）+ Noto Serif SC（正文）+ Inter（UI）
+- **色彩重构**：深红 (#c41e3a) 强调色，1px 细线边框，精致阴影
+- **聚光灯互动**：封面页鼠标跟随反色透镜效果
+- **首字下沉**：文章段落 drop-cap 装饰
+
+#### 🔧 项目重构
+
+- **模块化拆分**：内联 CSS/JS 提取为独立文件（CSS 440行 → `magazine.css`，JS 550行 → `config.js` + `markdown.js` + `magazine.js`）
+- **HTML 瘦身**：index.html 从 1343 行精简到 345 行（减少 74%）
+- **代码质量**：数据、解析、逻辑三层分离，单文件职责清晰
+
+#### 📐 排版细节
+
+- 导航栏下划线跟随动画
+- 杂志卡片悬停浮起效果（cubic-bezier 缓动）
+- 学习路径时间线垂直布局
+- 文章正文精细化排版（h1-h3、blockquote、code、table）
+- 分隔线装饰（细线 + 菱形符号）
+
+---
 
 ### v1.3.0 (2026-05-17)
 
@@ -295,4 +312,4 @@ MIT License
 ---
 
 *Made with ❤️ and ☕*
-*Last updated: 2026-03-29*
+*Last updated: 2026-06-16*

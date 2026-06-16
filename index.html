@@ -1,554 +1,353 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halface主页</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Brush Script MT, Lucida Handwriting, Segoe Script, Apple Chancery, Comic Sans MS, cursive' font-size='28' font-style='italic' fill='%23ff6b6b'%3EH%3C/text%3E%3C/svg%3E">
+    <title>Halface 主页</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Playfair Display, serif' font-size='26' font-style='italic' fill='%23c41e3a'%3EH%3C/text%3E%3C/svg%3E">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/music-player.css">
-    <!-- Font Awesome 图标 -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        paper: {
-                            light: '#fdfbf7',
-                            dark: '#1a1a2e'
-                        },
-                        ink: {
-                            light: '#2c2c2c',
-                            dark: '#eaeaea'
+                        mag: {
+                            paper: '#faf9f7',
+                            paperDark: '#0f0f0f',
+                            ink: '#1a1a1a',
+                            inkDark: '#e8e6e3',
+                            accent: '#c41e3a',
+                            accentDark: '#e85d75',
+                            gold: '#c9a96e',
+                            muted: '#6b6b6b',
+                            mutedDark: '#9a9896',
+                            line: '#e5e2dd',
+                            lineDark: '#2a2a2a'
                         }
+                    },
+                    fontFamily: {
+                        display: ['"Playfair Display"', '"Noto Serif SC"', 'serif'],
+                        body: ['"Noto Serif SC"', '"Source Han Serif SC"', 'serif'],
+                        sans: ['Inter', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-    <!-- MathJax 用于渲染数学公式 -->
+    <link rel="stylesheet" href="css/magazine.css">
+    <!-- MathJax -->
     <script>
         MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            svg: {
-                fontCache: 'global'
-            }
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
-<body class="min-h-screen relative">
-    <!-- 星星背景（仅暗黑模式显示） -->
-    <div class="stars" id="stars"></div>
-
-    <!-- 背景涂鸦装饰 -->
-    <svg class="doodle top-10 left-10 w-24 h-24 opacity-40" viewBox="0 0 100 100" style="color: var(--ink-color);">
-        <path d="M10,50 Q30,10 50,50 T90,50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="20" cy="30" r="3" fill="currentColor"/>
-        <circle cx="80" cy="70" r="4" fill="currentColor"/>
-    </svg>
-
-    <svg class="doodle top-40 right-20 w-32 h-32 opacity-40" style="animation-delay: 1s; color: var(--ink-color);" viewBox="0 0 100 100">
-        <path d="M50,10 L60,40 L90,50 L60,60 L50,90 L40,60 L10,50 L40,40 Z" fill="none" stroke="currentColor" stroke-width="2"/>
-    </svg>
-
-    <!-- 导航栏 -->
-    <nav class="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b-4 border-gray-800 sketch-border mx-4 mt-4 mb-8">
-        <div class="max-w-6xl mx-auto px-6 py-4">
-            <div class="flex flex-col md:flex-row justify-between items-center nav-container">
-                <div class="text-2xl font-bold mb-4 md:mb-0 cursor-pointer hover:rotate-2 transition-transform" onclick="showPage('home')">
-                    Halface
-                </div>
-                
-                <!-- 第一行：五个栏目按钮 -->
-                <div class="flex items-center gap-2 md:gap-3 flex-nowrap justify-center mb-2">
-                    <button class="sketch-btn nav-btn active" onclick="showPage('home')" id="btn-home">主页</button>
-                    <button class="sketch-btn nav-btn" onclick="showPage('face')" id="btn-face">半面</button>
-                    <button class="sketch-btn nav-btn" onclick="showPage('study')" id="btn-study">半学</button>
-                    <button class="sketch-btn nav-btn" onclick="showPage('writing')" id="btn-writing">半文</button>
-                    <button class="sketch-btn nav-btn" onclick="showPage('fun')" id="btn-fun">半趣</button>
-                </div>
-                
-                <!-- 第二行：功能按钮 -->
-                <div class="flex items-center gap-2 justify-center">
-                    <!-- 暗黑模式切换按钮 -->
-                    <div class="theme-toggle" onclick="toggleTheme()" title="切换主题">
-                        <div class="theme-toggle-slider">
-                            <span class="theme-icon-sun">☀️</span>
-                            <span class="theme-icon-moon">🌙</span>
-                        </div>
-                    </div>
-                    
-                    <!-- 搜索按钮 -->
-                    <button class="icon-btn" onclick="toggleSearch()" title="搜索">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    
-                    <!-- 音乐播放器按钮 -->
-                    <button id="nav-music-btn" class="icon-btn" onclick="MusicPlayer.togglePlayer()" title="音乐播放器">
-                        <i class="fas fa-music"></i>
-                    </button>
-                </div>
+<body class="min-h-screen">
+    <!-- 顶部导航 -->
+    <nav class="sticky top-0 z-50 border-b" style="border-color: var(--line); background: rgba(250,249,247,0.92); backdrop-filter: blur(12px);">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="font-display text-3xl font-bold tracking-tight cursor-pointer" onclick="showPage('home')" style="color: var(--accent);">
+                Halface
             </div>
+            <div class="hidden md:flex items-center gap-8">
+                <button class="nav-link active" onclick="showPage('home')" id="nav-home">主页</button>
+                <button class="nav-link" onclick="showPage('face')" id="nav-face">半面</button>
+                <button class="nav-link" onclick="showPage('study')" id="nav-study">半学</button>
+                <button class="nav-link" onclick="showPage('writing')" id="nav-writing">半文</button>
+                <button class="nav-link" onclick="showPage('fun')" id="nav-fun">半趣</button>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="text-sm hover:opacity-60 transition-opacity" onclick="MusicPlayer.togglePlayer()" title="音乐播放器">
+                    <i class="fas fa-music"></i>
+                </button>
+                <button class="text-sm hover:opacity-60 transition-opacity" onclick="toggleSearch()" title="搜索">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="text-sm hover:opacity-60 transition-opacity" onclick="toggleTheme()" title="切换主题" id="theme-toggle-btn">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div class="md:hidden flex justify-center gap-4 pb-3 text-sm" style="border-top: 1px solid var(--line);">
+            <button class="nav-link py-2 active" onclick="showPage('home')" id="nav-home-m">主页</button>
+            <button class="nav-link py-2" onclick="showPage('face')" id="nav-face-m">半面</button>
+            <button class="nav-link py-2" onclick="showPage('study')" id="nav-study-m">半学</button>
+            <button class="nav-link py-2" onclick="showPage('writing')" id="nav-writing-m">半文</button>
+            <button class="nav-link py-2" onclick="showPage('fun')" id="nav-fun-m">半趣</button>
         </div>
     </nav>
 
-    <!-- 全局搜索弹窗 -->
-    <div id="search-modal" class="fixed inset-0 z-[60] hidden">
-        <!-- 遮罩层 -->
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleSearch()"></div>
-        
-        <!-- 搜索框容器 -->
-        <div class="absolute top-4 md:top-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-2 md:px-4">
-            <div class="sketch-border bg-white dark:bg-gray-800 p-4 md:p-6 shadow-2xl max-h-[90vh] md:max-h-none overflow-hidden flex flex-col">
-                <!-- 搜索输入框 -->
-                <div class="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                    <i class="fas fa-search text-lg md:text-xl opacity-50"></i>
-                    <input 
-                        type="text" 
-                        id="search-input" 
-                        placeholder="搜索文章..." 
-                        class="flex-1 sketch-input text-base md:text-lg"
-                        oninput="performSearch(this.value)"
-                    >
-                    <button onclick="toggleSearch()" class="opacity-50 hover:opacity-100 transition-opacity p-1">
-                        <i class="fas fa-times text-lg md:text-xl"></i>
-                    </button>
+    <!-- 音乐播放器 -->
+    <div id="music-player"></div>
+
+    <!-- 搜索弹窗 -->
+    <div id="search-modal" class="fixed inset-0 z-[60] hidden" style="background: rgba(0,0,0,0.4);">
+        <div class="absolute inset-0" onclick="toggleSearch()"></div>
+        <div class="absolute top-16 left-1/2 transform -translate-x-1/2 w-full max-w-xl px-4">
+            <div class="p-6 shadow-2xl" style="background: var(--paper); border: 1px solid var(--line);">
+                <div class="flex items-center gap-3 mb-4">
+                    <i class="fas fa-search opacity-40"></i>
+                    <input type="text" id="search-input" placeholder="搜索文章..." class="flex-1 bg-transparent outline-none text-base" style="color: var(--ink); font-family: 'Noto Serif SC', serif;" oninput="performSearch(this.value)">
+                    <button onclick="toggleSearch()" class="opacity-40 hover:opacity-100 transition-opacity"><i class="fas fa-times"></i></button>
                 </div>
-                
-                <!-- 搜索结果 -->
-                <div id="search-results" class="flex-1 overflow-y-auto space-y-2 md:space-y-3 max-h-[60vh] md:max-h-[60vh]">
-                    <!-- 搜索结果将在这里动态显示 -->
-                </div>
-                
-                <!-- 搜索提示 -->
-                <div id="search-hint" class="text-center text-xs md:text-sm opacity-50 mt-3 md:mt-4 flex-shrink-0">
-                    输入关键词搜索文章
-                </div>
+                <div id="search-results" class="space-y-3 max-h-[60vh] overflow-y-auto"></div>
+                <div id="search-hint" class="text-center text-xs mt-4 opacity-40" style="font-family: 'Inter', sans-serif;">输入关键词搜索文章</div>
             </div>
         </div>
     </div>
 
-    <!-- 音乐播放器（JS 动态生成 DOM） -->
-    <div id="music-player"></div>
-
-    <!-- 主页 -->
-    <section id="home" class="page active max-w-6xl mx-auto px-6 py-12">
-        <div class="text-center mb-16 relative">
-            <h1 class="text-6xl md:text-8xl font-bold mb-6 sketch-underline inline-block">
-                欢迎来到<br/>我的空间
-            </h1>
-            <p class="text-xl md:text-2xl mt-8 max-w-2xl mx-auto leading-relaxed" style="color: var(--ink-color); opacity: 0.8;">
-                在这里，我记录生活的<span class="sketch-tag">半面</span>，
-                探索知识的<span class="sketch-tag">半学</span>，
-                书写心灵的<span class="sketch-tag">半文</span>。
-            </p>
-            
-            <!-- 装饰箭头 -->
-            <svg class="absolute -bottom-20 left-1/2 transform -translate-x-1/2 w-16 h-16 animate-bounce" style="color: var(--ink-color); opacity: 0.5;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 5v14M19 12l-7 7-7-7"/>
-            </svg>
-        </div>
-
-        <!-- 三大板块预览 -->
-        <div class="grid md:grid-cols-3 gap-8 mt-20">
-            <div class="sketch-border sketch-card p-8 cursor-pointer group" onclick="showPage('face')">
-                <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🎭</div>
-                <h3 class="text-2xl font-bold mb-3">半面</h3>
-                <p style="color: var(--ink-color); opacity: 0.7;">关于我，我的故事，我的兴趣，以及那些定义我是谁的一切。</p>
-                <div class="mt-4 text-sm opacity-50">点击查看 →</div>
+    <main class="max-w-6xl mx-auto px-6">
+        <!-- ========== 主页 / 封面 ========== -->
+        <section id="home" class="page active">
+            <!-- 杂志封面 -->
+            <div class="py-20 md:py-32 text-center magazine-hero" style="position:relative; overflow:hidden; cursor:none;">
+                <!-- 底层纹理文字 -->
+                <div id="spotlight-back" style="position:absolute; inset:0; z-index:0;"></div>
+                <!-- 反色圆形 -->
+                <div id="spotlight-circle" style="position:absolute; width:280px; height:280px; border-radius:50%; pointer-events:none; z-index:20; backdrop-filter:invert(1); -webkit-backdrop-filter:invert(1); display:none; transform:translate(-50%,-50%);"></div>
+                <!-- 封面内容 -->
+                <div class="relative z-10">
+                    <div class="animate-fade-up delay-100">
+                        <span class="inline-block text-xs tracking-[0.3em] uppercase mb-6" style="color: var(--muted); font-family: 'Inter', sans-serif;">Personal Magazine &mdash; 2026</span>
+                    </div>
+                    <h1 class="font-display text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.95] mb-8 animate-fade-up delay-200" style="color: var(--ink);">
+                        Halface
+                    </h1>
+                    <p class="text-lg md:text-xl max-w-xl mx-auto leading-relaxed animate-fade-up delay-300" style="color: var(--muted);">
+                        记录生活的半面，探索知识的半学，书写心灵的半文。
+                    </p>
+                    <div class="mt-12 flex justify-center gap-4 animate-fade-up delay-300">
+                        <button class="mag-btn accent" onclick="showPage('study')">浏览文章</button>
+                        <button class="mag-btn" onclick="showPage('face')">关于作者</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="sketch-border sketch-card p-8 cursor-pointer group" onclick="showPage('study')">
-                <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">📚</div>
-                <h3 class="text-2xl font-bold mb-3">半学</h3>
-                <p style="color: var(--ink-color); opacity: 0.7;">学习笔记，技能树，知识库，以及永无止境的探索之路。</p>
-                <div class="mt-4 text-sm opacity-50">点击查看 →</div>
-            </div>
+            <div class="mag-divider my-16"></div>
 
-            <div class="sketch-border sketch-card p-8 cursor-pointer group" onclick="showPage('writing')">
-                <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">✍️</div>
-                <h3 class="text-2xl font-bold mb-3">半文</h3>
-                <p style="color: var(--ink-color); opacity: 0.7;">随笔，思考，创作，以及那些想要与世界分享的文字。</p>
-                <div class="mt-4 text-sm opacity-50">点击查看 →</div>
-            </div>
-        </div>
-
-        <!-- 最新动态 -->
-        <div class="mt-20 sketch-border p-8 relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-yellow-200 dark:bg-purple-600 rounded-full opacity-50 blur-3xl transition-colors duration-500"></div>
-            <h2 class="text-3xl font-bold mb-6 sketch-underline">最近更新 ✨</h2>
-            <div class="space-y-4">
-                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('fun')">
-                    <span class="text-2xl">🎮</span>
+            <!-- 本期精选 -->
+            <div class="mb-20">
+                <div class="flex items-end justify-between mb-10">
                     <div>
-                        <div class="font-bold">新增半趣栏目</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-05-17T10:00:00"></span> · 全站</div>
+                        <span class="text-xs tracking-[0.2em] uppercase block mb-2" style="color: var(--accent); font-family: 'Inter', sans-serif;">Featured</span>
+                        <h2 class="font-display text-3xl md:text-4xl font-bold">本期精选</h2>
                     </div>
+                    <a href="#" onclick="showPage('study'); return false;" class="text-sm hover:opacity-60 transition-opacity hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">查看全部 <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
                 </div>
-                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="MusicPlayer.togglePlayer()">
-                    <span class="text-2xl">🎵</span>
-                    <div>
-                        <div class="font-bold">音乐播放器上线</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-04-05T20:00:00"></span> · 全站</div>
+                <div class="grid md:grid-cols-3 gap-6" id="featured-articles">
+                    <!-- JS 渲染 -->
+                </div>
+            </div>
+
+            <div class="mag-divider my-16"></div>
+
+            <!-- 最近更新 -->
+            <div class="mb-20">
+                <span class="text-xs tracking-[0.2em] uppercase block mb-2" style="color: var(--accent); font-family: 'Inter', sans-serif;">Updates</span>
+                <h2 class="font-display text-3xl md:text-4xl font-bold mb-10">最近更新</h2>
+                <div class="space-y-6" id="home-updates">
+                    <div class="flex items-start gap-6 py-4 border-b cursor-pointer group" style="border-color: var(--line);" onclick="showPage('home')">
+                        <span class="font-display text-2xl md:text-3xl font-bold opacity-20 group-hover:opacity-40 transition-opacity">01</span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">网站风格焕新 v2.0.0</h3>
+                            <p class="text-sm" style="color: var(--muted);">手绘风格 → 杂志排版风格，Playfair Display + Noto Serif SC，聚光灯互动效果</p>
+                        </div>
+                        <span class="text-xs hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">2026.06.16</span>
                     </div>
-                </div>
-                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="toggleSearch()">
-                    <span class="text-2xl">🔍</span>
-                    <div>
-                        <div class="font-bold">新增全局搜索功能</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-29T10:00:00"></span> · 全站</div>
+                    <div class="flex items-start gap-6 py-4 border-b cursor-pointer group" style="border-color: var(--line);" onclick="showPage('fun')">
+                        <span class="font-display text-2xl md:text-3xl font-bold opacity-20 group-hover:opacity-40 transition-opacity">02</span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">新增半趣栏目</h3>
+                            <p class="text-sm" style="color: var(--muted);">收录个人项目与趣味工具</p>
+                        </div>
+                        <span class="text-xs hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">2026.05.17</span>
                     </div>
-                </div>
-                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('writing')">
-                    <span class="text-2xl">✈️</span>
-                    <div>
-                        <div class="font-bold">新增 2 篇半游诗词</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-28T10:00:00"></span> · 半文</div>
+                    <div class="flex items-start gap-6 py-4 border-b cursor-pointer group" style="border-color: var(--line);" onclick="MusicPlayer.togglePlayer()">
+                        <span class="font-display text-2xl md:text-3xl font-bold opacity-20 group-hover:opacity-40 transition-opacity">03</span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">音乐播放器上线</h3>
+                            <p class="text-sm" style="color: var(--muted);">支持播放列表、进度控制与音量调节</p>
+                        </div>
+                        <span class="text-xs hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">2026.04.05</span>
                     </div>
-                </div>
-                <div class="flex items-start gap-4 p-4 hover:opacity-80 rounded-lg transition-colors sketch-border border-2 cursor-pointer" onclick="showPage('study')">
-                    <span class="text-2xl">💬</span>
-                    <div>
-                        <div class="font-bold">接入 Giscus 评论系统</div>
-                        <div class="text-sm opacity-50 mt-1"><span data-time="2026-03-26T21:00:00"></span> · 全站</div>
+                    <div class="flex items-start gap-6 py-4 border-b cursor-pointer group" style="border-color: var(--line);" onclick="toggleSearch()">
+                        <span class="font-display text-2xl md:text-3xl font-bold opacity-20 group-hover:opacity-40 transition-opacity">04</span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">新增全局搜索功能</h3>
+                            <p class="text-sm" style="color: var(--muted);">快速检索全站文章与内容</p>
+                        </div>
+                        <span class="text-xs hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">2026.03.29</span>
+                    </div>
+                    <div class="flex items-start gap-6 py-4 border-b cursor-pointer group" style="border-color: var(--line);" onclick="showPage('writing')">
+                        <span class="font-display text-2xl md:text-3xl font-bold opacity-20 group-hover:opacity-40 transition-opacity">05</span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">新增 2 篇半游诗词</h3>
+                            <p class="text-sm" style="color: var(--muted);">满江红·游四姑娘山 / 水调歌头·剑门</p>
+                        </div>
+                        <span class="text-xs hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">2026.03.28</span>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- 订阅区域 -->
-        <div class="mt-16 sketch-border bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 p-8 text-center relative overflow-hidden transition-colors duration-500">
-            <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-yellow-300 dark:bg-blue-500 rounded-full opacity-30 blur-2xl transition-colors duration-500"></div>
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-300 dark:bg-purple-500 rounded-full opacity-30 blur-2xl transition-colors duration-500"></div>
-            
-            <h3 class="text-2xl font-bold mb-4 relative z-10">订阅更新 ✉️</h3>
-            <p class="mb-6 relative z-10" style="color: var(--ink-color); opacity: 0.7;">有新文章发布时，第一时间通知你</p>
-            <form id="subscribe-form" class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto relative z-10">
-                <input type="email" id="subscribe-email" placeholder="输入你的邮箱..." class="sketch-input flex-1" required>
-                <button type="submit" class="sketch-btn bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-200">订阅</button>
-            </form>
-            <div id="subscribe-message" class="mt-4 text-sm relative z-10 hidden"></div>
-        </div>
-    </section>
-
-    <!-- 半面 - 关于我 -->
-    <section id="face" class="page max-w-6xl mx-auto px-6 py-12">
-        <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
-            <div class="relative">
-                <div class="sketch-border p-4 transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                    <img src="images/avatar.png" alt="头像" class="w-full h-full object-cover rounded-lg" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4'">
-                </div>
-                <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-yellow-300 dark:bg-purple-500 rounded-full flex items-center justify-center text-3xl sketch-border animate-pulse transition-colors duration-500">
-                    Hi!
-                </div>
-            </div>
-            <div>
-                <h2 class="text-5xl font-bold mb-6 sketch-underline">关于我</h2>
-                <p class="text-lg leading-relaxed mb-6" style="color: var(--ink-color); opacity: 0.8;">
-                    我是电子科技大学的大二学生，主修电子信息工程和电子商务专业。在代码与电路之间寻找平衡，在技术与商业的交叉点探索可能。
-                </p>
-                <p class="text-lg leading-relaxed mb-6" style="color: var(--ink-color); opacity: 0.8;">
-                    我相信学习是一场漫长的修行，而记录是思考的延伸。这个网站是我思考的痕迹，也是与这个世界对话的方式。
-                </p>
-                <div class="flex flex-wrap gap-2 mt-6">
-                    <span class="sketch-tag"># AI 使用者</span>
-                    <span class="sketch-tag"># 写作者</span>
-                    <span class="sketch-tag"># 终身学习者</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 时间线（暂时注释掉）
-        <div class="relative">
-            <h3 class="text-3xl font-bold mb-8 text-center">我的足迹 👣</h3>
-            <div class="space-y-8">
-                <div class="flex flex-col md:flex-row gap-6 items-start">
-                    <div class="sketch-border p-4 min-w-[120px] text-center">
-                        <div class="font-bold text-xl">2024</div>
-                        <div class="text-sm opacity-50">现在</div>
-                    </div>
-                    <div class="flex-1 sketch-border p-6 relative">
-                        <div class="absolute -left-3 top-1/2 w-6 h-6 bg-yellow-400 dark:bg-purple-500 rounded-full border-4 hidden md:block transition-colors duration-500" style="border-color: var(--paper-color);"></div>
-                        <h4 class="font-bold text-xl mb-2">开始构建个人品牌</h4>
-                        <p style="color: var(--ink-color); opacity: 0.7;">创建了这个手绘风格的个人网站，记录成长与思考。</p>
+        <!-- ========== 半面 / 关于 ========== -->
+        <section id="face" class="page py-16 md:py-24">
+            <div class="grid md:grid-cols-12 gap-12">
+                <!-- 左侧头像区 -->
+                <div class="md:col-span-4">
+                    <div class="sticky top-28">
+                        <div class="aspect-[3/4] overflow-hidden mb-6" style="border: 1px solid var(--line);">
+                            <img src="images/avatar.png" alt="头像" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                                 onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4'">
+                        </div>
+                        <div class="text-center">
+                            <span class="text-xs tracking-[0.2em] uppercase block mb-1" style="color: var(--muted); font-family: 'Inter', sans-serif;">Author</span>
+                            <h3 class="font-display text-xl font-bold">Halface</h3>
+                        </div>
                     </div>
                 </div>
-
-                <div class="flex flex-col md:flex-row gap-6 items-start">
-                    <div class="sketch-border p-4 min-w-[120px] text-center">
-                        <div class="font-bold text-xl">2023</div>
-                        <div class="text-sm opacity-50">探索</div>
-                    </div>
-                    <div class="flex-1 sketch-border p-6 relative">
-                        <div class="absolute -left-3 top-1/2 w-6 h-6 bg-blue-400 dark:bg-blue-600 rounded-full border-4 hidden md:block transition-colors duration-500" style="border-color: var(--paper-color);"></div>
-                        <h4 class="font-bold text-xl mb-2">深入学习前端开发</h4>
-                        <p style="color: var(--ink-color); opacity: 0.7;">掌握了 React、Vue 等现代前端框架，开始独立开发项目。</p>
-                    </div>
-                </div>
-
-                <div class="flex flex-col md:flex-row gap-6 items-start">
-                    <div class="sketch-border p-4 min-w-[120px] text-center">
-                        <div class="font-bold text-xl">2022</div>
-                        <div class="text-sm opacity-50">起点</div>
-                    </div>
-                    <div class="flex-1 sketch-border p-6 relative">
-                        <div class="absolute -left-3 top-1/2 w-6 h-6 bg-pink-400 dark:bg-pink-600 rounded-full border-4 hidden md:block transition-colors duration-500" style="border-color: var(--paper-color);"></div>
-                        <h4 class="font-bold text-xl mb-2">第一次接触编程</h4>
-                        <p style="color: var(--ink-color); opacity: 0.7;">写下了第一行 "Hello World"，开启了技术之旅。</p>
+                <!-- 右侧内容 -->
+                <div class="md:col-span-8">
+                    <span class="text-xs tracking-[0.2em] uppercase block mb-4" style="color: var(--accent); font-family: 'Inter', sans-serif;">About</span>
+                    <h1 class="font-display text-4xl md:text-5xl font-bold mb-10">关于我</h1>
+                    <div class="prose max-w-none">
+                        <p class="text-lg leading-relaxed mb-8 drop-cap" style="color: var(--ink);">
+                            我是电子科技大学的大二学生，主修电子信息工程和电子商务专业。在代码与电路之间寻找平衡，在技术与商业的交叉点探索可能。
+                        </p>
+                        <p class="text-lg leading-relaxed mb-8" style="color: var(--muted);">
+                            我相信学习是一场漫长的修行，而记录是思考的延伸。这个网站是我思考的痕迹，也是与这个世界对话的方式。在这里，你可以看到我关于机器学习、数学建模的学习笔记，也能读到我在某个夜晚的随笔与旅途中的诗词。
+                        </p>
+                        <div class="mag-divider my-10"></div>
+                        <h3 class="font-display text-2xl font-bold mb-6">标签</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-3 py-1 text-xs tracking-wider uppercase" style="border: 1px solid var(--line); font-family: 'Inter', sans-serif;">AI 使用者</span>
+                            <span class="px-3 py-1 text-xs tracking-wider uppercase" style="border: 1px solid var(--line); font-family: 'Inter', sans-serif;">写作者</span>
+                            <span class="px-3 py-1 text-xs tracking-wider uppercase" style="border: 1px solid var(--line); font-family: 'Inter', sans-serif;">终身学习者</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        -->
-    </section>
+        </section>
 
-    <!-- 半学 - 技术博客 & 学习路径 -->
-    <section id="study" class="page max-w-6xl mx-auto px-6 py-12">
-        <div class="text-center mb-16">
-            <h2 class="text-5xl font-bold mb-4 sketch-underline inline-block">半学</h2>
-            <p class="text-xl mt-4" style="color: var(--ink-color); opacity: 0.7;">路漫漫其修远兮，吾将上下而求索 💻</p>
-        </div>
-
-        <!-- 学习路径时间线 -->
-        <div class="sketch-border p-8 relative overflow-hidden mb-16">
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-blue-200 to-purple-200 dark:from-blue-700 dark:to-purple-700 rounded-full opacity-30 blur-3xl transition-colors duration-500"></div>
-            
-            <h3 class="text-3xl font-bold mb-8 flex items-center gap-3 relative z-10">
-                <span class="text-4xl">🚀</span>
-                我的学习路径
-            </h3>
-
-            <div class="relative z-10" id="learning-timeline">
-                <!-- 学习路径由 JS 动态渲染 -->
+        <!-- ========== 半学 / 技术博客 ========== -->
+        <section id="study" class="page py-16 md:py-24">
+            <div class="text-center mb-16">
+                <span class="text-xs tracking-[0.3em] uppercase block mb-4" style="color: var(--accent); font-family: 'Inter', sans-serif;">Study Notes</span>
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4">半学</h1>
+                <p class="max-w-md mx-auto" style="color: var(--muted);">路漫漫其修远兮，吾将上下而求索</p>
             </div>
-        </div>
 
-        <!-- 技术博客文章列表 -->
-        <div class="mb-16">
-            <div class="flex items-center justify-between mb-8">
-                <h3 class="text-3xl font-bold flex items-center gap-3">
-                    <span class="text-4xl">📝</span>
-                    技术博客
-                </h3>
+            <!-- 学习路径 -->
+            <div class="mb-20 max-w-3xl mx-auto">
+                <h2 class="font-display text-2xl font-bold mb-8 text-center">学习路径</h2>
+                <div class="relative pl-8" id="learning-timeline">
+                    <!-- JS 渲染 -->
+                </div>
+            </div>
+
+            <div class="mag-divider mb-16"></div>
+
+            <!-- 技术博客 -->
+            <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+                <h2 class="font-display text-2xl font-bold">技术博客</h2>
                 <div class="flex gap-2" id="tech-filters">
-                    <button class="sketch-btn active text-sm" data-filter="all" onclick="filterTechArticles('all')">全部</button>
-                    <button class="sketch-btn text-sm" data-filter="ml" onclick="filterTechArticles('ml')">机器学习</button>
-                    <button class="sketch-btn text-sm" data-filter="modeling" onclick="filterTechArticles('modeling')">数学建模</button>
+                    <button class="mag-btn active text-xs" data-filter="all" onclick="filterTechArticles('all')">全部</button>
+                    <button class="mag-btn text-xs" data-filter="ml" onclick="filterTechArticles('ml')">机器学习</button>
+                    <button class="mag-btn text-xs" data-filter="modeling" onclick="filterTechArticles('modeling')">数学建模</button>
                 </div>
             </div>
-
-            <div class="grid md:grid-cols-2 gap-6" id="tech-article-list">
-                <!-- 技术文章卡片由 JS 动态渲染 -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="tech-article-list">
+                <!-- JS 渲染 -->
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 半文 - 文章/文字 -->
-    <section id="writing" class="page max-w-6xl mx-auto px-6 py-12">
-        <div class="text-center mb-16">
-            <h2 class="text-5xl font-bold mb-4 sketch-underline inline-block">半文</h2>
-            <p class="text-xl mt-4" style="color: var(--ink-color); opacity: 0.7;">文章千古事，得失寸心知 📝</p>
-        </div>
+        <!-- ========== 半文 / 写作 ========== -->
+        <section id="writing" class="page py-16 md:py-24">
+            <div class="text-center mb-16">
+                <span class="text-xs tracking-[0.3em] uppercase block mb-4" style="color: var(--accent); font-family: 'Inter', sans-serif;">Writing</span>
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4">半文</h1>
+                <p class="max-w-md mx-auto" style="color: var(--muted);">随笔，思考，创作，以及那些想要与世界分享的文字</p>
+            </div>
 
-        <!-- 文章分类 -->
-        <div class="flex flex-wrap justify-center gap-4 mb-12" id="article-filters">
-            <button class="sketch-btn active" data-filter="all" onclick="filterArticles('all')">全部</button>
-            <button class="sketch-btn" data-filter="thinking" onclick="filterArticles('thinking')">半思</button>
-            <button class="sketch-btn" data-filter="reading" onclick="filterArticles('reading')">半读</button>
-            <button class="sketch-btn" data-filter="movie" onclick="filterArticles('movie')">半影</button>
-            <button class="sketch-btn" data-filter="travel" onclick="filterArticles('travel')">半游</button>
-        </div>
-
-        <!-- 文章列表 -->
-        <div class="grid md:grid-cols-2 gap-8" id="article-list">
-            <!-- 半文文章卡片由 JS 动态渲染 -->
-        </div>
-
-    </section>
-
-    <!-- 文章详情页 -->
-    <section id="article-detail" class="page max-w-4xl mx-auto px-6 py-12">
-        <button onclick="backToArticles()" class="sketch-btn mb-8 flex items-center gap-2">
-            <span>←</span> 返回文章列表
-        </button>
-        <article id="article-content" class="sketch-border p-8 md:p-12">
-            <!-- 文章内容将在这里动态加载 -->
-        </article>
-        
-        <!-- Disqus 评论预留区域 -->
-        <div id="disqus_thread"></div>
-        
-        <!-- 评论区域（可替换为 Disqus） -->
-        <div id="comments-section" class="mt-12 pt-8 border-t-4 border-gray-300 dark:border-gray-600">
-            <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                <span>💬</span>
-                <span>评论</span>
-                <span id="comment-count" class="text-lg font-normal opacity-60">(0)</span>
-            </h3>
-            
-            <!-- 评论输入框（移动端响应式布局） -->
-            <div class="sketch-border p-4 sm:p-6 mb-8 bg-white dark:bg-gray-800 transition-colors duration-500">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
-                    <input type="text" id="comment-name" placeholder="你的昵称" class="sketch-input" required>
-                    <input type="email" id="comment-email" placeholder="邮箱（不公开）" class="sketch-input" required>
-                </div>
-                <textarea id="comment-content" placeholder="写下你的评论..." class="sketch-input w-full h-32 resize-none mb-4" required></textarea>
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                    <p class="text-xs opacity-50">✉️ 邮箱仅用于接收回复通知，不会公开</p>
-                    <button onclick="submitComment()" class="sketch-btn bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-200 w-full sm:w-auto">
-                        发表评论
-                    </button>
+            <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+                <h2 class="font-display text-2xl font-bold">文章列表</h2>
+                <div class="flex gap-2" id="article-filters">
+                    <button class="mag-btn active text-xs" data-filter="all" onclick="filterWritingArticles('all')">全部</button>
+                    <button class="mag-btn text-xs" data-filter="thinking" onclick="filterWritingArticles('thinking')">半思</button>
+                    <button class="mag-btn text-xs" data-filter="reading" onclick="filterWritingArticles('reading')">半读</button>
+                    <button class="mag-btn text-xs" data-filter="travel" onclick="filterWritingArticles('travel')">半游</button>
                 </div>
             </div>
-            
-            <!-- 评论列表 -->
-            <div id="comment-list" class="space-y-4 sm:space-y-6">
-                <!-- 评论由 Giscus 系统管理 -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="article-list">
+                <!-- JS 渲染 -->
             </div>
-            
-            <!-- 空状态 -->
-            <div id="comment-empty" class="text-center py-8 sm:py-12 hidden">
-                <div class="text-4xl sm:text-5xl mb-4">💭</div>
-                <p class="opacity-60">还没有评论，来做第一个评论者吧！</p>
+        </section>
+
+        <!-- ========== 半趣 / 项目 ========== -->
+        <section id="fun" class="page py-16 md:py-24">
+            <div class="text-center mb-16">
+                <span class="text-xs tracking-[0.3em] uppercase block mb-4" style="color: var(--accent); font-family: 'Inter', sans-serif;">Projects</span>
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4">半趣</h1>
+                <p class="max-w-md mx-auto" style="color: var(--muted);">个人项目与趣味工具集合</p>
             </div>
-        </div>
-    </section>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+                <!-- JS 渲染 -->
+            </div>
+        </section>
 
-    <!-- 半趣页面 -->
-    <section id="fun" class="page max-w-6xl mx-auto px-6 py-12">
-        <div class="text-center mb-16">
-            <h2 class="text-5xl font-bold mb-4 sketch-underline inline-block">半趣</h2>
-            <p class="text-xl mt-4" style="color: var(--ink-color); opacity: 0.7;">兴趣使然，玩物养志 🎮</p>
-        </div>
-
-        <!-- 项目展示网格 -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- 项目卡片 1 -->
-            <div class="sketch-border sketch-card p-6 cursor-pointer group" onclick="showProjectDetail('project1')">
-                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">💰</div>
-                <h3 class="text-xl font-bold mb-2">半面记账</h3>
-                <p class="text-sm opacity-70 mb-4">个人财务记账系统，帮助管理日常收支</p>
-                <div class="flex gap-2 flex-wrap">
-                    <span class="sketch-tag text-xs">React</span>
-                    <span class="sketch-tag text-xs">Tailwind</span>
-                    <span class="sketch-tag text-xs">Vercel</span>
+        <!-- ========== 文章详情 ========== -->
+        <section id="article-detail" class="page py-16 md:py-24">
+            <div class="max-w-3xl mx-auto">
+                <button onclick="backToArticles()" class="mag-btn text-xs mb-8">
+                    <i class="fas fa-arrow-left mr-2"></i>返回
+                </button>
+                <div id="article-content" class="article-body">
+                    <!-- JS 渲染 -->
+                </div>
+                <div class="mt-16 pt-8" style="border-top: 1px solid var(--line);">
+                    <div id="disqus_thread"></div>
                 </div>
             </div>
-
-            <!-- 项目卡片 2 -->
-            <div class="sketch-border sketch-card p-6 cursor-pointer group" onclick="showProjectDetail('project2')">
-                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🎮</div>
-                <h3 class="text-xl font-bold mb-2">Imperium Civitatum</h3>
-                <p class="text-sm opacity-70 mb-4">历史文明策略游戏</p>
-                <div class="flex gap-2 flex-wrap">
-                    <span class="sketch-tag text-xs">游戏</span>
-                    <span class="sketch-tag text-xs">策略</span>
-                    <span class="sketch-tag text-xs">历史</span>
-                </div>
-            </div>
-
-            <!-- 项目卡片 3 -->
-            <div class="sketch-border sketch-card p-6 cursor-pointer group" onclick="showProjectDetail('project3')">
-                <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">📱</div>
-                <h3 class="text-xl font-bold mb-2">项目名称 3</h3>
-                <p class="text-sm opacity-70 mb-4">移动端或小程序项目...</p>
-                <div class="flex gap-2 flex-wrap">
-                    <span class="sketch-tag text-xs">React</span>
-                    <span class="sketch-tag text-xs">App</span>
-                </div>
-            </div>
-
-            <!-- 添加更多项目卡片 -->
-            <div class="sketch-border sketch-card p-6 border-dashed flex items-center justify-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" onclick="alert('点击编辑添加新项目')">
-                <div class="text-center opacity-50">
-                    <div class="text-4xl mb-2">+</div>
-                    <p>添加项目</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 项目详情弹窗 -->
-        <div id="project-detail-modal" class="fixed inset-0 z-[70] hidden">
-            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeProjectDetail()"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl px-4">
-                <div class="sketch-border bg-white dark:bg-gray-800 p-6 md:p-8 shadow-2xl max-h-[80vh] overflow-y-auto">
-                    <div class="flex justify-between items-start mb-6">
-                        <h3 id="project-detail-title" class="text-2xl font-bold">项目详情</h3>
-                        <button onclick="closeProjectDetail()" class="text-2xl hover:opacity-70">✕</button>
-                    </div>
-                    <div id="project-detail-content">
-                        <!-- 动态加载项目详情 -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- 页脚 -->
-    <footer class="max-w-6xl mx-auto px-6 py-12 mt-20 border-t-4 border-gray-800 sketch-border mx-4 mb-4">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="text-center md:text-left">
-                <div class="text-xl font-bold mb-2">Halface</div>
-                <div class="text-sm opacity-50">用不完美的线条，描绘完美的生活</div>
+    <footer class="mt-24 py-16 border-t" style="border-color: var(--line);">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="text-center md:text-left">
+                    <div class="font-display text-2xl font-bold mb-2" style="color: var(--accent);">Halface</div>
+                    <div class="text-sm" style="color: var(--muted);">志向做一个伟大的人，努力做一个真诚的人，一定做一个善良的人</div>
+                </div>
+                <div class="flex gap-3">
+                    <a href="mailto:panqihao525@163.com" class="w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]" style="border: 1px solid var(--line); color: var(--muted);" title="邮箱">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://github.com/Halface525" target="_blank" class="w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]" style="border: 1px solid var(--line); color: var(--muted);" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="images/wechat-qr.jpg" target="_blank" class="w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]" style="border: 1px solid var(--line); color: var(--muted);" title="微信公众号">
+                        <i class="fab fa-weixin"></i>
+                    </a>
+                </div>
             </div>
-            <div class="flex gap-4">
-                <a href="mailto:panqihao525@163.com" class="sketch-border p-3 hover:opacity-80 transition-colors text-2xl flex items-center justify-center w-12 h-12" title="邮箱">
-                    <i class="fas fa-envelope"></i>
-                </a>
-                <a href="https://github.com/Halface525/Halface525.github.io" target="_blank" class="sketch-border p-3 hover:opacity-80 transition-colors text-2xl flex items-center justify-center w-12 h-12" title="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="images/wechat-qr.jpg" target="_blank" class="sketch-border p-3 hover:opacity-80 transition-colors text-2xl flex items-center justify-center w-12 h-12" title="微信公众号">
-                    <i class="fab fa-weixin"></i>
-                </a>
+            <div class="text-center mt-12 text-xs tracking-wider" style="color: var(--muted); font-family: 'Inter', sans-serif;">
+                &copy; 2026 Made by Halface | v2.0.0
             </div>
-        </div>
-        <div class="text-center mt-8 text-sm opacity-50">
-            © 2026 Made with ❤️ by Halface & Kimi | v1.3.0 | <span id="theme-status">当前：亮色模式</span>
         </div>
     </footer>
 
-    <!-- Howler.js 音频库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
-    <!-- 应用 JS 模块 -->
+    <!-- ========== 数据与脚本 ========== -->
     <script src="js/config.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/theme.js"></script>
-    <script src="js/router.js"></script>
     <script src="js/markdown.js"></script>
-    <script src="js/effects.js"></script>
-    <script src="js/articles.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/comments.js"></script>
-    <script src="js/projects.js"></script>
-    <script src="js/subscribe.js"></script>
+    <script src="js/magazine.js"></script>
     <script src="js/music-player.js"></script>
-    <script src="js/main.js"></script>
-    
-    <!-- 音乐播放器初始化 -->
-    <script>
-        // 页面加载后初始化播放器
-        document.addEventListener('DOMContentLoaded', () => {
-            MusicPlayer.init();
-        });
-        
-        // 首次点击后开始播放（解决浏览器自动播放限制）
-        let musicStarted = false;
-        document.addEventListener('click', () => {
-            if (!musicStarted && MusicPlayer.playlist.length > 0) {
-                MusicPlayer.play(0);
-                musicStarted = true;
-            }
-        }, { once: true });
-    </script>
 </body>
 </html>

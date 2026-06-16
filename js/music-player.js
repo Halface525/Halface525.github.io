@@ -36,7 +36,7 @@ const MusicPlayer = {
         mount.innerHTML = `
             <div class="music-full">
                 <div class="music-header">
-                    <div class="music-cover"><span>🎵</span></div>
+                    <div class="music-cover"><div class="vinyl-disc"></div></div>
                     <div class="music-meta">
                         <div id="music-title" class="music-title">未播放</div>
                         <div id="music-artist" class="music-artist">-</div>

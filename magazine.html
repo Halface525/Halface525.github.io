@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halface 主页</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Playfair Display, serif' font-size='26' font-style='italic' fill='%23c41e3a'%3EH%3C/text%3E%3C/svg%3E">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mag: {
+                            paper: '#faf9f7',
+                            paperDark: '#0f0f0f',
+                            ink: '#1a1a1a',
+                            inkDark: '#e8e6e3',
+                            accent: '#c41e3a',
+                            accentDark: '#e85d75',
+                            gold: '#c9a96e',
+                            muted: '#6b6b6b',
+                            mutedDark: '#9a9896',
+                            line: '#e5e2dd',
+                            lineDark: '#2a2a2a'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Playfair Display"', '"Noto Serif SC"', 'serif'],
+                        body: ['"Noto Serif SC"', '"Source Han Serif SC"', 'serif'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --paper: #faf9f7;
+            --ink: #1a1a1a;
+            --accent: #c41e3a;
+            --gold: #c9a96e;
+            --muted: #6b6b6b;
+            --line: #e5e2dd;
+        }
+        .dark {
+            --paper: #0f0f0f;
+            --ink: #e8e6e3;
+            --accent: #e85d75;
+            --gold: #c9a96e;
+            --muted: #9a9896;
+            --line: #2a2a2a;
+        }
+        body {
+            font-family: 'Noto Serif SC', 'Source Han Serif SC', serif;
+            background: var(--paper);
+            color: var(--ink);
+            transition: background 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* 杂志标题 */
+        .font-display { font-family: 'Playfair Display', 'Noto Serif SC', serif; }
+
+        /* 首字下沉 */
+        .drop-cap::first-letter {
+            float: left;
+            font-size: 4.2rem;
+            line-height: 0.75;
+            padding-right: 0.6rem;
+            padding-top: 0.15rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* 杂志卡片 */
+        .mag-card {
+            border: 1px solid var(--line);
+            background: var(--paper);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .mag-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 48px rgba(0,0,0,0.08);
+            border-color: var(--accent);
+        }
+        .dark .mag-card:hover {
+            box-shadow: 0 24px 48px rgba(0,0,0,0.25);
+        }
+
+        /* 页面切换 */
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 分隔线 */
+        .mag-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--muted);
+        }
+        .mag-divider::before, .mag-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--line);
+        }
+
+        /* 导航链接 */
+        .nav-link {
+            position: relative;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--muted);
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--ink);
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* 搜索弹窗 */
+        #search-modal {
+            backdrop-filter: blur(12px);
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+        /* 杂志按钮 */
+        .mag-btn {
+            border: 1px solid var(--ink);
+            background: transparent;
+            color: var(--ink);
+            padding: 0.5rem 1.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .mag-btn:hover {
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .mag-btn.accent {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .mag-btn.accent:hover {
+            background: var(--accent);
+            color: white;
+        }
+        .mag-btn.active {
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .dark .mag-btn.active {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        /* ==================== 音乐播放器 — 杂志风格 ==================== */
+        .sketch-border { border: 1px solid var(--line); background: var(--paper); }
+        .sketch-btn { border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; transition: all 0.2s ease; }
+        .sketch-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        .music-player {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 300px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            z-index: 60;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+        }
+        .dark .music-player { box-shadow: 0 16px 40px rgba(0,0,0,0.3); }
+        .music-player.minimized { width: auto; padding: 0; background: transparent; border: none; box-shadow: none; }
+        .music-player.minimized .music-full { display: none; }
+        .music-player.minimized .music-mini { display: flex; }
+
+        .music-mini {
+            display: none;
+            width: 44px; height: 44px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .music-mini:hover { border-color: var(--accent); color: var(--accent); }
+        .music-mini-icon { font-size: 18px; }
+
+        .music-full { padding: 20px; }
+        .music-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+        .music-cover {
+            width: 48px; height: 48px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .music-cover span { display: none; }
+        .music-cover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-radial-gradient(circle at center, #1a1a1a 0px, #1a1a1a 2px, #2a2a2a 3px, #1a1a1a 4px);
+        }
+        .music-cover::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px; height: 12px;
+            background: var(--paper);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .music-meta { flex: 1; min-width: 0; }
+        .music-title { font-family: 'Playfair Display', 'Noto Serif SC', serif; font-weight: 600; font-size: 1rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .music-artist { font-size: 0.8rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .music-close {
+            width: 28px; height: 28px;
+            border: 1px solid var(--line); background: transparent;
+            cursor: pointer; font-size: 14px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; color: var(--muted);
+        }
+        .music-close:hover { border-color: var(--accent); color: var(--accent); }
+
+        .music-progress-container { margin-bottom: 16px; }
+        .music-progress-bar { height: 3px; background: var(--line); cursor: pointer; position: relative; }
+        .music-progress { height: 100%; background: var(--accent); width: 0%; transition: width 0.1s linear; }
+        .music-time { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-top: 6px; font-family: 'Inter', sans-serif; }
+
+        .music-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; }
+        .music-control-btn, .music-mode-btn {
+            width: 32px; height: 32px;
+            border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; cursor: pointer; transition: all 0.2s;
+        }
+        .music-control-btn:hover, .music-mode-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .music-play-btn {
+            width: 40px; height: 40px;
+            border: 1px solid var(--ink); background: var(--ink); color: var(--paper);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; cursor: pointer; transition: all 0.2s;
+        }
+        .music-play-btn:hover { background: var(--accent); border-color: var(--accent); color: white; }
+
+        .music-volume-wrapper { display: flex; align-items: center; gap: 6px; margin-left: 6px; }
+        .music-volume-wrapper i { font-size: 12px; color: var(--muted); cursor: pointer; transition: color 0.2s; }
+        .music-volume-wrapper i:hover { color: var(--accent); }
+        .music-volume-wrapper input[type="range"] {
+            width: 50px; height: 2px;
+            -webkit-appearance: none; appearance: none;
+            background: var(--line); outline: none;
+        }
+        .music-volume-wrapper input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 10px; height: 10px; background: var(--accent); cursor: pointer;
+        }
+        .music-volume-wrapper input[type="range"]::-moz-range-thumb {
+            width: 10px; height: 10px; background: var(--accent); cursor: pointer; border: none;
+        }
+
+        .music-playlist { max-height: 140px; overflow-y: auto; border-top: 1px solid var(--line); padding-top: 12px; }
+        .music-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; cursor: pointer; transition: all 0.15s; border-bottom: 1px solid transparent; }
+        .music-item:hover { border-bottom-color: var(--line); }
+        .music-item.active { color: var(--accent); }
+        .music-number { width: 18px; text-align: center; color: var(--muted); font-size: 0.75rem; font-family: 'Inter', sans-serif; flex-shrink: 0; }
+        .music-item.active .music-number { color: var(--accent); }
+        .music-info { flex: 1; min-width: 0; }
+        .music-item .music-title { font-size: 0.85rem; margin-bottom: 1px; }
+        .music-item .music-artist { font-size: 0.7rem; color: var(--muted); }
+        .music-playing { font-size: 12px; color: var(--accent); }
+        .music-empty { text-align: center; padding: 20px; color: var(--muted); font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .music-player { width: calc(100% - 32px); left: 16px; right: 16px; top: 120px; }
+            .music-full { padding: 16px; }
+            .music-playlist { max-height: 120px; }
+        }
+
+        /* 文章正文排版 */
+        .article-body h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+        }
+        .article-body h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--line);
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+        }
+        .article-body h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .article-body p {
+            margin-bottom: 1.25rem;
+            line-height: 1.85;
+            text-align: justify;
+        }
+        .article-body blockquote {
+            border-left: 2px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--muted);
+        }
+        .article-body pre {
+            background: rgba(0,0,0,0.03);
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--line);
+            font-family: 'Menlo', 'Monaco', monospace;
+            font-size: 0.875rem;
+        }
+        .dark .article-body pre {
+            background: rgba(255,255,255,0.03);
+        }
+        .article-body code {
+            background: rgba(0,0,0,0.03);
+            padding: 0.2rem 0.4rem;
+            font-size: 0.875rem;
+            font-family: 'Menlo', 'Monaco', monospace;
+        }
+        .article-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        .article-body th, .article-body td {
+            border: 1px solid var(--line);
+            padding: 0.75rem 1rem;
+        }
+        .article-body th {
+            background: rgba(0,0,0,0.02);
+            font-weight: 600;
+        }
+        .article-body ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1.25rem; }
+        .article-body ol { list-style: decimal; margin-left: 1.5rem; margin-bottom: 1.25rem; }
+        .article-body li { margin-bottom: 0.5rem; }
+        .article-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+        .article-body a:hover { opacity: 0.8; }
+        .article-body img { max-width: 100%; height: auto; }
+
+        /* 搜索高亮 */
+        .search-highlight { background: rgba(196, 30, 58, 0.15); }
+
+        /* 时间线 */
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--ink);
+            opacity: 0.25;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -5px;
+            top: 0.4rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--paper);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+        .status-tag {
+            font-size: 10px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            font-family: 'Inter', sans-serif;
+            border-radius: 2px;
+            display: inline-block;
+        }
+        .status-completed {
+            background: var(--line);
+            color: var(--ink);
+            border: 1px solid var(--line);
+        }
+        .status-ongoing {
+            background: var(--accent);
+            color: var(--paper);
+            border: 1px solid var(--accent);
+        }
+
+        /* 聚光灯互动区 */
+        .spotlight-container {
+            position: relative;
+            height: 340px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            border: 1px solid var(--line);
+            cursor: none;
+        }
+        .spotlight-back {
+            position: absolute;
+            inset: 0;
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .spotlight-mask {
+            position: absolute;
+            inset: 0;
+            background: var(--paper);
+            mask-image: radial-gradient(circle 140px at 50% 50%, transparent 100%, black 100%);
+            -webkit-mask-image: radial-gradient(circle 140px at 50% 50%, transparent 100%, black 100%);
+        }
+        .spotlight-word {
+            position: absolute;
+            font-weight: 600;
+            opacity: 0.55;
+            user-select: none;
+            pointer-events: none;
+            white-space: nowrap;
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+        }
+
+        /* 封面大标题动画 */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+            animation: fadeUp 0.8s ease forwards;
+        }
+        .delay-100 { animation-delay: 0.1s; opacity: 0; }
+        .delay-200 { animation-delay: 0.2s; opacity: 0; }
+        .delay-300 { animation-delay: 0.3s; opacity: 0; }
+
+        /* 响应式导航 */
+        @media (max-width: 768px) {
+            .magazine-hero h1 { font-size: 3rem !important; }
+        }
+    </style>
+    <!-- MathJax -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="min-h-screen">
+    <!-- 顶部导航 -->
+    <nav class="sticky top-0 z-50 border-b" style="border-color: var(--line); background: rgba(250,249,247,0.92); backdrop-filter: blur(12px);">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="font-display text-3xl font-bold tracking-tight cursor-pointer" onclick="showPage('home')" style="color: var(--accent);">
+                Halface
+            </div>
+            <div class="hidden md:flex items-center gap-8">
+                <button class="nav-link active" onclick="showPage('home')" id="nav-home">主页</button>
+                <button class="nav-link" onclick="showPage('face')" id="nav-face">半面</button>
+                <button class="nav-link" onclick="showPage('study')" id="nav-study">半学</button>
+                <button class="nav-link" onclick="showPage('writing')" id="nav-writing">半文</button>
+                <button class="nav-link" onclick="showPage('fun')" id="nav-fun">半趣</button>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="text-sm hover:opacity-60 transition-opacity" onclick="MusicPlayer.togglePlayer()" title="音乐播放器">
+                    <i class="fas fa-music"></i>
+                </button>
+                <button class="text-sm hover:opacity-60 transition-opacity" onclick="toggleSearch()" title="搜索">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="text-sm hover:opacity-60 transition-opacity" onclick="toggleTheme()" title="切换主题" id="theme-toggle-btn">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div class="md:hidden flex justify-center gap-4 pb-3 text-sm" style="border-top: 1px solid var(--line);">
+            <button class="nav-link py-2 active" onclick="showPage('home')" id="nav-home-m">主页</button>
+            <button class="nav-link py-2" onclick="showPage('face')" id="nav-face-m">半面</button>
+            <button class="nav-link py-2" onclick="showPage('study')" id="nav-study-m">半学</button>
+            <button class="nav-link py-2" onclick="showPage('writing')" id="nav-writing-m">半文</button>
+            <button class="nav-link py-2" onclick="showPage('fun')" id="nav-fun-m">半趣</button>
+        </div>
+    </nav>
+
+    <!-- 音乐播放器 -->
+    <div id="music-player"></div>
+
+    <!-- 搜索弹窗 -->
+    <div id="search-modal" class="fixed inset-0 z-[60] hidden" style="background: rgba(0,0,0,0.4);">
+        <div class="absolute inset-0" onclick="toggleSearch()"></div>
+        <div class="absolute top-16 left-1/2 transform -translate-x-1/2 w-full max-w-xl px-4">
+            <div class="p-6 shadow-2xl" style="background: var(--paper); border: 1px solid var(--line);">
+                <div class="flex items-center gap-3 mb-4">
+                    <i class="fas fa-search opacity-40"></i>
+                    <input type="text" id="search-input" placeholder="搜索文章..." class="flex-1 bg-transparent outline-none text-base" style="color: var(--ink); font-family: 'Noto Serif SC', serif;" oninput="performSearch(this.value)">
+                    <button onclick="toggleSearch()" class="opacity-40 hover:opacity-100 transition-opacity"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="search-results" class="space-y-3 max-h-[60vh] overflow-y-auto"></div>
+                <div id="search-hint" class="text-center text-xs mt-4 opacity-40" style="font-family: 'Inter', sans-serif;">输入关键词搜索文章</div>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-6">
+        <!-- ========== 主页 / 封面 ========== -->
+        <section id="home" class="page active">
+            <!-- 杂志封面 -->
+            <div class="py-20 md:py-32 text-center magazine-hero" style="position:relative; overflow:hidden; cursor:none;">
+                <!-- 底层纹理文字 -->
+                <div id="spotlight-back" style="position:absolute; inset:0; z-index:0;"></div>
+                <!-- 反色圆形 -->
+                <div id="spotlight-circle" style="position:absolute; width:280px; height:280px; border-radius:50%; pointer-events:none; z-index:20; backdrop-filter:invert(1); -webkit-backdrop-filter:invert(1); display:none; transform:translate(-50%,-50%);"></div>
+                <!-- 封面内容 -->
+                <div class="relative z-10">
+                    <div class="animate-fade-up delay-100">
+                        <span class="inline-block text-xs tracking-[0.3em] uppercase mb-6" style="color: var(--muted); font-family: 'Inter', sans-serif;">Personal Magazine &mdash; 2026</span>
+                    </div>
+                    <h1 class="font-display text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.95] mb-8 animate-fade-up delay-200" style="color: var(--ink);">
+                        Halface
+                    </h1>
+                    <p class="text-lg md:text-xl max-w-xl mx-auto leading-relaxed animate-fade-up delay-300" style="color: var(--muted);">
+                        记录生活的半面，探索知识的半学，书写心灵的半文。
+                    </p>
+                    <div class="mt-12 flex justify-center gap-4 animate-fade-up delay-300">
+                        <button class="mag-btn accent" onclick="showPage('study')">浏览文章</button>
+                        <button class="mag-btn" onclick="showPage('face')">关于作者</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mag-divider my-16"></div>
+
+            <!-- 本期精选 -->
+            <div class="mb-20">
+                <div class="flex items-end justify-between mb-10">
+                    <div>
+                        <span class="text-xs tracking-[0.2em] uppercase block mb-2" style="color: var(--accent); font-family: 'Inter', sans-serif;">Featured</span>
+                        <h2 class="font-display text-3xl md:text-4xl font-bold">本期精选</h2>
+                    </div>
+                    <a href="#" onclick="showPage('study'); return false;" class="text-sm hover:opacity-60 transition-opacity hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">查看全部 <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6" id="featured-articles">
+                    <!-- JS 渲染 -->
+                </div>
+            </div>
+
+            <div class="mag-divider my-16"></div>
+
+            <!-- 最近更新 -->
+            <div class="mb-20">
+                <span class="text-xs tracking-[0.2em] uppercase block mb-2" style="color: var(--accent); font-family: 'Inter', sans-serif;">Updates</span>
+                <h2 class="font-display text-3xl md:text-4xl font-bold mb-10">最近更新</h2>
+                <div class="space-y-6" id="home-updates">
+                    <div class="flex items-start gap-6 py-4 border-b cursor-pointer group" style="border-color: var(--line);" onclick="showPage('fun')">
+                        <span class="font-display text-2xl md:text-3xl font-bold opacity-20 group-hover:opacity-40 transition-opacity">01</span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">新增半趣栏目</h3>
+                            <p class="text-sm" style="color: var(--muted);">收录个人项目与趣味工具</p>
+                        </div>
+                        <span class="text-xs hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">2026.05.17</span>
+                    </div>
+                    <div class="flex items-start gap-6 py-4 border-b cursor-pointer group" style="border-color: var(--line);" onclick="MusicPlayer.togglePlayer()">
+                        <span class="font-display text-2xl md:text-3xl font-bold opacity-20 group-hover:opacity-40 transition-opacity">02</span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">音乐播放器上线</h3>
+                            <p class="text-sm" style="color: var(--muted);">支持播放列表、进度控制与音量调节</p>
+                        </div>
+                        <span class="text-xs hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">2026.04.05</span>
+                    </div>
+                    <div class="flex items-start gap-6 py-4 border-b cursor-pointer group" style="border-color: var(--line);" onclick="toggleSearch()">
+                        <span class="font-display text-2xl md:text-3xl font-bold opacity-20 group-hover:opacity-40 transition-opacity">03</span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">新增全局搜索功能</h3>
+                            <p class="text-sm" style="color: var(--muted);">快速检索全站文章与内容</p>
+                        </div>
+                        <span class="text-xs hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">2026.03.29</span>
+                    </div>
+                    <div class="flex items-start gap-6 py-4 border-b cursor-pointer group" style="border-color: var(--line);" onclick="showPage('writing')">
+                        <span class="font-display text-2xl md:text-3xl font-bold opacity-20 group-hover:opacity-40 transition-opacity">04</span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">新增 2 篇半游诗词</h3>
+                            <p class="text-sm" style="color: var(--muted);">满江红·游四姑娘山 / 水调歌头·剑门</p>
+                        </div>
+                        <span class="text-xs hidden md:block" style="color: var(--muted); font-family: 'Inter', sans-serif;">2026.03.28</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 半面 / 关于 ========== -->
+        <section id="face" class="page py-16 md:py-24">
+            <div class="grid md:grid-cols-12 gap-12">
+                <!-- 左侧头像区 -->
+                <div class="md:col-span-4">
+                    <div class="sticky top-28">
+                        <div class="aspect-[3/4] overflow-hidden mb-6" style="border: 1px solid var(--line);">
+                            <img src="images/avatar.png" alt="头像" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                                 onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4'">
+                        </div>
+                        <div class="text-center">
+                            <span class="text-xs tracking-[0.2em] uppercase block mb-1" style="color: var(--muted); font-family: 'Inter', sans-serif;">Author</span>
+                            <h3 class="font-display text-xl font-bold">Halface</h3>
+                        </div>
+                    </div>
+                </div>
+                <!-- 右侧内容 -->
+                <div class="md:col-span-8">
+                    <span class="text-xs tracking-[0.2em] uppercase block mb-4" style="color: var(--accent); font-family: 'Inter', sans-serif;">About</span>
+                    <h1 class="font-display text-4xl md:text-5xl font-bold mb-10">关于我</h1>
+                    <div class="prose max-w-none">
+                        <p class="text-lg leading-relaxed mb-8 drop-cap" style="color: var(--ink);">
+                            我是电子科技大学的大二学生，主修电子信息工程和电子商务专业。在代码与电路之间寻找平衡，在技术与商业的交叉点探索可能。
+                        </p>
+                        <p class="text-lg leading-relaxed mb-8" style="color: var(--muted);">
+                            我相信学习是一场漫长的修行，而记录是思考的延伸。这个网站是我思考的痕迹，也是与这个世界对话的方式。在这里，你可以看到我关于机器学习、数学建模的学习笔记，也能读到我在某个夜晚的随笔与旅途中的诗词。
+                        </p>
+                        <div class="mag-divider my-10"></div>
+                        <h3 class="font-display text-2xl font-bold mb-6">标签</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-3 py-1 text-xs tracking-wider uppercase" style="border: 1px solid var(--line); font-family: 'Inter', sans-serif;">AI 使用者</span>
+                            <span class="px-3 py-1 text-xs tracking-wider uppercase" style="border: 1px solid var(--line); font-family: 'Inter', sans-serif;">写作者</span>
+                            <span class="px-3 py-1 text-xs tracking-wider uppercase" style="border: 1px solid var(--line); font-family: 'Inter', sans-serif;">终身学习者</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 半学 / 技术博客 ========== -->
+        <section id="study" class="page py-16 md:py-24">
+            <div class="text-center mb-16">
+                <span class="text-xs tracking-[0.3em] uppercase block mb-4" style="color: var(--accent); font-family: 'Inter', sans-serif;">Study Notes</span>
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4">半学</h1>
+                <p class="max-w-md mx-auto" style="color: var(--muted);">路漫漫其修远兮，吾将上下而求索</p>
+            </div>
+
+            <!-- 学习路径 -->
+            <div class="mb-20 max-w-3xl mx-auto">
+                <h2 class="font-display text-2xl font-bold mb-8 text-center">学习路径</h2>
+                <div class="relative pl-8" id="learning-timeline">
+                    <!-- JS 渲染 -->
+                </div>
+            </div>
+
+            <div class="mag-divider mb-16"></div>
+
+            <!-- 技术博客 -->
+            <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+                <h2 class="font-display text-2xl font-bold">技术博客</h2>
+                <div class="flex gap-2" id="tech-filters">
+                    <button class="mag-btn active text-xs" data-filter="all" onclick="filterTechArticles('all')">全部</button>
+                    <button class="mag-btn text-xs" data-filter="ml" onclick="filterTechArticles('ml')">机器学习</button>
+                    <button class="mag-btn text-xs" data-filter="modeling" onclick="filterTechArticles('modeling')">数学建模</button>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="tech-article-list">
+                <!-- JS 渲染 -->
+            </div>
+        </section>
+
+        <!-- ========== 半文 / 写作 ========== -->
+        <section id="writing" class="page py-16 md:py-24">
+            <div class="text-center mb-16">
+                <span class="text-xs tracking-[0.3em] uppercase block mb-4" style="color: var(--accent); font-family: 'Inter', sans-serif;">Writing</span>
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4">半文</h1>
+                <p class="max-w-md mx-auto" style="color: var(--muted);">随笔，思考，创作，以及那些想要与世界分享的文字</p>
+            </div>
+
+            <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+                <h2 class="font-display text-2xl font-bold">文章列表</h2>
+                <div class="flex gap-2" id="article-filters">
+                    <button class="mag-btn active text-xs" data-filter="all" onclick="filterWritingArticles('all')">全部</button>
+                    <button class="mag-btn text-xs" data-filter="thinking" onclick="filterWritingArticles('thinking')">半思</button>
+                    <button class="mag-btn text-xs" data-filter="reading" onclick="filterWritingArticles('reading')">半读</button>
+                    <button class="mag-btn text-xs" data-filter="travel" onclick="filterWritingArticles('travel')">半游</button>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="article-list">
+                <!-- JS 渲染 -->
+            </div>
+        </section>
+
+        <!-- ========== 半趣 / 项目 ========== -->
+        <section id="fun" class="page py-16 md:py-24">
+            <div class="text-center mb-16">
+                <span class="text-xs tracking-[0.3em] uppercase block mb-4" style="color: var(--accent); font-family: 'Inter', sans-serif;">Projects</span>
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4">半趣</h1>
+                <p class="max-w-md mx-auto" style="color: var(--muted);">个人项目与趣味工具集合</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+                <!-- JS 渲染 -->
+            </div>
+        </section>
+
+        <!-- ========== 文章详情 ========== -->
+        <section id="article-detail" class="page py-16 md:py-24">
+            <div class="max-w-3xl mx-auto">
+                <button onclick="backToArticles()" class="mag-btn text-xs mb-8">
+                    <i class="fas fa-arrow-left mr-2"></i>返回
+                </button>
+                <div id="article-content" class="article-body">
+                    <!-- JS 渲染 -->
+                </div>
+                <div class="mt-16 pt-8" style="border-top: 1px solid var(--line);">
+                    <div id="disqus_thread"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="mt-24 py-16 border-t" style="border-color: var(--line);">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="text-center md:text-left">
+                    <div class="font-display text-2xl font-bold mb-2" style="color: var(--accent);">Halface</div>
+                    <div class="text-sm" style="color: var(--muted);">志向做一个伟大的人，努力做一个真诚的人，一定做一个善良的人</div>
+                </div>
+                <div class="flex gap-3">
+                    <a href="mailto:panqihao525@163.com" class="w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]" style="border: 1px solid var(--line); color: var(--muted);" title="邮箱">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://github.com/Halface525" target="_blank" class="w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]" style="border: 1px solid var(--line); color: var(--muted);" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="images/wechat-qr.jpg" target="_blank" class="w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]" style="border: 1px solid var(--line); color: var(--muted);" title="微信公众号">
+                        <i class="fab fa-weixin"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="text-center mt-12 text-xs tracking-wider" style="color: var(--muted); font-family: 'Inter', sans-serif;">
+                &copy; 2026 Made by Halface | v1.3.0
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== 数据与脚本 ========== -->
+    <script>
+        // ==================== 数据 ====================
+        const GISCUS_CONFIG = {
+            repo: 'Halface525/comments', repoId: 'R_kgDORxheUQ',
+            category: 'General', categoryId: 'DIC_kwDORxheUc4C5Vdr',
+            mapping: 'title', strict: '0', reactionsEnabled: '1',
+            emitMetadata: '0', inputPosition: 'bottom',
+            theme: 'preferred_color_scheme', lang: 'zh-CN', enabled: true
+        };
+
+        const projectsData = {
+            'project2': {
+                title: 'Imperium Civitatum', icon: '', description: '一个关于历史/政治/地理的策略游戏。',
+                details: '<p class="mb-4">Imperium Civitatum 是一款探索历史文明与政治体系的策略游戏。</p><h4 class="font-bold mb-2">游戏特色</h4><ul class="list-disc list-inside mb-4 space-y-1"><li>历史文明模拟</li><li>政治体系策略</li><li>地理扩张玩法</li></ul>',
+                link: 'https://halface525.github.io/imperium-civitatum', github: '#'
+            },
+            'project3': {
+                title: 'Dozu', icon: '', description: 'Something new is coming.',
+                details: '<p class="mb-4">开发中……</p>', link: '#', github: '#'
+            }
+        };
+
+        const techArticlesData = [
+            { file: 'content/study/ml/10-jiangweiyuduliangxuexi.md', category: 'ml', title: '降维与度量学习', date: '2026-01-26', readTime: '14 min', emoji: '', desc: 'k近邻学习、低维嵌入、主成分分析、核化线性降维、流形学习、度量学习...' },
+            { file: 'content/study/ml/09-julei.md', category: 'ml', title: '聚类', date: '2026-01-25', readTime: '12 min', emoji: '', desc: '距离计算、原型聚类、密度聚类、层次聚类，无监督学习核心算法...' },
+            { file: 'content/study/ml/08-fenleiqi-zongjie.md', category: 'ml', title: '分类器总结', date: '2026-01-24', readTime: '10 min', emoji: '', desc: '各分类器优缺点对比、适用场景分析、实验对比与选择建议...' },
+            { file: 'content/study/ml/07-jichengxuexi.md', category: 'ml', title: '集成学习', date: '2026-01-23', readTime: '14 min', emoji: '', desc: 'Boosting、Bagging、随机森林、结合策略、多样性增强，集成学习全景...' },
+            { file: 'content/study/ml/06-beiyesifenleiqi.md', category: 'ml', title: '贝叶斯分类器', date: '2026-01-22', readTime: '12 min', emoji: '', desc: '贝叶斯决策论、极大似然估计、朴素贝叶斯分类器、EM算法...' },
+            { file: 'content/study/ml/05-zhichixiangliangji.md', category: 'ml', title: '支持向量机', date: '2026-01-21', readTime: '15 min', emoji: '', desc: '间隔与支持向量、对偶问题、核函数、软间隔与正则化，SVM完整推导...' },
+            { file: 'content/study/ml/04-shenjingwangluo.md', category: 'ml', title: '神经网络', date: '2026-01-20', readTime: '15 min', emoji: '', desc: '神经元模型、感知机与多层网络、误差逆传播算法、全局最小与局部最小...' },
+            { file: 'content/study/ml/03-jueceshu.md', category: 'ml', title: '决策树', date: '2026-01-19', readTime: '12 min', emoji: '', desc: '信息增益、增益率、基尼指数，ID3、C4.5、CART算法原理与实现...' },
+            { file: 'content/study/ml/02-xianxingmoxing.md', category: 'ml', title: '线性模型', date: '2026-01-18', readTime: '12 min', emoji: '', desc: '线性回归、对数几率回归、线性判别分析，从基础到应用的完整解析...' },
+            { file: 'content/study/ml/01-moxingpingguyuxuanze.md', category: 'ml', title: '模型评估与选择', date: '2026-01-26', readTime: '15 min', emoji: '', desc: '经验误差与过拟合、评估方法、性能度量、比较检验，模型选择的基础工具箱...' },
+            { file: 'content/study/ml/00-yixiegainian.md', category: 'ml', title: '一些概念：从挑西瓜说起', date: '2026-01-17', readTime: '10 min', emoji: '', desc: '像人一样学习的机器，通过"挑西瓜"案例解析机器学习基础术语与核心思想...' },
+            { file: 'content/study/modeling/01-xianxingguihua.md', category: 'modeling', title: '线性规划', date: '2026-01-05', readTime: '12 min', emoji: '', desc: '线性规划模型建立、单纯形法原理、灵敏度分析、实际应用案例...' },
+            { file: 'content/study/modeling/00-shuxuejianmosixiang.md', category: 'modeling', title: '数学建模思想', date: '2026-01-03', readTime: '15 min', emoji: '', desc: '蒙特卡洛法、动态规划、图论模型，数学建模中的四大经典思想解析...' },
+            { file: 'content/study/modeling/02-zhengshuguihua.md', category: 'modeling', title: '整数规划', date: '2026-01-07', readTime: '13 min', emoji: '', desc: '整数规划模型、分支定界法、0-1整数规划、指派问题与旅行商问题...' }
+        ];
+
+        const writingArticlesData = [
+            { file: 'content/writing/thinking/03-chunfen.md', category: 'thinking', title: '春分', date: '2026-03-22', readTime: '5 min', emoji: '', desc: '有时候乌云占着天空，落下几粒雨水。有时候雨水打湿头发，混了汗或者泪...' },
+            { file: 'content/writing/travel/01-manjianghong-siguniangshan.md', category: 'travel', title: '满江红·游四姑娘山', date: '2025-10-03', readTime: '3 min', emoji: '', desc: '万里川西，云翻处、雪山巍峨。清秋至、长空如镜，草色生波...' },
+            { file: 'content/writing/thinking/02-meiyouyihan.md', category: 'thinking', title: '没有遗憾', date: '2025-09-21', readTime: '6 min', emoji: '', desc: '成都今天的天气很好，没有下雨。我不是一个矫情的人...' },
+            { file: 'content/writing/reading/01-yongyuanshengmeng.md', category: 'reading', title: '永远生猛的黄金时代', date: '2025-04-20', readTime: '15 min', emoji: '', desc: '那一天我二十一岁，在我一生的黄金时代，我有好多奢望。我想爱，想吃...' },
+            { file: 'content/writing/travel/02-shuidiaogetou-jianmen.md', category: 'travel', title: '水调歌头·剑门', date: '2025-04-05', readTime: '3 min', emoji: '', desc: '踏裂苍苔去，振袂叩剑门。千峰列阵如卒，云海荡胸宽...' },
+            { file: 'content/writing/thinking/01-xiezaimougeye.md', category: 'thinking', title: '写在某个夜晚', date: '2025-02-09', readTime: '5 min', emoji: '', desc: '人在吃饱喝足之后会思考人生的意义，在迷茫仿徨时会想起文字...' }
+        ];
+
+        const learningTimeline = [
+            { time: '2024.09 - 2025.02', status: '已完成', title: '编程入门', desc: '从零开始学习编程，掌握 Python 基础语法、数据结构和算法，完成多个练手项目。', skills: ['Python', '数据结构', '算法', 'Git'] },
+            { time: '2025.02 - 2025.10', status: '已完成', title: '数学建模', desc: '学习线性代数、概率统计、优化理论，参加数学建模竞赛，将数学应用于实际问题求解。', skills: ['MATLAB', '线性代数', '概率统计', '优化算法'] },
+            { time: '2025.10 - 2026.01', status: '已完成', title: '机器学习基础', desc: '系统学习监督学习、无监督学习、强化学习基础算法，掌握 Scikit-learn 和基础神经网络。', skills: ['Python', 'Scikit-learn', '回归/分类', '聚类'] },
+            { time: '2026.01 - 至今', status: '进行中', title: '深度学习', desc: '深入学习神经网络架构、Transformer、大语言模型，探索深度学习在计算机视觉和自然语言处理中的应用。', skills: ['PyTorch', 'Transformer', 'CNN', 'RNN'] }
+        ];
+
+        const searchIndex = [
+            { title: '一些概念：从挑西瓜说起', file: 'content/study/ml/00-yixiegainian.md', category: 'ml', section: '半学', date: '2026.01.17' },
+            { title: '模型评估与选择', file: 'content/study/ml/01-moxingpingguyuxuanze.md', category: 'ml', section: '半学', date: '2026.01.17' },
+            { title: '线性模型', file: 'content/study/ml/02-xianxingmoxing.md', category: 'ml', section: '半学', date: '2026.01.18' },
+            { title: '决策树', file: 'content/study/ml/03-jueceshu.md', category: 'ml', section: '半学', date: '2026.01.19' },
+            { title: '神经网络', file: 'content/study/ml/04-shenjingwangluo.md', category: 'ml', section: '半学', date: '2026.01.20' },
+            { title: '支持向量机', file: 'content/study/ml/05-zhichixiangliangji.md', category: 'ml', section: '半学', date: '2026.01.21' },
+            { title: '贝叶斯分类器', file: 'content/study/ml/06-beiyesifenleiqi.md', category: 'ml', section: '半学', date: '2026.01.22' },
+            { title: '集成学习', file: 'content/study/ml/07-jichengxuexi.md', category: 'ml', section: '半学', date: '2026.01.23' },
+            { title: '分类器总结', file: 'content/study/ml/08-fenleiqi-zongjie.md', category: 'ml', section: '半学', date: '2026.01.24' },
+            { title: '聚类', file: 'content/study/ml/09-julei.md', category: 'ml', section: '半学', date: '2026.01.25' },
+            { title: '降维与度量学习', file: 'content/study/ml/10-jiangweiyuduliangxuexi.md', category: 'ml', section: '半学', date: '2026.01.26' },
+            { title: '数学建模思想', file: 'content/study/modeling/00-shuxuejianmosixiang.md', category: 'modeling', section: '半学', date: '2026.01.03' },
+            { title: '线性规划', file: 'content/study/modeling/01-xianxingguihua.md', category: 'modeling', section: '半学', date: '2026.01.05' },
+            { title: '整数规划', file: 'content/study/modeling/02-zhengshuguihua.md', category: 'modeling', section: '半学', date: '2026.01.07' },
+            { title: '写在某个夜晚', file: 'content/writing/thinking/01-xiezaimougeye.md', category: 'thinking', section: '半文', date: '2025.02.09' },
+            { title: '没有遗憾', file: 'content/writing/thinking/02-meiyouyihan.md', category: 'thinking', section: '半文', date: '2025.09.21' },
+            { title: '春分', file: 'content/writing/thinking/03-chunfen.md', category: 'thinking', section: '半文', date: '2026.03.22' },
+            { title: '永远生猛的黄金时代', file: 'content/writing/reading/01-yongyuanshengmeng.md', category: 'reading', section: '半文', date: '2025.04.20' },
+            { title: '满江红·游四姑娘山', file: 'content/writing/travel/01-manjianghong-siguniangshan.md', category: 'travel', section: '半文', date: '2025.10.03' },
+            { title: '水调歌头·剑门', file: 'content/writing/travel/02-shuidiaogetou-jianmen.md', category: 'travel', section: '半文', date: '2025.04.05' }
+        ];
+
+        // ==================== 工具函数 ====================
+        function getCategoryLabel(category) {
+            const labels = { 'ml': '机器学习', 'modeling': '数学建模', 'thinking': '半思', 'reading': '半读', 'travel': '半游' };
+            return labels[category] || category;
+        }
+
+        // ==================== 主题 ====================
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            const icon = document.getElementById('theme-icon');
+            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            document.querySelector('nav').style.background = isDark ? 'rgba(15,15,15,0.92)' : 'rgba(250,249,247,0.92)';
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && prefersDark)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').className = 'fas fa-sun';
+                document.querySelector('nav').style.background = 'rgba(15,15,15,0.92)';
+            }
+        }
+
+        // ==================== Markdown 解析 ====================
+        function parseYAMLFrontMatter(md) {
+            const frontMatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
+            const match = md.match(frontMatterRegex);
+            if (!match) return { metadata: {}, content: md };
+            const yamlText = match[1];
+            const content = md.slice(match[0].length);
+            const metadata = {};
+            const lines = yamlText.split('\n');
+            let currentKey = null, currentList = null;
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('- ')) {
+                    if (currentList) currentList.push(trimmed.slice(2).trim());
+                    continue;
+                }
+                const colonIndex = trimmed.indexOf(':');
+                if (colonIndex > 0) {
+                    const key = trimmed.slice(0, colonIndex).trim();
+                    let value = trimmed.slice(colonIndex + 1).trim();
+                    if (value === '') { currentList = []; metadata[key] = currentList; }
+                    else {
+                        if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) value = value.slice(1, -1);
+                        metadata[key] = value;
+                        currentList = null;
+                    }
+                    currentKey = key;
+                }
+            }
+            return { metadata, content };
+        }
+
+        function parseMarkdown(md) {
+            const { metadata, content } = parseYAMLFrontMatter(md);
+            let html = content.replace(/\r\n/g, '\n');
+
+            // 保护代码块
+            const codeBlocks = [];
+            html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                codeBlocks.push(`<pre><code>${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`);
+                return `__CODE_BLOCK_${codeBlocks.length - 1}__`;
+            });
+
+            html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+            html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            html = html.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            html = html.replace(/^\d+\.\s+(.*$)/gim, '<li>$1</li>');
+            html = html.replace(/^- (.*$)/gim, '<li>$1</li>');
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+            html = html.replace(/\|(.+)\|\n\|[-:\s|]+\|\n((?:\|.+\|\n?)+)/g, function(match, header, rows) {
+                const headers = header.split('|').map(h => h.trim()).filter(h => h);
+                const rowData = rows.trim().split('\n').map(row => row.split('|').map(c => c.trim()).filter(c => c));
+                let t = '<table><thead><tr>';
+                headers.forEach(h => { t += `<th>${h}</th>`; });
+                t += '</tr></thead><tbody>';
+                rowData.forEach(row => { t += '<tr>'; row.forEach(c => { t += `<td>${c}</td>`; }); t += '</tr>'; });
+                t += '</tbody></table>';
+                return t;
+            });
+            html = html.replace(/^---$/gim, '<div style="display:flex;align-items:center;gap:1rem;margin:2rem 0;"><div style="flex:1;height:1px;background:var(--line);"></div><span style="color:var(--muted);">&#10022;</span><div style="flex:1;height:1px;background:var(--line);"></div></div>');
+
+            // 分段：把剩余的双换行替换成段落分隔
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = '<p>' + html + '</p>';
+            html = html.replace(/<p><\/p>/g, '');
+            html = html.replace(/<p>\s*<\/p>/g, '');
+
+            // 恢复代码块
+            codeBlocks.forEach((block, i) => {
+                html = html.replace(`__CODE_BLOCK_${i}__`, block);
+            });
+
+            return { metadata, html };
+        }
+
+        // ==================== 页面切换 ====================
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+            const btn = document.getElementById('nav-' + pageId);
+            const btnM = document.getElementById('nav-' + pageId + '-m');
+            if (btn) btn.classList.add('active');
+            if (btnM) btnM.classList.add('active');
+
+            const titles = { home: 'Halface', face: '半面 — Halface', study: '半学 — Halface', writing: '半文 — Halface', fun: '半趣 — Halface' };
+            document.title = titles[pageId] || 'Halface';
+        }
+
+        // ==================== 渲染函数 ====================
+        function getCardLabel(title) {
+            return /^[\u4e00-\u9fa5]/.test(title) ? title : title.split(' ')[0];
+        }
+        function renderFeatured() {
+            const container = document.getElementById('featured-articles');
+            if (!container) return;
+            const tech = techArticlesData[0];
+            const writing = writingArticlesData[0];
+            const projectKey = Object.keys(projectsData)[0];
+            const project = projectsData[projectKey];
+            const featured = [
+                { type: 'article', data: tech, label: getCategoryLabel(tech.category) },
+                { type: 'article', data: writing, label: getCategoryLabel(writing.category) },
+                { type: 'project', data: project, key: projectKey, label: '项目' }
+            ];
+            container.innerHTML = featured.map((item, i) => {
+                if (item.type === 'article') {
+                    const a = item.data;
+                    return `<article class="mag-card cursor-pointer group" onclick="showArticleFromFile('${a.file}', '${a.category}')">
+                        <div class="aspect-[4/3] flex items-center justify-center text-3xl md:text-4xl font-display font-bold opacity-25 group-hover:opacity-60 transition-opacity" style="background: var(--line); color: var(--ink);">
+                            ${getCardLabel(a.title)}
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs tracking-wider uppercase block mb-2" style="color: var(--accent); font-family: 'Inter', sans-serif;">${item.label}</span>
+                            <h3 class="font-display text-xl font-bold mb-2 group-hover:text-[var(--accent)] transition-colors">${a.title}</h3>
+                            <p class="text-sm mb-4 line-clamp-2" style="color: var(--muted);">${a.desc}</p>
+                            <div class="flex justify-between items-center text-xs" style="color: var(--muted); font-family: 'Inter', sans-serif;">
+                                <span>${a.date}</span>
+                                <span>${a.readTime}</span>
+                            </div>
+                        </div>
+                    </article>`;
+                } else {
+                    const p = item.data;
+                    return `<article class="mag-card cursor-pointer group" onclick="showProjectDetail('${item.key}')">
+                        <div class="aspect-[4/3] flex items-center justify-center text-3xl md:text-4xl font-display font-bold opacity-25 group-hover:opacity-60 transition-opacity" style="background: var(--line); color: var(--ink);">
+                            ${getCardLabel(p.title)}
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs tracking-wider uppercase block mb-2" style="color: var(--accent); font-family: 'Inter', sans-serif;">${item.label}</span>
+                            <h3 class="font-display text-xl font-bold mb-2 group-hover:text-[var(--accent)] transition-colors">${p.title}</h3>
+                            <p class="text-sm mb-4 line-clamp-2" style="color: var(--muted);">${p.description}</p>
+                            <div class="flex justify-between items-center text-xs" style="color: var(--muted); font-family: 'Inter', sans-serif;">
+                                <span>半趣</span>
+                                <span>查看详情 &rarr;</span>
+                            </div>
+                        </div>
+                    </article>`;
+                }
+            }).join('');
+        }
+
+        function renderTechArticles(filter) {
+            const container = document.getElementById('tech-article-list');
+            if (!container) return;
+            const articles = filter === 'all' ? techArticlesData : techArticlesData.filter(a => a.category === filter);
+            container.innerHTML = articles.map(a => `
+                <article class="mag-card cursor-pointer group" onclick="showArticleFromFile('${a.file}', '${a.category}')">
+                    <div class="p-6">
+                        <span class="text-xs tracking-wider uppercase block mb-2" style="color: var(--accent); font-family: 'Inter', sans-serif;">${getCategoryLabel(a.category)}</span>
+                        <h3 class="font-display text-lg font-bold mb-2 group-hover:text-[var(--accent)] transition-colors">${a.title}</h3>
+                        <p class="text-sm mb-4 line-clamp-2" style="color: var(--muted);">${a.desc}</p>
+                        <div class="flex justify-between items-center text-xs" style="color: var(--muted); font-family: 'Inter', sans-serif;">
+                            <span>${a.date}</span>
+                            <span>${a.readTime} &rarr;</span>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+            const filterContainer = document.getElementById('tech-filters');
+            if (filterContainer) {
+                filterContainer.querySelectorAll('.mag-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.filter === filter);
+                });
+            }
+        }
+
+        function filterTechArticles(category) { renderTechArticles(category); }
+
+        function renderWritingArticles(filter) {
+            const container = document.getElementById('article-list');
+            if (!container) return;
+            const articles = filter === 'all' ? writingArticlesData : writingArticlesData.filter(a => a.category === filter);
+            container.innerHTML = articles.map(a => `
+                <article class="mag-card cursor-pointer group" onclick="showArticleFromFile('${a.file}', '${a.category}')">
+                    <div class="p-6">
+                        <span class="text-xs tracking-wider uppercase block mb-2" style="color: var(--accent); font-family: 'Inter', sans-serif;">${getCategoryLabel(a.category)}</span>
+                        <h3 class="font-display text-lg font-bold mb-2 group-hover:text-[var(--accent)] transition-colors">${a.title}</h3>
+                        <p class="text-sm mb-4 line-clamp-2" style="color: var(--muted);">${a.desc}</p>
+                        <div class="flex justify-between items-center text-xs" style="color: var(--muted); font-family: 'Inter', sans-serif;">
+                            <span>${a.date}</span>
+                            <span>${a.readTime} &rarr;</span>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+            const filterContainer = document.getElementById('article-filters');
+            if (filterContainer) {
+                filterContainer.querySelectorAll('.mag-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.filter === filter);
+                });
+            }
+        }
+
+        function filterWritingArticles(category) { renderWritingArticles(category); }
+
+        function renderLearningTimeline() {
+            const container = document.getElementById('learning-timeline');
+            if (!container) return;
+            container.innerHTML = learningTimeline.map((item, index) => `
+                <div class="relative pl-8 ${index < learningTimeline.length - 1 ? 'pb-10' : ''}">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-dot"></div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-1">
+                            <span class="text-sm font-semibold" style="color: var(--ink);">${item.time}</span>
+                            <span class="status-tag ${item.status === '进行中' ? 'status-ongoing' : 'status-completed'}">${item.status}</span>
+                        </div>
+                        <h4 class="font-display text-lg font-bold mb-1" style="color: var(--ink);">${item.title}</h4>
+                        <p class="text-sm mb-3" style="color: var(--ink); opacity: 0.7;">${item.desc}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.skills.map(s => `<span class="text-[10px] tracking-wider uppercase px-2 py-0.5" style="border: 1px solid var(--ink); opacity: 0.25; font-family: 'Inter', sans-serif; color: var(--ink); opacity: 0.6;">${s}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjects() {
+            const container = document.getElementById('projects-grid');
+            if (!container) return;
+            container.innerHTML = Object.entries(projectsData).map(([id, p]) => `
+                <div class="mag-card cursor-pointer group" onclick="showProjectDetail('${id}')">
+                    <div class="aspect-[16/10] flex items-center justify-center text-3xl md:text-4xl font-display font-bold opacity-25 group-hover:opacity-60 transition-opacity" style="background: var(--line); color: var(--ink);">
+                        ${getCardLabel(p.title)}
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display text-lg font-bold mb-2 group-hover:text-[var(--accent)] transition-colors">${p.title}</h3>
+                        <p class="text-sm" style="color: var(--muted);">${p.description}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showProjectDetail(projectId) {
+            const p = projectsData[projectId];
+            if (!p) return;
+            const modal = document.createElement('div');
+            modal.id = 'project-modal';
+            modal.className = 'fixed inset-0 z-[70] flex items-center justify-center p-4';
+            modal.style.background = 'rgba(0,0,0,0.5)';
+            modal.innerHTML = `
+                <div class="w-full max-w-lg max-h-[80vh] overflow-y-auto p-8 relative" style="background: var(--paper); border: 1px solid var(--line);">
+                    <button onclick="document.getElementById('project-modal').remove()" class="absolute top-4 right-4 opacity-40 hover:opacity-100 transition-opacity"><i class="fas fa-times"></i></button>
+                    <h2 class="font-display text-2xl font-bold mb-4">${p.title}</h2>
+                    <p class="mb-4" style="color: var(--muted);">${p.description}</p>
+                    <div class="mb-6">${p.details}</div>
+                    <div class="flex gap-3">
+                        ${p.link !== '#' ? `<a href="${p.link}" target="_blank" class="mag-btn accent">查看项目</a>` : ''}
+                        ${p.github !== '#' ? `<a href="${p.github}" target="_blank" class="mag-btn">GitHub</a>` : ''}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            modal.addEventListener('click', (e) => { if (e.target === modal) { modal.remove(); document.body.style.overflow = ''; } });
+        }
+
+        async function showArticle(articleId, filePath, sectionName, cardTitle) {
+            try {
+                const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
+                const response = await fetch(baseUrl + filePath);
+                if (!response.ok) throw new Error('Failed to load article (status: ' + response.status + ')');
+                const mdContent = await response.text();
+                const { metadata, html } = parseMarkdown(mdContent);
+                const displayTitle = cardTitle || metadata.title || articleId;
+
+                let headerHtml = '<div class="mb-10 pb-6" style="border-bottom: 1px solid var(--line);">';
+                headerHtml += `<h1 class="font-display text-3xl md:text-4xl font-bold mb-6">${displayTitle}</h1>`;
+                if (metadata.data) {
+                    headerHtml += `<div class="flex flex-wrap gap-4 text-sm" style="color: var(--muted); font-family: 'Inter', sans-serif;">`;
+                    headerHtml += `<span>${metadata.data}</span>`;
+                    if (metadata.auther) headerHtml += `<span>${metadata.auther}</span>`;
+                    if (metadata.tags && Array.isArray(metadata.tags)) headerHtml += `<span>${metadata.tags.join(' / ')}</span>`;
+                    headerHtml += `</div>`;
+                }
+                headerHtml += '</div>';
+
+                const contentContainer = document.getElementById('article-content');
+                contentContainer.innerHTML = headerHtml + html;
+
+                if (window.MathJax) {
+                    MathJax.typesetPromise([contentContainer]).catch(err => console.error('MathJax error:', err));
+                }
+
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('article-detail').classList.add('active');
+                initComments();
+                document.title = `${displayTitle} - ${sectionName} - Halface`;
+                history.pushState({ page: 'article', section: sectionName, filePath }, displayTitle, `#article-${encodeURIComponent(articleId)}`);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error loading article:', error);
+                alert('文章加载失败: ' + error.message);
+            }
+        }
+
+        async function showArticleFromFile(filePath, category) {
+            let sectionName = '半文';
+            if (filePath.includes('/study/') || filePath.includes('\\study\\')) sectionName = '半学';
+            const allArticles = [...techArticlesData, ...writingArticlesData];
+            const found = allArticles.find(a => a.file === filePath);
+            await showArticle(filePath, filePath, sectionName, found ? found.title : '');
+        }
+
+        function backToArticles() {
+            document.getElementById('article-detail').classList.remove('active');
+            const currentTitle = document.title;
+            let targetPage = 'writing', targetBtn = 'btn-writing', pageTitle = '半文';
+            if (currentTitle.includes('半学') || currentTitle.includes('机器学习') || currentTitle.includes('数学建模')) {
+                targetPage = 'study'; targetBtn = 'btn-study'; pageTitle = '半学';
+            }
+            document.getElementById(targetPage).classList.add('active');
+            document.title = `${pageTitle} - Halface`;
+        }
+
+        function toggleSearch() {
+            const modal = document.getElementById('search-modal');
+            const input = document.getElementById('search-input');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => input.focus(), 100);
+            } else {
+                modal.classList.add('hidden');
+                input.value = '';
+                document.getElementById('search-results').innerHTML = '';
+            }
+        }
+
+        function performSearch(query) {
+            const resultsContainer = document.getElementById('search-results');
+            const hint = document.getElementById('search-hint');
+            if (!query.trim()) {
+                resultsContainer.innerHTML = '';
+                hint.textContent = '输入关键词搜索文章';
+                return;
+            }
+            const q = query.toLowerCase();
+            const results = searchIndex.filter(item => item.title.toLowerCase().includes(q) || item.section.toLowerCase().includes(q));
+            hint.textContent = `找到 ${results.length} 个结果`;
+            resultsContainer.innerHTML = results.map(r => `
+                <div class="p-3 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-colors" style="border-bottom: 1px solid var(--line);" onclick="showArticleFromFile('${r.file}', '${r.category}'); toggleSearch();">
+                    <div class="font-semibold mb-1">${r.title}</div>
+                    <div class="text-xs" style="color: var(--muted); font-family: 'Inter', sans-serif;">${r.section} / ${r.date}</div>
+                </div>
+            `).join('');
+        }
+
+        function initComments() {
+            if (!GISCUS_CONFIG.enabled) return;
+            const container = document.getElementById('disqus_thread');
+            if (!container) return;
+            container.innerHTML = '';
+            const script = document.createElement('script');
+            script.src = 'https://giscus.app/client.js';
+            script.setAttribute('data-repo', GISCUS_CONFIG.repo);
+            script.setAttribute('data-repo-id', GISCUS_CONFIG.repoId);
+            script.setAttribute('data-category', GISCUS_CONFIG.category);
+            script.setAttribute('data-category-id', GISCUS_CONFIG.categoryId);
+            script.setAttribute('data-mapping', GISCUS_CONFIG.mapping);
+            script.setAttribute('data-strict', GISCUS_CONFIG.strict);
+            script.setAttribute('data-reactions-enabled', GISCUS_CONFIG.reactionsEnabled);
+            script.setAttribute('data-emit-metadata', GISCUS_CONFIG.emitMetadata);
+            script.setAttribute('data-input-position', GISCUS_CONFIG.inputPosition);
+            script.setAttribute('data-theme', GISCUS_CONFIG.theme);
+            script.setAttribute('data-lang', GISCUS_CONFIG.lang);
+            script.setAttribute('crossorigin', 'anonymous');
+            script.async = true;
+            container.appendChild(script);
+        }
+
+        // 聚光灯互动区
+        const SPOTLIGHT_WORDS = [
+            { text: '半面' }, { text: 'Halface' }, { text: 'ハーフフェイス' },
+            { text: 'Demi-face' }, { text: 'Halbgesicht' }, { text: 'Mezza faccia' },
+            { text: '반면' }, { text: 'Medio rostro' }, { text: 'Полулицо' },
+            { text: 'half' }, { text: 'face' }, { text: 'H' },
+            { text: 'halface' }, { text: '半' }, { text: 'HALFACE' },
+            { text: '半面半学' }, { text: '半文' }, { text: '半趣' },
+            { text: 'Half Face' }, { text: 'demi-visage' }, { text: 'halv ansigt' },
+            { text: 'Halv ansikt' }, { text: 'Puolikas' }, { text: 'Halv del' },
+            { text: 'Félig arc' }, { text: 'Pół twarzy' }, { text: 'Semi-față' },
+            { text: 'Halvt ansikte' }, { text: 'Yarım yüz' }
+        ];
+        function initSpotlight() {
+            const back = document.getElementById('spotlight-back');
+            const circle = document.getElementById('spotlight-circle');
+            const hero = document.querySelector('.magazine-hero');
+            if (!back || !circle || !hero) return;
+
+            // 将区域分为 6x4 网格，随机填入文字，避开中心内容区
+            const cols = 7, rows = 5;
+            const centerColStart = 2, centerColEnd = 5;
+            const centerRowStart = 1, centerRowEnd = 4;
+            let html = '';
+            SPOTLIGHT_WORDS.forEach((w, i) => {
+                const col = i % cols;
+                const row = Math.floor(i / cols) % rows;
+                // 跳过中心区域（封面文字所在位置）
+                if (col >= centerColStart && col < centerColEnd && row >= centerRowStart && row < centerRowEnd) return;
+                const x = (col / cols) * 100 + (5 + Math.random() * 10);
+                const y = (row / rows) * 100 + (5 + Math.random() * 10);
+                const size = 0.7 + Math.random() * 1.8;
+                html += `<span style="position:absolute; left:${x}%; top:${y}%; font-size:${size}rem; color:var(--muted); opacity:0.18; font-weight:600; white-space:nowrap; font-family:'Playfair Display','Noto Serif SC',serif; user-select:none; pointer-events:none;">${w.text}</span>`;
+            });
+            back.innerHTML = html;
+
+            hero.addEventListener('mousemove', (e) => {
+                const rect = hero.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                circle.style.display = 'block';
+                circle.style.left = x + 'px';
+                circle.style.top = y + 'px';
+            });
+            hero.addEventListener('mouseleave', () => {
+                circle.style.display = 'none';
+            });
+        }
+
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('search-modal');
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) toggleSearch();
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                e.preventDefault(); toggleSearch();
+            }
+        });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            initSpotlight();
+            renderFeatured();
+            renderTechArticles('all');
+            renderWritingArticles('all');
+            renderLearningTimeline();
+            renderProjects();
+            initComments();
+            if (typeof MusicPlayer !== 'undefined') MusicPlayer.init();
+        });
+    </script>
+    <script src="js/music-player.js"></script>
+</body>
+</html>
