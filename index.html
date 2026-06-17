@@ -333,9 +333,13 @@
                     <a href="https://github.com/Halface525" target="_blank" class="w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]" style="border: 1px solid var(--line); color: var(--muted);" title="GitHub">
                         <i class="fab fa-github"></i>
                     </a>
-                    <a href="images/wechat-qr.jpg" target="_blank" class="w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]" style="border: 1px solid var(--line); color: var(--muted);" title="微信公众号">
+                    <div class="relative group w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)] cursor-pointer" style="border: 1px solid var(--line); color: var(--muted);">
                         <i class="fab fa-weixin"></i>
-                    </a>
+                        <div class="absolute hidden group-hover:block p-3 rounded-lg shadow-xl z-50" style="bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); background: var(--paper); border: 1px solid var(--line); width: 140px;">
+                            <img src="images/wechat-qr.jpg" alt="公众号二维码" style="width: 116px; height: 116px; object-fit: cover; border-radius: 4px; display: block;" onerror="this.style.display='none'">
+                            <div class="text-center text-xs mt-2" style="color: var(--muted);">公众号</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="text-center mt-12 text-xs tracking-wider" style="color: var(--muted); font-family: 'Inter', sans-serif;">
