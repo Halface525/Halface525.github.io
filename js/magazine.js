@@ -203,7 +203,7 @@ function showProjectDetail(projectId) {
     modal.style.background = 'rgba(0,0,0,0.5)';
     modal.innerHTML = `
         <div class="w-full max-w-lg max-h-[80vh] overflow-y-auto p-8 relative" style="background: var(--paper); border: 1px solid var(--line);">
-            <button onclick="document.getElementById('project-modal').remove()" class="absolute top-4 right-4 opacity-40 hover:opacity-100 transition-opacity"><i class="fas fa-times"></i></button>
+            <button onclick="document.getElementById('project-modal').remove(); document.body.style.overflow = '';" class="absolute top-4 right-4 opacity-40 hover:opacity-100 transition-opacity"><i class="fas fa-times"></i></button>
             <h2 class="font-display text-2xl font-bold mb-4">${p.title}</h2>
             <p class="mb-4" style="color: var(--muted);">${p.description}</p>
             <div class="mb-6">${p.details}</div>
