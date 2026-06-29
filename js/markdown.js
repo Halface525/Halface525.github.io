@@ -90,6 +90,11 @@ function parseMarkdown(md) {
     html = html.replace(/<p><\/p>/g, '');
     html = html.replace(/<p>\s*<\/p>/g, '');
 
+    // 段落内单换行 → <br>（保留诗歌换行）
+    html = html.replace(/<p>([\s\S]*?)<\/p>/g, (match, content) => {
+        return '<p>' + content.replace(/\n/g, '<br>') + '</p>';
+    });
+
     // 恢复代码块
     codeBlocks.forEach((block, i) => {
         html = html.replace(`__CODE_BLOCK_${i}__`, block);
