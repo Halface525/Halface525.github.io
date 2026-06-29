@@ -56,8 +56,10 @@ function getCardLabel(title) {
 function renderFeatured() {
     const container = document.getElementById('featured-articles');
     if (!container) return;
-    const tech = techArticlesData[0];
-    const writing = writingArticlesData[0];
+    const sortedTech = techArticlesData.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sortedWriting = writingArticlesData.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+    const tech = sortedTech[0];
+    const writing = sortedWriting[0];
     const projectKey = Object.keys(projectsData)[0];
     const project = projectsData[projectKey];
     const featured = [
@@ -105,7 +107,8 @@ function renderFeatured() {
 function renderTechArticles(filter) {
     const container = document.getElementById('tech-article-list');
     if (!container) return;
-    const articles = filter === 'all' ? techArticlesData : techArticlesData.filter(a => a.category === filter);
+    const articles = (filter === 'all' ? techArticlesData : techArticlesData.filter(a => a.category === filter))
+        .slice().sort((a, b) => new Date(b.date) - new Date(a.date));
     container.innerHTML = articles.map(a => `
         <article class="mag-card cursor-pointer group" onclick="showArticleFromFile('${a.file}', '${a.category}')">
             <div class="p-6">
@@ -132,7 +135,8 @@ function filterTechArticles(category) { renderTechArticles(category); }
 function renderWritingArticles(filter) {
     const container = document.getElementById('article-list');
     if (!container) return;
-    const articles = filter === 'all' ? writingArticlesData : writingArticlesData.filter(a => a.category === filter);
+    const articles = (filter === 'all' ? writingArticlesData : writingArticlesData.filter(a => a.category === filter))
+        .slice().sort((a, b) => new Date(b.date) - new Date(a.date));
     container.innerHTML = articles.map(a => `
         <article class="mag-card cursor-pointer group" onclick="showArticleFromFile('${a.file}', '${a.category}')">
             <div class="p-6">
