@@ -1,0 +1,33 @@
+# Editor / IDE
+.trae/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+
+# Backup / Legacy
+legacy/
+
+# Local env files
+.env
+.env.local
+.env.*.local

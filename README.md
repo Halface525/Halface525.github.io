@@ -12,28 +12,54 @@
 
 ```
 web/
-├── index.html              # 主页面（单页应用）
-├── magazine.html           # 杂志风格参考副本（独立可运行）
-├── css/
-│   └── magazine.css        # 杂志风格核心样式（CSS变量、卡片、时间线、聚光灯）
-├── js/
-│   ├── config.js           # 全局数据（Giscus、文章数据、项目数据、搜索索引）
-│   ├── markdown.js         # Markdown 解析器 & YAML Front Matter
-│   ├── magazine.js         # 应用逻辑（主题/路由/渲染/搜索/聚光灯/评论）
-│   └── music-player.js     # 音乐播放器（含 DOM 生成）
-├── images/                 # 图片资源
-│   ├── avatar.png          # 头像
-│   └── wechat-qr.jpg       # 微信公众号二维码
-├── audio/                  # 音乐文件（15首 MP3）
-└── content/                # Markdown 文章内容
-    ├── study/              # 学习笔记
-    │   ├── ml/            # 机器学习系列（11篇）
-    │   └── modeling/      # 数学建模系列（3篇）
-    └── writing/           # 随笔文章
-        ├── thinking/      # 半思（3篇）
-        ├── reading/       # 半读（1篇）
-        └── travel/        # 半游（2篇）
+├── index.html              # React 开发入口 HTML（构建后也是部署主页面）
+├── package.json            # 项目依赖与脚本
+├── vite.config.js          # Vite 配置
+├── eslint.config.js        # ESLint 配置
+├── src/                    # React 源码
+│   ├── App.jsx             # 路由配置（HashRouter）
+│   ├── main.jsx            # React 挂载入口
+│   ├── index.css           # Tailwind 主题 + 杂志风格样式
+│   ├── components/         # 复用组件
+│   ├── pages/              # 页面组件
+│   ├── hooks/              # 自定义 React Hooks
+│   ├── data/               # 站点数据、文章索引、播放列表
+│   └── utils/              # 工具函数、Markdown 解析器
+├── public/                 # 静态资源（构建时原样复制到 dist/）
+│   ├── audio/             # 音乐文件（15首 MP3）
+│   ├── content/           # Markdown 文章内容
+│   │   ├── study/        # 学习笔记
+│   │   │   ├── ml/      # 机器学习系列（11篇）
+│   │   │   └── modeling/# 数学建模系列（3篇）
+│   │   └── writing/     # 随笔文章
+│   │       ├── thinking/# 半思（4篇）
+│   │       ├── reading/ # 半读（1篇）
+│   │       ├── travel/  # 半游（2篇）
+│   │       └── movie/   # 半影（预留）
+│   └── images/            # 图片资源
+│       ├── avatar.png     # 头像
+│       └── wechat-qr.jpg  # 公众号二维码
+├── assets/                 # React 构建产物（JS/CSS/字体等）
+├── legacy/                 # 原静态站点备份（HTML/CSS/JS 三件套）
+└── dist/                   # Vite 构建输出目录（.gitignore 忽略）
 ```
+
+> **说明**：根目录的 `index.html` 和 `assets/` 是 `npm run build` 后的构建产物，已替代原来的静态 HTML/CSS/JS 三件套。原静态站点备份在 `legacy/` 目录中。源码入口是 `src/main.jsx`，静态资源放在 `public/`。
+
+---
+
+## 🛠 技术栈
+
+- **框架**: React 19
+- **构建工具**: Vite 6
+- **样式**: Tailwind CSS 4
+- **路由**: React Router 7（HashRouter）
+- **图标**: Font Awesome 6.5
+- **字体**: Playfair Display + Noto Serif SC + Inter
+- **数学公式**: MathJax 3
+- **音频播放**: Howler.js
+- **评论系统**: Giscus
+- **部署**: GitHub Pages
 
 ---
 
@@ -53,13 +79,13 @@ web/
 - CSS 变量驱动，所有组件无缝适配
 - 暗黑模式保留同等质感
 
-### 三大核心板块
+### 四大核心板块
 
 | 板块           | 内容                 | 数量     |
 | -------------- | -------------------- | -------- |
 | **半面** | 个人介绍、关于我     | -        |
 | **半学** | 技术博客、学习路径   | 14篇文章 |
-| **半文** | 随笔、读书笔记、游记 | 8篇文章  |
+| **半文** | 随笔、读书笔记、游记 | 7篇文章  |
 | **半趣** | 项目展示、兴趣爱好   | 2个项目  |
 
 ---
@@ -70,23 +96,84 @@ web/
 - **Markdown 渲染**：支持 YAML Front Matter、表格、LaTeX 数学公式
 - **MathJax 集成**：专业数学公式渲染
 - **响应式设计**：完美适配移动端和桌面端
-- **本地存储**：主题偏好、订阅邮箱本地保存
-- **Giscus 评论系统**：基于 GitHub Discussions 的评论系统，支持手绘风格定制
+- **本地存储**：主题偏好、音乐音量/播放模式本地保存
+- **Giscus 评论系统**：基于 GitHub Discussions 的评论系统
+- **全局搜索**：`/` 快捷键唤起，支持文章标题搜索
+- **音乐播放器**：支持播放列表、循环模式、进度拖拽、音量控制
 
 ---
 
 ## 🚀 快速开始
 
-### 本地预览
+### 安装依赖
 
-直接用浏览器打开 `index.html` 即可预览。
+```powershell
+npm install
+```
 
-### 部署到 GitHub Pages
+### 开发预览
 
-1. Fork 或 Clone 本仓库
-2. 进入仓库 **Settings** → **Pages**
-3. Source 选择 `main` 分支，`/(root)` 目录
-4. 访问 `https://yourusername.github.io/repo-name`
+```powershell
+npm run dev
+```
+
+默认访问 `http://localhost:5173/`，修改代码后支持热更新（HMR）。
+
+### 生产构建
+
+```powershell
+npm run build
+```
+
+构建产物输出到 `dist/` 目录。
+
+### 根目录同步（用于 GitHub Pages 部署）
+
+由于 GitHub Pages 从仓库根目录部署，需要将 `dist/` 中的内容同步到根目录：
+
+```powershell
+npm run build
+Copy-Item dist/index.html index.html -Force
+Copy-Item dist/assets . -Recurse -Force
+Copy-Item dist/audio/* audio/ -Recurse -Force
+Copy-Item dist/content/* content/ -Recurse -Force
+Copy-Item dist/images/* images/ -Recurse -Force
+```
+
+> 说明：`public/` 中的静态资源会在构建时自动复制到 `dist/`，再同步到根目录用于部署。
+
+### 预览生产构建
+
+```powershell
+npm run preview
+```
+
+默认访问 `http://localhost:4173/`。
+
+---
+
+## 📦 部署到 GitHub Pages
+
+根目录的 `index.html` 和 `assets/` 已经是构建产物，直接部署仓库根目录即可。
+
+### 手动部署
+
+1. 执行 `npm run build`
+2. 将 `dist/` 内容同步到 `web/` 根目录
+3. 提交并推送到 GitHub
+4. 进入仓库 **Settings** → **Pages**
+5. Source 选择 `main` 分支，`/(root)` 目录
+6. 访问 `https://yourusername.github.io/repo-name`
+
+### 自动部署（GitHub Actions）
+
+在仓库根目录添加 `.github/workflows/deploy.yml`，配置 Vite 构建并将 `dist/` 自动部署到 GitHub Pages。
+
+### 访问地址
+
+```
+https://yourusername.github.io/repo-name
+```
 
 ---
 
@@ -99,9 +186,10 @@ web/
 示例：
 
 ```
-00-yixiegainian.md      # 机器学习 - 一些概念
-01-moxingpingguyuxuanze.md  # 模型评估与选择
-01-xianzaimougeye.md    # 写在某个夜晚
+00-yixiegainian.md              # 机器学习 - 一些概念
+01-moxingpingguyuxuanze.md      # 模型评估与选择
+01-xiezaimougeye.md             # 写在某个夜晚
+04-woxuanzesiwang.md            # 我选择死亡
 ```
 
 ### 文章 Front Matter
@@ -117,6 +205,13 @@ auther: 作者名
 ---
 ```
 
+### 添加新文章步骤
+
+1. 将 Markdown 文件放入 `public/content/` 下对应分类目录
+2. 在 `src/data/techArticles.js` 或 `writingArticles.js` 中添加文章元数据
+3. 在 `src/data/siteData.js` 的 `searchIndex` 中添加搜索索引
+4. 重新运行 `npm run dev` 或 `npm run build`
+
 ---
 
 ## 🔧 高级配置
@@ -125,18 +220,22 @@ auther: 作者名
 
 Giscus 评论系统已配置完成，使用独立的 `comments` 仓库存储评论数据。
 
-**配置信息**（已内置在 `js/config.js`）：
+**配置信息**（已内置在 `src/data/siteData.js`）：
 
 ```javascript
-const GISCUS_CONFIG = {
-    repo: 'Halface525/comments',
-    repoId: 'R_kgDORxheUQ',
-    category: 'General',
-    categoryId: 'DIC_kwDORxheUc4C5Vdr',
-    mapping: 'pathname',
-    theme: 'preferred_color_scheme',
-    lang: 'zh-CN',
-    enabled: true
+export const GISCUS_CONFIG = {
+  repo: "Halface525/comments",
+  repoId: "R_kgDORxheUQ",
+  category: "General",
+  categoryId: "DIC_kwDORxheUc4C5Vdr",
+  mapping: "title",
+  strict: "0",
+  reactionsEnabled: "1",
+  emitMetadata: "0",
+  inputPosition: "bottom",
+  theme: "preferred_color_scheme",
+  lang: "zh-CN",
+  enabled: true,
 };
 ```
 
@@ -145,21 +244,60 @@ const GISCUS_CONFIG = {
 1. 在 GitHub 新建仓库并启用 Discussions
 2. 安装 [Giscus App](https://github.com/apps/giscus)
 3. 访问 [giscus.app](https://giscus.app/zh-CN) 获取配置
-4. 修改 `js/main.js` 中的 `GISCUS_CONFIG`
-
-### 订阅功能 (Formspree)
-
-1. 注册 [Formspree](https://formspree.io)
-2. 创建表单，获取 Form ID
-3. 修改 `index.html` 中的表单 action：
-
-```html
-<form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-```
+4. 修改 `src/data/siteData.js` 中的 `GISCUS_CONFIG`
 
 ---
 
 ## 📌 版本更新日志
+
+### v3.0.0 (2026-07-22)
+
+#### 🚀 技术重构
+
+- **React + Vite + Tailwind CSS 重构**：将原单 HTML 站点重构为现代前端工程化项目，源码位于仓库根目录，构建产物替代原静态站点
+- **构建工具迁移到 Vite 6**：利用原生 ESM 实现秒级冷启动与热更新（HMR），生产构建产物位于 `dist/` 并同步到仓库根目录部署
+- **样式系统升级到 Tailwind CSS 4**：通过 `@theme` 与 CSS 变量定义杂志风格设计令牌（paper / ink / accent / gold / muted / line）
+- **React Router 7 HashRouter**：实现无刷新 SPA 路由，路径包括 `/`, `/face`, `/study`, `/writing`, `/fun`, `/article/*`
+
+#### 🧩 组件化拆分
+
+将原 `index.html` 中的内联逻辑拆分为独立 React 组件：
+
+- **Layout**：全局布局，集成 Navbar、Footer、SearchModal、MusicPlayer
+- **Navbar**：粘性导航栏，响应式菜单，主题/搜索/音乐入口
+- **HomePage**：杂志封面、聚光灯反色效果、本期精选、最近更新
+- **FacePage**：关于我、头像、个人标签
+- **StudyPage / WritingPage**：文章列表、分类筛选、学习路径时间线
+- **FunPage**：项目展示与项目详情弹窗
+- **ArticlePage**：Markdown 文章渲染、MathJax 公式、Giscus 评论
+- **ArticleCard / ProjectCard**：杂志风格卡片
+- **SearchModal**：全局搜索弹窗，`/` 快捷键唤起，ESC 关闭
+- **MusicPlayer**：基于 Howler.js 的音乐播放器，支持列表/单曲/随机模式
+- **GiscusComments**：基于 GitHub Discussions 的评论系统
+
+#### ⚛️ Hooks 抽象
+
+- **useTheme**：主题状态管理，支持 localStorage 记忆与系统主题监听
+- **useSearch**：搜索状态、`/` 快捷键、结果过滤
+- **useMusicPlayer**：Howler 音频实例、播放控制、进度、音量、播放模式
+- **useArticle**：异步加载并解析 Markdown 文章
+- **useDocumentTitle**：动态修改页面标题
+
+#### 🛡 安全与体验
+
+- **DOMPurify 消毒**：文章 HTML 渲染前进行安全消毒，降低 XSS 风险
+- **歌词与数学公式**：保留 MathJax 3 支持，公式渲染后自动触发 `typesetPromise`
+- **本地存储增强**：主题、音乐音量、播放模式均持久化到 localStorage
+
+#### 📦 数据与内容管理
+
+- `src/data/siteData.js`：Giscus 配置、搜索索引、学习路径、最近更新、项目数据
+- `src/data/techArticles.js`：半学文章元数据
+- `src/data/writingArticles.js`：半文文章元数据
+- `src/data/musicPlaylist.js`：音乐播放列表
+- `public/content/`：Markdown 文章静态资源
+
+---
 
 ### v2.0.0 (2026-06-16)
 
@@ -210,7 +348,7 @@ const GISCUS_CONFIG = {
 
 ---
 
-## v1.2.0 (2026-04-05)
+### v1.2.0 (2026-04-05)
 
 #### ✨ 新增功能
 
@@ -282,7 +420,8 @@ const GISCUS_CONFIG = {
 
 - [X] 文章搜索功能 ✓ (v1.1.0 已完成)
 - [X] 背景音乐播放器 ✓ (v1.2.0 已完成)
-- [X] 项目展示栏目 ✓ (v1.2.2 已完成)
+- [X] 项目展示栏目 ✓ (v1.3.0 已完成)
+- [X] React 工程化重构 ✓ (v3.0.0 已完成)
 - [ ] 标签/分类筛选
 - [ ] RSS 订阅
 - [ ] 文章阅读量统计
@@ -312,4 +451,4 @@ MIT License
 ---
 
 *Made with ❤️ and ☕*
-*Last updated: 2026-06-16*
+*Last updated: 2026-07-22*
