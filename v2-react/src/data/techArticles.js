@@ -1,0 +1,16 @@
+export const techArticlesData = [
+  { file: "content/study/ml/10-jiangweiyuduliangxuexi.md", category: "ml", title: "降维与度量学习", date: "2026-01-26", readTime: "14 min", emoji: "", desc: "k近邻学习、低维嵌入、主成分分析、核化线性降维、流形学习、度量学习..." },
+  { file: "content/study/ml/09-julei.md", category: "ml", title: "聚类", date: "2026-01-25", readTime: "12 min", emoji: "", desc: "距离计算、原型聚类、密度聚类、层次聚类，无监督学习核心算法..." },
+  { file: "content/study/ml/08-fenleiqi-zongjie.md", category: "ml", title: "分类器总结", date: "2026-01-24", readTime: "10 min", emoji: "", desc: "各分类器优缺点对比、适用场景分析、实验对比与选择建议..." },
+  { file: "content/study/ml/07-jichengxuexi.md", category: "ml", title: "集成学习", date: "2026-01-23", readTime: "14 min", emoji: "", desc: "Boosting、Bagging、随机森林、结合策略、多样性增强，集成学习全景..." },
+  { file: "content/study/ml/06-beiyesifenleiqi.md", category: "ml", title: "贝叶斯分类器", date: "2026-01-22", readTime: "12 min", emoji: "", desc: "贝叶斯决策论、极大似然估计、朴素贝叶斯分类器、EM算法..." },
+  { file: "content/study/ml/05-zhichixiangliangji.md", category: "ml", title: "支持向量机", date: "2026-01-21", readTime: "15 min", emoji: "", desc: "间隔与支持向量、对偶问题、核函数、软间隔与正则化，SVM完整推导..." },
+  { file: "content/study/ml/04-shenjingwangluo.md", category: "ml", title: "神经网络", date: "2026-01-20", readTime: "15 min", emoji: "", desc: "神经元模型、感知机与多层网络、误差逆传播算法、全局最小与局部最小..." },
+  { file: "content/study/ml/03-jueceshu.md", category: "ml", title: "决策树", date: "2026-01-19", readTime: "12 min", emoji: "", desc: "信息增益、增益率、基尼指数，ID3、C4.5、CART算法原理与实现..." },
+  { file: "content/study/ml/02-xianxingmoxing.md", category: "ml", title: "线性模型", date: "2026-01-18", readTime: "12 min", emoji: "", desc: "线性回归、对数几率回归、线性判别分析，从基础到应用的完整解析..." },
+  { file: "content/study/ml/01-moxingpingguyuxuanze.md", category: "ml", title: "模型评估与选择", date: "2026-01-26", readTime: "15 min", emoji: "", desc: "经验误差与过拟合、评估方法、性能度量、比较检验，模型选择的基础工具箱..." },
+  { file: "content/study/ml/00-yixiegainian.md", category: "ml", title: "一些概念：从挑西瓜说起", date: "2026-01-17", readTime: "10 min", emoji: "", desc: "像人一样学习的机器，通过\"挑西瓜\"案例解析机器学习基础术语与核心思想..." },
+  { file: "content/study/modeling/01-xianxingguihua.md", category: "modeling", title: "线性规划", date: "2026-01-05", readTime: "12 min", emoji: "", desc: "线性规划模型建立、单纯形法原理、灵敏度分析、实际应用案例..." },
+  { file: "content/study/modeling/00-shuxuejianmosixiang.md", category: "modeling", title: "数学建模思想", date: "2026-01-03", readTime: "15 min", emoji: "", desc: "蒙特卡洛法、动态规划、图论模型，数学建模中的四大经典思想解析..." },
+  { file: "content/study/modeling/02-zhengshuguihua.md", category: "modeling", title: "整数规划", date: "2026-01-07", readTime: "13 min", emoji: "", desc: "整数规划模型、分支定界法、0-1整数规划、指派问题与旅行商问题..." },
+];

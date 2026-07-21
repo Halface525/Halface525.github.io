@@ -1,0 +1,17 @@
+export const musicPlaylist = [
+  { title: "Nanjing", artist: "Li Zhi", src: "audio/01-nanjing.mp3" },
+  { title: "Black Envelope", artist: "Li Zhi", src: "audio/02-heixinfeng.mp3" },
+  { title: "Dongzhuo Yao", artist: "Li Zhi", src: "audio/03-dongzhuoyao.mp3" },
+  { title: "Youth", artist: "Li Zhi", src: "audio/04-qingchun.mp3" },
+  { title: "Zhengzhou", artist: "Li Zhi", src: "audio/05-zhengzhou.mp3" },
+  { title: "Dingxi", artist: "Li Zhi", src: "audio/06-dingxi.mp3" },
+  { title: "Southern City", artist: "Li Zhi", src: "audio/07-chunmo.mp3" },
+  { title: "Rain", artist: "Li Zhi", src: "audio/08-xiayu.mp3" },
+  { title: "Castle in the Sky", artist: "Li Zhi", src: "audio/09-tiankongzhicheng.mp3" },
+  { title: "Summer of Shanyin Road", artist: "Li Zhi", src: "audio/10-shanyinlu.mp3" },
+  { title: "Hangzhou", artist: "Li Zhi", src: "audio/11-hangzhou.mp3" },
+  { title: "Will This World Be Better", artist: "Li Zhi", src: "audio/12-zhegeshijie.mp3" },
+  { title: "Youth Nowhere to Rest", artist: "Zhao Lei", src: "audio/13-qingchunwuchuanfang.mp3" },
+  { title: "Being With You", artist: "Li Zhi", src: "audio/14-henizaiyiqi.mp3" },
+  { title: "Rehe", artist: "Li Zhi", src: "audio/15-rehe.mp3" },
+];
