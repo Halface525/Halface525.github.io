@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from "react-router";
+﻿import { HashRouter, Routes, Route } from "react-router";
 import { Layout } from "./components/Layout";
 import { HomePage } from "./pages/HomePage";
 import { FacePage } from "./pages/FacePage";

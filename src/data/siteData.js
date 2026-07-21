@@ -73,11 +73,11 @@ export const searchIndex = [
   { title: "水调歌头·剑门", file: "content/writing/travel/02-shuidiaogetou-jianmen.md", category: "travel", section: "半文", date: "2025.04.05" },
 ];
 
-// 首页最近更新数据
+// 首页最近更新数据（按日期倒序，最多保留 5 条）
 export const updatesData = [
-  { id: "01", title: "新增《我选择死亡》", desc: "半思栏目新诗：我已经失去了春天，夏天的太阳也变得冰冷...", date: "2026.06.29", action: { type: "article", file: "content/writing/thinking/04-woxuanzesiwang.md", category: "thinking" } },
-  { id: "02", title: "网站风格焕新 v2.0.0", desc: "手绘风格 → 杂志排版风格，Playfair Display + Noto Serif SC，聚光灯互动效果", date: "2026.06.16", action: { type: "navigate", target: "/" } },
-  { id: "03", title: "新增半趣栏目", desc: "收录个人项目与趣味工具", date: "2026.05.17", action: { type: "navigate", target: "/fun" } },
-  { id: "04", title: "音乐播放器上线", desc: "支持播放列表、进度控制与音量调节", date: "2026.04.05", action: { type: "toggleMusic" } },
-  { id: "05", title: "新增全局搜索功能", desc: "快速检索全站文章与内容", date: "2026.03.29", action: { type: "toggleSearch" } },
+  { id: "01", title: "博客重构 v3.0.0", desc: "静态 HTML 三件套 → React + Vite + Tailwind CSS，组件化与工程化升级", date: "2026.07.22", action: { type: "navigate", target: "/" } },
+  { id: "02", title: "新增《我选择死亡》", desc: "半思栏目新诗：我已经失去了春天，夏天的太阳也变得冰冷...", date: "2026.06.29", action: { type: "article", file: "content/writing/thinking/04-woxuanzesiwang.md", category: "thinking" } },
+  { id: "03", title: "网站风格焕新 v2.0.0", desc: "手绘风格 → 杂志排版风格，Playfair Display + Noto Serif SC，聚光灯互动效果", date: "2026.06.16", action: { type: "navigate", target: "/" } },
+  { id: "04", title: "新增半趣栏目", desc: "收录个人项目与趣味工具", date: "2026.05.17", action: { type: "navigate", target: "/fun" } },
+  { id: "05", title: "音乐播放器上线", desc: "支持播放列表、进度控制与音量调节", date: "2026.04.05", action: { type: "toggleMusic" } },
 ];

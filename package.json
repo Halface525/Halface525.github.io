@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "powershell -Command \"Copy-Item index.dev.html index.html -Force; vite\"",
     "build": "vite build",
+    "build:deploy": "powershell -ExecutionPolicy Bypass -File ./build-deploy.ps1",
     "lint": "eslint .",
     "preview": "vite preview"
   },
