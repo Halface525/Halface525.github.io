@@ -13,9 +13,9 @@ auther: Halface
 
 ---
 
-# 1.1 范数（Norm）
+## 1.1 范数（Norm）
 
-# 1.1.1 向量范数（Vector Norm）
+### 1.1.1 向量范数（Vector Norm）
 
 向量范数（vector norm）是对向量大小的一种度量。设 $\mathcal{V}$ 是数域 $\mathbb{F}$（$\mathbb{R}$ 或 $\mathbb{C}$）上的向量空间，映射 $\|\cdot\| : \mathcal{V} \to \mathbb{R}$ 称为向量范数，需满足三条公理（axioms）：非负性（nonnegativity：$\|\mathbf{x}\| \ge 0$，且 $\|\mathbf{x}\| = 0 \Longleftrightarrow \mathbf{x} = \mathbf{0}$）、齐次性（homogeneity：$\|\alpha \mathbf{x}\| = |\alpha| \cdot \|\mathbf{x}\|$）、三角不等式（triangle inequality：$\|\mathbf{x} + \mathbf{y}\| \le \|\mathbf{x}\| + \|\mathbf{y}\|$）。
 
@@ -58,7 +58,7 @@ $$
 
 ---
 
-# 1.1.2 内积（Inner Product）
+### 1.1.2 内积（Inner Product）
 
 向量范数描述了向量的长度，而内积（inner product）进一步刻画了向量之间的角度关系，是范数的自然延伸。
 
@@ -89,11 +89,11 @@ $$
 
 ---
 
-# 1.1.3 矩阵范数（Matrix Norm）
+### 1.1.3 矩阵范数（Matrix Norm）
 
 有了内积的基础，矩阵范数可以自然地分为两大类：由矩阵内积直接诱导的 **Frobenius 范数**，以及由底层向量范数诱导的**算子范数**。
 
-# Frobenius 范数（Frobenius Norm）
+#### Frobenius 范数（Frobenius Norm）
 
 > **定义 1.1**（Frobenius 范数 / Frobenius Norm）：矩阵 $\mathbf{A} = [a_{ij}] \in \mathbb{C}^{m \times n}$ 的 Frobenius 范数为
 > $$
@@ -105,7 +105,7 @@ $$
 
 Frobenius 范数具有正交不变性（orthogonal invariance）：对任意酉矩阵（unitary matrix）$\mathbf{U}, \mathbf{V}$，$\|\mathbf{U}\mathbf{A}\mathbf{V}\|_F = \|\mathbf{A}\|_F$。同时满足次乘性（submultiplicativity）$\|\mathbf{A}\mathbf{B}\|_F \le \|\mathbf{A}\|_F \cdot \|\mathbf{B}\|_F$。
 
-# 算子范数（Operator Norm / Induced Norm）
+#### 算子范数（Operator Norm / Induced Norm）
 
 与 Frobenius 范数不同，算子范数由底层的向量 $\ell_p$ 范数诱导（induced），衡量的是线性变换的增益上界（gain upper bound）。
 
@@ -136,7 +136,7 @@ Frobenius 范数具有正交不变性（orthogonal invariance）：对任意酉�
 
 算子范数的核心性质：对任意相容的矩阵，满足次乘性（submultiplicativity）$\|\mathbf{A}\mathbf{B}\|_p \le \|\mathbf{A}\|_p \cdot \|\mathbf{B}\|_p$ 和相容性（consistency）$\|\mathbf{A}\mathbf{x}\|_p \le \|\mathbf{A}\|_p \cdot \|\mathbf{x}\|_p$；谱范数具有酉不变性（unitary invariance）$\|\mathbf{U}\mathbf{A}\mathbf{V}\|_2 = \|\mathbf{A}\|_2$；谱半径（spectral radius）$\rho(\mathbf{A}) \triangleq \max_i |\lambda_i(\mathbf{A})|$ 是任意算子范数的下界（lower bound），即 $\rho(\mathbf{A}) \le \|\mathbf{A}\|_p$。
 
-# 范数之间的关系
+#### 范数之间的关系
 
 Frobenius 范数与谱范数之间的关系：设 $r = \operatorname{rank}(\mathbf{A})$，则
 
@@ -148,17 +148,17 @@ $$
 
 ---
 
-# 1.1.4 核范数（Nuclear Norm）
+### 1.1.4 核范数（Nuclear Norm）
 
 核范数（nuclear norm）定义为 $\|\mathbf{A}\|_* \triangleq \sum_i \sigma_i(\mathbf{A})$，即所有奇异值之和。它是秩函数（rank function）的凸包络（convex envelope），在低秩矩阵补全（low-rank matrix completion）和鲁棒 PCA（robust PCA）中有重要应用。
 
 ---
 
-# 1.2 梯度（Gradient）与复梯度（Complex Gradient）
+## 1.2 梯度（Gradient）与复梯度（Complex Gradient）
 
 在凸优化中，梯度是判定最优性和设计下降算法的核心工具。对于实变量和复变量问题，梯度的定义有所不同。
 
-# 1.2.1 实梯度（Real Gradient）
+### 1.2.1 实梯度（Real Gradient）
 
 > **定义 1.3**（梯度 / Gradient）：设 $f : \mathbb{R}^n \to \mathbb{R}$ 为连续可微函数（continuously differentiable），则 $f$ 在点 $\mathbf{x}$ 处的梯度（gradient）记为 $\nabla f(\mathbf{x})$，是一个列向量：
 > $$
@@ -205,7 +205,7 @@ $$
 
 ---
 
-# 1.2.2 常用梯度公式
+### 1.2.2 常用梯度公式
 
 以下公式在优化推导中频繁出现（$\mathbf{a}$ 为常向量，$\mathbf{A}$ 为常矩阵）：
 
@@ -220,7 +220,7 @@ $$
 
 ---
 
-# 1.2.3 复梯度与 Wirtinger 微积分（Wirtinger Calculus）
+### 1.2.3 复梯度与 Wirtinger 微积分（Wirtinger Calculus）
 
 在信号处理和通信问题中，变量常为复数（如波束成形权重 $\mathbf{w} \in \mathbb{C}^n$），而代价函数 $f(\mathbf{w})$ 取实数值（如功率、误差）。实值复变函数不满足 Cauchy-Riemann 条件，无法直接对 $\mathbf{w}$ 求导。
 
@@ -265,9 +265,9 @@ $$
 
 ---
 
-# 1.3 正定矩阵、特征值分解与奇异值分解
+## 1.3 正定矩阵、特征值分解与奇异值分解
 
-# 1.3.1 正定矩阵与半正定矩阵（Positive Definite / Semidefinite Matrices）
+### 1.3.1 正定矩阵与半正定矩阵（Positive Definite / Semidefinite Matrices）
 
 正定性和半正定性是矩阵理论中最重要的概念之一，在凸优化中直接用于判定函数的凸性和约束的可行性。
 
@@ -290,7 +290,7 @@ $$
 
 ---
 
-# 1.3.2 特征值分解（Eigenvalue Decomposition, EVD）
+### 1.3.2 特征值分解（Eigenvalue Decomposition, EVD）
 
 > **定义 1.7**（特征值分解 / EVD）：设 $\mathbf{A} \in \mathbb{R}^{n \times n}$ 对称，则 $\mathbf{A}$ 可对角化为
 > $$
@@ -320,7 +320,7 @@ $$
 
 ---
 
-# 1.3.3 奇异值分解（Singular Value Decomposition, SVD）
+### 1.3.3 奇异值分解（Singular Value Decomposition, SVD）
 
 EVD 仅适用于方阵，SVD 将其推广至任意 $m \times n$ 矩阵。
 
