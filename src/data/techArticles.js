@@ -1,4 +1,6 @@
 export const techArticlesData = [
+  { file: "content/study/signal/convex-optimization/00-yinyan.md", category: "convex", title: "引言：信号处理与通信中的凸优化", date: "2026-07-23", readTime: "8 min", emoji: "", desc: "开坑说明、主要参考书目、后续更新计划，以及对旧系列烂尾的坦诚与对新系列的期待..." },
+  { file: "content/study/signal/convex-optimization/01-shuxuejichu.md", category: "convex", title: "数学基础", date: "2026-07-25", readTime: "25 min", emoji: "", desc: "向量与矩阵范数、内积空间、梯度与复梯度、特征值分解与奇异值分解，凸优化的数学前置知识..." },
   { file: "content/study/ml/10-jiangweiyuduliangxuexi.md", category: "ml", title: "降维与度量学习", date: "2026-01-26", readTime: "14 min", emoji: "", desc: "k近邻学习、低维嵌入、主成分分析、核化线性降维、流形学习、度量学习..." },
   { file: "content/study/ml/09-julei.md", category: "ml", title: "聚类", date: "2026-01-25", readTime: "12 min", emoji: "", desc: "距离计算、原型聚类、密度聚类、层次聚类，无监督学习核心算法..." },
   { file: "content/study/ml/08-fenleiqi-zongjie.md", category: "ml", title: "分类器总结", date: "2026-01-24", readTime: "10 min", emoji: "", desc: "各分类器优缺点对比、适用场景分析、实验对比与选择建议..." },

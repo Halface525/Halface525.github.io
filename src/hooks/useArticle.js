@@ -16,8 +16,8 @@ export function useArticle(filePath) {
         return res.text();
       })
       .then((md) => {
-        const { metadata, html } = parseMarkdown(md);
-        setData({ metadata, html });
+        const { metadata, content } = parseMarkdown(md);
+        setData({ metadata, content });
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));

@@ -12,6 +12,7 @@ const FILTERS = [
   { value: "all", label: "全部" },
   { value: "ml", label: "机器学习" },
   { value: "modeling", label: "数学建模" },
+  { value: "convex", label: "凸优化" },
 ];
 
 export function StudyPage() {
@@ -68,7 +69,12 @@ export function StudyPage() {
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((a) => (
-          <ArticleCard key={a.file} article={a} onClick={() => navigate(`/article/${a.file}`)} />
+          <ArticleCard
+            key={a.file}
+            article={a}
+            showSequence={true}
+            onClick={() => navigate(`/article/${a.file}`)}
+          />
         ))}
       </div>
     </section>

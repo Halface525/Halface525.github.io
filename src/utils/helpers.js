@@ -2,6 +2,7 @@ export function getCategoryLabel(category) {
   const labels = {
     ml: "机器学习",
     modeling: "数学建模",
+    convex: "凸优化",
     thinking: "半思",
     reading: "半读",
     travel: "半游",
@@ -11,6 +12,12 @@ export function getCategoryLabel(category) {
 
 export function getCardLabel(title) {
   return /^[一-龥]/.test(title) ? title : title.split(" ")[0];
+}
+
+export function getArticleSequence(file) {
+  const basename = file.split("/").pop();
+  const match = basename.match(/^(\d+)-/);
+  return match ? match[1] : null;
 }
 
 export function formatDate(dateStr) {

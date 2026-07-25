@@ -1,0 +1,350 @@
+﻿---
+data: 2026-07-25
+tags:
+  - 凸优化
+  - 信号处理
+  - 数学基础
+lastdate: 2026-07-25
+auther: Halface
+---
+
+
+> **本章导引：** 本章回顾凸优化所需的数学基础知识，包括向量与矩阵范数（vector/matrix norm）、内积空间（inner product space）、导数与梯度（gradient）、特征值分解（eigenvalue decomposition）与奇异值分解（singular value decomposition, SVD）等核心概念。这些工具是后续理解凸集、凸函数以及各类优化问题的必备前提。本章内容主要参考 *Convex Optimization for Signal Processing and Communications* 第一章，并结合 Boyd *Convex Optimization* 的附录进行补充。
+
+---
+
+# 1.1 范数（Norm）
+
+# 1.1.1 向量范数（Vector Norm）
+
+向量范数（vector norm）是对向量大小的一种度量。设 $\mathcal{V}$ 是数域 $\mathbb{F}$（$\mathbb{R}$ 或 $\mathbb{C}$）上的向量空间，映射 $\|\cdot\| : \mathcal{V} \to \mathbb{R}$ 称为向量范数，需满足三条公理（axioms）：非负性（nonnegativity：$\|\mathbf{x}\| \ge 0$，且 $\|\mathbf{x}\| = 0 \Longleftrightarrow \mathbf{x} = \mathbf{0}$）、齐次性（homogeneity：$\|\alpha \mathbf{x}\| = |\alpha| \cdot \|\mathbf{x}\|$）、三角不等式（triangle inequality：$\|\mathbf{x} + \mathbf{y}\| \le \|\mathbf{x}\| + \|\mathbf{y}\|$）。
+
+工程中最常用的是 $\ell_p$ 范数族。对 $p \ge 1$，向量 $\mathbf{x} = (x_1, \ldots, x_n)^T \in \mathbb{C}^n$ 的 $\ell_p$ 范数定义为
+
+$$
+\|\mathbf{x}\|_p \triangleq \left( \sum_{i=1}^{n} |x_i|^p \right)^{1/p}, \quad p \ge 1
+$$
+
+三种最常用的 $\ell_p$ 范数：
+
+- $\ell_1$ 范数（$\ell_1$ norm / Manhattan norm）：$\|\mathbf{x}\|_1 = \sum_{i=1}^{n} |x_i|$，对应坐标绝对值之和，在稀疏信号恢复（sparse signal recovery）和压缩感知（compressive sensing）中起关键作用（$\ell_1$ 最小化是 $\ell_0$ 的凸近似）。
+- $\ell_2$ 范数（$\ell_2$ norm / Euclidean norm）：$\|\mathbf{x}\|_2 = \sqrt{\sum_{i=1}^{n} |x_i|^2} = \sqrt{\mathbf{x}^H \mathbf{x}}$，即几何距离，在最小二乘估计（least-squares estimation）和波束成形（beamforming）设计中广泛使用。
+- $\ell_{\infty}$ 范数（$\ell_{\infty}$ norm / Chebyshev norm）：$\|\mathbf{x}\|_{\infty} \triangleq \max_{1 \le i \le n} |x_i| = \lim_{p \to \infty} \|\mathbf{x}\|_p$，常用于最坏情况分析（worst-case analysis）和 minimax 鲁棒优化。
+
+> **举例 1.1**（向量 $\ell_p$ 范数计算）：取 $\mathbf{x} = (3, -4, 0)^T$，计算各范数：
+> $$
+> \begin{aligned}
+> \|\mathbf{x}\|_1 &= |3| + |-4| + |0| = 7 \\
+> \|\mathbf{x}\|_2 &= \sqrt{3^2 + (-4)^2 + 0^2} = 5 \\
+> \|\mathbf{x}\|_{\infty} &= \max\{|3|, |-4|, |0|\} = 4
+> \end{aligned}
+> $$
+> 验证范数等价不等式（$n=3$）：$\|\mathbf{x}\|_{\infty}=4 \le \|\mathbf{x}\|_2=5 \le \|\mathbf{x}\|_1=7 \le 3\cdot\|\mathbf{x}\|_{\infty}=12$。✓
+
+---
+
+> **定理 1.1**（有限维空间中的范数等价性 / Norm Equivalence）：在 $\mathbb{C}^n$ 中所有范数等价（equivalent）：对 $1 \le p < q \le \infty$，
+> $$
+> \|\mathbf{x}\|_q \le \|\mathbf{x}\|_p \le n^{\frac{1}{p} - \frac{1}{q}} \|\mathbf{x}\|_q
+> $$
+> 常用的特殊情形：
+> $$
+> \begin{aligned}
+> \|\mathbf{x}\|_2 &\le \|\mathbf{x}\|_1 \le \sqrt{n} \, \|\mathbf{x}\|_2 \\
+> \|\mathbf{x}\|_{\infty} &\le \|\mathbf{x}\|_2 \le \sqrt{n} \, \|\mathbf{x}\|_{\infty} \\
+> \|\mathbf{x}\|_{\infty} &\le \|\mathbf{x}\|_1 \le n \, \|\mathbf{x}\|_{\infty}
+> \end{aligned}
+> $$
+
+---
+
+# 1.1.2 内积（Inner Product）
+
+向量范数描述了向量的长度，而内积（inner product）进一步刻画了向量之间的角度关系，是范数的自然延伸。
+
+$\mathbb{C}^n$ 上的标准内积（standard inner product）定义为
+
+$$
+\langle \mathbf{x}, \mathbf{y} \rangle \triangleq \mathbf{y}^H \mathbf{x} = \sum_{i=1}^{n} x_i \overline{y_i}
+$$
+
+该内积诱导（induce）出 $\ell_2$ 范数：$\|\mathbf{x}\|_2 = \sqrt{\langle \mathbf{x}, \mathbf{x} \rangle}$。
+
+类似地，$\mathbb{C}^{m \times n}$ 上的矩阵内积（matrix inner product）定义为
+
+$$
+\langle \mathbf{A}, \mathbf{B} \rangle \triangleq \operatorname{tr}(\mathbf{B}^H \mathbf{A}) = \sum_{i=1}^{m} \sum_{j=1}^{n} a_{ij} \overline{b_{ij}}
+$$
+
+即将矩阵按列堆叠为 $mn$ 维向量后取标准内积。该内积诱导出 Frobenius 范数：$\|\mathbf{A}\|_F = \sqrt{\langle \mathbf{A}, \mathbf{A} \rangle}$。
+
+> **定理 1.2**（Cauchy-Schwarz 不等式 / Cauchy-Schwarz Inequality）：对内积空间中的任意两个元素，其上确界由各自范数的乘积限定：
+> $$
+> \begin{aligned}
+> |\langle \mathbf{x}, \mathbf{y} \rangle| &\le \|\mathbf{x}\|_2 \cdot \|\mathbf{y}\|_2 \\
+> |\langle \mathbf{A}, \mathbf{B} \rangle| &\le \|\mathbf{A}\|_F \cdot \|\mathbf{B}\|_F
+> \end{aligned}
+> $$
+> 等号成立当且仅当两者线性相关（即共线）。
+
+---
+
+# 1.1.3 矩阵范数（Matrix Norm）
+
+有了内积的基础，矩阵范数可以自然地分为两大类：由矩阵内积直接诱导的 **Frobenius 范数**，以及由底层向量范数诱导的**算子范数**。
+
+# Frobenius 范数（Frobenius Norm）
+
+> **定义 1.1**（Frobenius 范数 / Frobenius Norm）：矩阵 $\mathbf{A} = [a_{ij}] \in \mathbb{C}^{m \times n}$ 的 Frobenius 范数为
+> $$
+> \|\mathbf{A}\|_F \triangleq \left( \sum_{i=1}^{m} \sum_{j=1}^{n} |a_{ij}|^2 \right)^{1/2}
+> = \sqrt{\operatorname{tr}(\mathbf{A}^H \mathbf{A})}
+> = \sqrt{\sum_{i=1}^{\min\{m,n\}} \sigma_i^2(\mathbf{A})}
+> $$
+> 其中 $\operatorname{tr}(\cdot)$ 表示迹（trace），$\sigma_i(\mathbf{A})$ 为矩阵的奇异值（singular values）。
+
+Frobenius 范数具有正交不变性（orthogonal invariance）：对任意酉矩阵（unitary matrix）$\mathbf{U}, \mathbf{V}$，$\|\mathbf{U}\mathbf{A}\mathbf{V}\|_F = \|\mathbf{A}\|_F$。同时满足次乘性（submultiplicativity）$\|\mathbf{A}\mathbf{B}\|_F \le \|\mathbf{A}\|_F \cdot \|\mathbf{B}\|_F$。
+
+# 算子范数（Operator Norm / Induced Norm）
+
+与 Frobenius 范数不同，算子范数由底层的向量 $\ell_p$ 范数诱导（induced），衡量的是线性变换的增益上界（gain upper bound）。
+
+> **定义 1.2**（算子范数 / Operator Norm）：矩阵 $\mathbf{A} \in \mathbb{C}^{m \times n}$ 的 $\ell_p$ 算子范数为
+> $$
+> \|\mathbf{A}\|_p \triangleq \sup_{\mathbf{x} \neq \mathbf{0}} \frac{\|\mathbf{A}\mathbf{x}\|_p}{\|\mathbf{x}\|_p}
+> = \sup_{\|\mathbf{x}\|_p = 1} \|\mathbf{A}\mathbf{x}\|_p
+> $$
+
+三种最重要的算子范数有简洁的闭合形式（closed form）：
+
+> **定理 1.3**（$\ell_1$、$\ell_{\infty}$ 和 $\ell_2$ 算子范数的计算）：
+> $$
+> \begin{aligned}
+> \|\mathbf{A}\|_1 &= \max_{1 \le j \le n} \sum_{i=1}^{m} |a_{ij}| \quad \text{（最大绝对列和，max column sum）} \\
+> \|\mathbf{A}\|_{\infty} &= \max_{1 \le i \le m} \sum_{j=1}^{n} |a_{ij}| \quad \text{（最大绝对行和，max row sum）} \\
+> \|\mathbf{A}\|_2 &= \sigma_{\max}(\mathbf{A}) \quad \text{（谱范数，spectral norm，即最大奇异值）}
+> \end{aligned}
+> $$
+
+> **举例 1.2**（Frobenius 范数与算子范数计算）：取 $\mathbf{A} = \begin{pmatrix} 1 & -2 \\ 3 & 0 \end{pmatrix}$。
+> - **Frobenius 范数：** $\|\mathbf{A}\|_F = \sqrt{1^2 + (-2)^2 + 3^2 + 0^2} = \sqrt{14} \approx 3.742$
+> - **$\ell_1$ 算子范数（列和）：** 列1：$|1|+|3|=4$，列2：$|-2|+|0|=2$，故 $\|\mathbf{A}\|_1 = 4$
+> - **$\ell_{\infty}$ 算子范数（行和）：** 行1：$|1|+|-2|=3$，行2：$|3|+|0|=3$，故 $\|\mathbf{A}\|_{\infty} = 3$
+> - **$\ell_2$ 算子范数（谱范数）：** 计算 $\mathbf{A}^T\mathbf{A} = \begin{pmatrix} 10 & -2 \\ -2 & 4 \end{pmatrix}$，特征值为 $\lambda_1 \approx 10.83,\ \lambda_2 \approx 3.17$，故 $\|\mathbf{A}\|_2 = \sqrt{10.83} \approx 3.291$
+>
+> 注意这里 $\|\mathbf{A}\|_2 < \|\mathbf{A}\|_F$，与不等式 $\|\mathbf{A}\|_2 \le \|\mathbf{A}\|_F \le \sqrt{2}\|\mathbf{A}\|_2$ 一致。
+
+算子范数的核心性质：对任意相容的矩阵，满足次乘性（submultiplicativity）$\|\mathbf{A}\mathbf{B}\|_p \le \|\mathbf{A}\|_p \cdot \|\mathbf{B}\|_p$ 和相容性（consistency）$\|\mathbf{A}\mathbf{x}\|_p \le \|\mathbf{A}\|_p \cdot \|\mathbf{x}\|_p$；谱范数具有酉不变性（unitary invariance）$\|\mathbf{U}\mathbf{A}\mathbf{V}\|_2 = \|\mathbf{A}\|_2$；谱半径（spectral radius）$\rho(\mathbf{A}) \triangleq \max_i |\lambda_i(\mathbf{A})|$ 是任意算子范数的下界（lower bound），即 $\rho(\mathbf{A}) \le \|\mathbf{A}\|_p$。
+
+# 范数之间的关系
+
+Frobenius 范数与谱范数之间的关系：设 $r = \operatorname{rank}(\mathbf{A})$，则
+
+$$
+\|\mathbf{A}\|_2 \le \|\mathbf{A}\|_F \le \sqrt{r} \cdot \|\mathbf{A}\|_2
+$$
+
+这是因为 $\sigma_{\max} \le \sqrt{\sum \sigma_i^2} \le \sqrt{r} \cdot \sigma_{\max}$。
+
+---
+
+# 1.1.4 核范数（Nuclear Norm）
+
+核范数（nuclear norm）定义为 $\|\mathbf{A}\|_* \triangleq \sum_i \sigma_i(\mathbf{A})$，即所有奇异值之和。它是秩函数（rank function）的凸包络（convex envelope），在低秩矩阵补全（low-rank matrix completion）和鲁棒 PCA（robust PCA）中有重要应用。
+
+---
+
+# 1.2 梯度（Gradient）与复梯度（Complex Gradient）
+
+在凸优化中，梯度是判定最优性和设计下降算法的核心工具。对于实变量和复变量问题，梯度的定义有所不同。
+
+# 1.2.1 实梯度（Real Gradient）
+
+> **定义 1.3**（梯度 / Gradient）：设 $f : \mathbb{R}^n \to \mathbb{R}$ 为连续可微函数（continuously differentiable），则 $f$ 在点 $\mathbf{x}$ 处的梯度（gradient）记为 $\nabla f(\mathbf{x})$，是一个列向量：
+> $$
+> \nabla f(\mathbf{x}) \triangleq
+> \begin{bmatrix}
+> \dfrac{\partial f}{\partial x_1} & \dfrac{\partial f}{\partial x_2} & \cdots & \dfrac{\partial f}{\partial x_n}
+> \end{bmatrix}^T
+> \in \mathbb{R}^n
+> $$
+> 即 $[\nabla f(\mathbf{x})]_i = \partial f / \partial x_i$。
+
+梯度的几何意义：$\nabla f(\mathbf{x})$ 是 $f$ 在 $\mathbf{x}$ 处上升最快的方向（direction of steepest ascent），其反方向 $-\nabla f(\mathbf{x})$ 是最速下降方向（direction of steepest descent），也是梯度下降法（gradient descent）的基础。
+
+梯度的一阶 Taylor 展开（first-order Taylor expansion）：
+
+$$
+f(\mathbf{x} + \Delta\mathbf{x}) \approx f(\mathbf{x}) + \nabla f(\mathbf{x})^T \Delta\mathbf{x}
+$$
+
+对于可微凸函数，$\mathbf{x}^*$ 是全局极小点当且仅当 $\nabla f(\mathbf{x}^*) = \mathbf{0}$，即一阶最优性条件。
+
+> **定义 1.4**（Hessian 矩阵 / Hessian Matrix）：若 $f$ 二阶可微（twice differentiable），其 Hessian 矩阵为二阶偏导数组成的 $n \times n$ 对称矩阵：
+> $$
+> \nabla^2 f(\mathbf{x}) \triangleq
+> \begin{bmatrix}
+> \dfrac{\partial^2 f}{\partial x_i \partial x_j}
+> \end{bmatrix}_{i,j=1}^{n}
+> \in \mathbb{R}^{n \times n}
+> $$
+
+二阶 Taylor 展开为：
+
+$$
+f(\mathbf{x} + \Delta\mathbf{x}) \approx f(\mathbf{x}) + \nabla f(\mathbf{x})^T \Delta\mathbf{x} + \frac{1}{2} \Delta\mathbf{x}^T \nabla^2 f(\mathbf{x}) \Delta\mathbf{x}
+$$
+
+> **举例 1.3**（梯度与 Hessian 计算）：设 $f(\mathbf{x}) = x_1^2 + 2x_1 x_2 + 3x_2^2$，写成二次型 $f(\mathbf{x}) = \mathbf{x}^T \mathbf{P} \mathbf{x}$，其中 $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 1 & 3 \end{pmatrix}$。
+>
+> 梯度：$\nabla f(\mathbf{x}) = \begin{bmatrix} 2x_1 + 2x_2 \\ 2x_1 + 6x_2 \end{bmatrix} = 2\mathbf{P}\mathbf{x}$
+>
+> Hessian：$\nabla^2 f(\mathbf{x}) = \begin{pmatrix} 2 & 2 \\ 2 & 6 \end{pmatrix} = 2\mathbf{P}$
+>
+> 对于一般二次型 $f(\mathbf{x}) = \mathbf{x}^T \mathbf{P} \mathbf{x}$（$\mathbf{P}$ 对称），$\nabla f = 2\mathbf{P}\mathbf{x}$，$\nabla^2 f = 2\mathbf{P}$。
+
+---
+
+# 1.2.2 常用梯度公式
+
+以下公式在优化推导中频繁出现（$\mathbf{a}$ 为常向量，$\mathbf{A}$ 为常矩阵）：
+
+$$
+\begin{aligned}
+\nabla_{\mathbf{x}} (\mathbf{a}^T \mathbf{x}) &= \mathbf{a} \\
+\nabla_{\mathbf{x}} (\mathbf{x}^T \mathbf{A} \mathbf{x}) &= (\mathbf{A} + \mathbf{A}^T) \mathbf{x} \quad \text{（若 $\mathbf{A}$ 对称，则为 $2\mathbf{A}\mathbf{x}$）} \\
+\nabla_{\mathbf{x}} \|\mathbf{x}\|_2^2 &= 2\mathbf{x} \\
+\nabla_{\mathbf{x}} \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2 &= 2\mathbf{A}^T(\mathbf{A}\mathbf{x} - \mathbf{b})
+\end{aligned}
+$$
+
+---
+
+# 1.2.3 复梯度与 Wirtinger 微积分（Wirtinger Calculus）
+
+在信号处理和通信问题中，变量常为复数（如波束成形权重 $\mathbf{w} \in \mathbb{C}^n$），而代价函数 $f(\mathbf{w})$ 取实数值（如功率、误差）。实值复变函数不满足 Cauchy-Riemann 条件，无法直接对 $\mathbf{w}$ 求导。
+
+Wirtinger 微积分（Wirtinger calculus）通过将 $\mathbf{z}$ 和其共轭 $\mathbf{z}^*$ 视为独立变量来定义复导数：
+
+> **定义 1.5**（Wirtinger 导数 / Wirtinger Derivatives）：对复变量 $z = x + jy$（$x, y \in \mathbb{R}$）：
+> $$
+> \begin{aligned}
+> \frac{\partial}{\partial z} &\triangleq \frac{1}{2}\left( \frac{\partial}{\partial x} - j\frac{\partial}{\partial y} \right) \\
+> \frac{\partial}{\partial z^*} &\triangleq \frac{1}{2}\left( \frac{\partial}{\partial x} + j\frac{\partial}{\partial y} \right)
+> \end{aligned}
+> $$
+
+> **定理 1.4**（复梯度的核心性质）：对于实值函数 $f : \mathbb{C}^n \to \mathbb{R}$：
+> 1. 最速下降方向由共轭梯度给出：$-\nabla_{\mathbf{z}^*} f(\mathbf{z})$
+> 2. 驻点条件（stationary point）：$\nabla_{\mathbf{z}^*} f(\mathbf{z}) = \mathbf{0}$（或等价地 $\nabla_{\mathbf{z}} f(\mathbf{z}) = \mathbf{0}$）
+> 3. 一阶 Taylor 展开：$f(\mathbf{z} + \Delta\mathbf{z}) \approx f(\mathbf{z}) + 2\operatorname{Re}\big\{ \nabla_{\mathbf{z}^*} f(\mathbf{z})^H \Delta\mathbf{z} \big\}$
+
+实际计算技巧：将 $f$ 写为 $\mathbf{z}$ 和 $\mathbf{z}^*$ 的表达式，把 $\mathbf{z}^*$ 当作独立变量求偏导即得共轭梯度 $\nabla_{\mathbf{z}^*} f$。常用公式：
+
+$$
+\begin{aligned}
+\nabla_{\mathbf{z}^*} (\mathbf{a}^H \mathbf{z}) &= \mathbf{0} \\
+\nabla_{\mathbf{z}^*} (\mathbf{z}^H \mathbf{a}) &= \mathbf{a} \\
+\nabla_{\mathbf{z}^*} (\mathbf{z}^H \mathbf{A} \mathbf{z}) &= \mathbf{A} \mathbf{z} \quad \text{（$\mathbf{A}$ 为 Hermitian）} \\
+\nabla_{\mathbf{z}^*} \|\mathbf{z}\|_2^2 &= \mathbf{z}
+\end{aligned}
+$$
+
+> **举例 1.4**（复梯度计算：线性最小二乘）：设 $f(\mathbf{w}) = \|\mathbf{X}\mathbf{w} - \mathbf{y}\|_2^2$，$\mathbf{w} \in \mathbb{C}^n$。展开：
+> $$
+> \begin{aligned}
+> f(\mathbf{w}) &= (\mathbf{X}\mathbf{w} - \mathbf{y})^H (\mathbf{X}\mathbf{w} - \mathbf{y}) \\
+> &= \mathbf{w}^H \mathbf{X}^H \mathbf{X} \mathbf{w} - \mathbf{w}^H \mathbf{X}^H \mathbf{y} - \mathbf{y}^H \mathbf{X} \mathbf{w} + \mathbf{y}^H \mathbf{y}
+> \end{aligned}
+> $$
+> 对 $\mathbf{w}^*$ 求偏导（视 $\mathbf{w}$ 为常数）：
+> $$
+> \nabla_{\mathbf{w}^*} f = \mathbf{X}^H \mathbf{X} \mathbf{w} - \mathbf{X}^H \mathbf{y}
+> $$
+> 令其为零得正规方程（normal equation）：$\mathbf{X}^H \mathbf{X} \mathbf{w}^* = \mathbf{X}^H \mathbf{y}$，解为 $\mathbf{w}^* = (\mathbf{X}^H \mathbf{X})^{-1} \mathbf{X}^H \mathbf{y}$（Moore-Penrose 伪逆）。
+
+---
+
+# 1.3 正定矩阵、特征值分解与奇异值分解
+
+# 1.3.1 正定矩阵与半正定矩阵（Positive Definite / Semidefinite Matrices）
+
+正定性和半正定性是矩阵理论中最重要的概念之一，在凸优化中直接用于判定函数的凸性和约束的可行性。
+
+> **定义 1.6**（正定矩阵与半正定矩阵）：设 $\mathbf{A} \in \mathbb{R}^{n \times n}$ 为对称矩阵（symmetric matrix），即 $\mathbf{A} = \mathbf{A}^T$。
+> - $\mathbf{A}$ 称为**正定**（positive definite, PD），记作 $\mathbf{A} \succ \mathbf{0}$，若对任意非零 $\mathbf{x} \in \mathbb{R}^n$，有 $\mathbf{x}^T \mathbf{A} \mathbf{x} > 0$。
+> - $\mathbf{A}$ 称为**半正定**（positive semidefinite, PSD），记作 $\mathbf{A} \succeq \mathbf{0}$，若对任意 $\mathbf{x} \in \mathbb{R}^n$，有 $\mathbf{x}^T \mathbf{A} \mathbf{x} \ge 0$。
+>
+> 对于复 Hermitian 矩阵 $\mathbf{A} = \mathbf{A}^H \in \mathbb{C}^{n \times n}$，相应条件为 $\mathbf{x}^H \mathbf{A} \mathbf{x} > 0$（PD）或 $\mathbf{x}^H \mathbf{A} \mathbf{x} \ge 0$（PSD）。
+
+正定性可通过多种等价条件刻画，最核心的是特征值条件。
+
+> **定理 1.5**（正定 / 半正定的等价刻画）：设 $\mathbf{A} \in \mathbb{R}^{n \times n}$ 对称，以下命题等价：
+> 1. $\mathbf{A} \succ \mathbf{0}$（或 $\mathbf{A} \succeq \mathbf{0}$）
+> 2. $\mathbf{A}$ 的所有特征值 $\lambda_i > 0$（或 $\lambda_i \ge 0$）
+> 3. $\mathbf{A}$ 的所有顺序主子式 $> 0$（Sylvester 判据，仅对 PD 成立）
+> 4. 存在满列秩矩阵 $\mathbf{B}$ 使 $\mathbf{A} = \mathbf{B} \mathbf{B}^T$
+> 5. $\mathbf{A}$ 的 Cholesky 分解 $\mathbf{A} = \mathbf{L} \mathbf{L}^T$ 存在（仅对 PD）
+
+正定矩阵的集合是凸锥（convex cone），记作 $\mathbb{S}_{++}^n$（PD）和 $\mathbb{S}_{+}^n$（PSD）。
+
+---
+
+# 1.3.2 特征值分解（Eigenvalue Decomposition, EVD）
+
+> **定义 1.7**（特征值分解 / EVD）：设 $\mathbf{A} \in \mathbb{R}^{n \times n}$ 对称，则 $\mathbf{A}$ 可对角化为
+> $$
+> \mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T = \sum_{i=1}^{n} \lambda_i \mathbf{q}_i \mathbf{q}_i^T
+> $$
+> 其中 $\boldsymbol{\Lambda} = \operatorname{diag}(\lambda_1, \ldots, \lambda_n)$ 为特征值按降序排列的对角矩阵，$\mathbf{Q} = [\mathbf{q}_1, \ldots, \mathbf{q}_n]$ 为正交矩阵（orthogonal matrix）。
+
+特征值分解的核心性质：
+- 对称矩阵的特征值均为实数，特征向量可选取为正交的（orthonormal）。
+- 矩阵的秩 $r = \operatorname{rank}(\mathbf{A})$ 等于非零特征值的个数。
+- 迹 $\operatorname{tr}(\mathbf{A}) = \sum_i \lambda_i$，行列式 $\det(\mathbf{A}) = \prod_i \lambda_i$。
+
+对于复 Hermitian 矩阵 $\mathbf{A} = \mathbf{A}^H$，EVD 为 $\mathbf{A} = \mathbf{U} \boldsymbol{\Lambda} \mathbf{U}^H$，其中 $\mathbf{U}$ 为酉矩阵（unitary matrix）。
+
+> **定理 1.6**（PSD 矩阵的平方根分解）：若 $\mathbf{A} \succeq \mathbf{0}$，则存在唯一的半正定矩阵 $\mathbf{A}^{1/2} \succeq \mathbf{0}$ 满足 $\mathbf{A}^{1/2} \mathbf{A}^{1/2} = \mathbf{A}$：
+> $$
+> \mathbf{A}^{1/2} = \mathbf{Q} \boldsymbol{\Lambda}^{1/2} \mathbf{Q}^T, \quad \boldsymbol{\Lambda}^{1/2} = \operatorname{diag}(\sqrt{\lambda_1}, \ldots, \sqrt{\lambda_n})
+> $$
+
+> **举例 1.5**（PSD 矩阵的 EVD 与平方根）：设 $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$。特征值 $\lambda_1 = 3$，$\lambda_2 = 1$，均为正，故 $\mathbf{A} \succ \mathbf{0}$。
+>
+> 特征向量：$\mathbf{q}_1 = \frac{1}{\sqrt{2}}(1, 1)^T$，$\mathbf{q}_2 = \frac{1}{\sqrt{2}}(1, -1)^T$。
+>
+> EVD：$\mathbf{A} = \begin{pmatrix} 1/\sqrt{2} & 1/\sqrt{2} \\ 1/\sqrt{2} & -1/\sqrt{2} \end{pmatrix} \begin{pmatrix} 3 & 0 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} 1/\sqrt{2} & 1/\sqrt{2} \\ 1/\sqrt{2} & -1/\sqrt{2} \end{pmatrix}$
+>
+> 平方根：$\mathbf{A}^{1/2} = \begin{pmatrix} \frac{\sqrt{3}+1}{2} & \frac{\sqrt{3}-1}{2} \\ \frac{\sqrt{3}-1}{2} & \frac{\sqrt{3}+1}{2} \end{pmatrix}$，验证 $\mathbf{A}^{1/2} \mathbf{A}^{1/2} = \mathbf{A}$。
+
+---
+
+# 1.3.3 奇异值分解（Singular Value Decomposition, SVD）
+
+EVD 仅适用于方阵，SVD 将其推广至任意 $m \times n$ 矩阵。
+
+> **定义 1.8**（奇异值分解 / SVD）：对任意矩阵 $\mathbf{A} \in \mathbb{C}^{m \times n}$，存在分解
+> $$
+> \mathbf{A} = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^H
+> $$
+> 其中：
+> - $\mathbf{U} \in \mathbb{C}^{m \times m}$ 为酉矩阵，列称为左奇异向量（left singular vectors）
+> - $\mathbf{V} \in \mathbb{C}^{n \times n}$ 为酉矩阵，列称为右奇异向量（right singular vectors）
+> - $\boldsymbol{\Sigma}$ 对角元 $\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_r > 0$ 为奇异值（singular values），$r = \operatorname{rank}(\mathbf{A})$
+
+SVD 与 EVD 的联系：$\mathbf{A}^H \mathbf{A}$ 和 $\mathbf{A} \mathbf{A}^H$ 均为半正定 Hermitian 矩阵，其 EVD 直接给出 SVD 的组成部分 —— $\mathbf{A}^H \mathbf{A}$ 的特征向量是 $\mathbf{V}$，特征值是 $\sigma_i^2$；$\mathbf{A} \mathbf{A}^H$ 的特征向量是 $\mathbf{U}$，特征值也是 $\sigma_i^2$。
+
+> **定理 1.7**（Eckart-Young 定理 / 低秩近似）：保留前 $k$ 个最大奇异值构造 $\mathbf{A}_k = \sum_{i=1}^{k} \sigma_i \mathbf{u}_i \mathbf{v}_i^H$，则对任意秩不超过 $k$ 的矩阵 $\mathbf{B}$：
+> $$
+> \|\mathbf{A} - \mathbf{A}_k\|_2 \le \|\mathbf{A} - \mathbf{B}\|_2, \quad \|\mathbf{A} - \mathbf{A}_k\|_F \le \|\mathbf{A} - \mathbf{B}\|_F
+> $$
+> 且 $\|\mathbf{A} - \mathbf{A}_k\|_2 = \sigma_{k+1}$，$\|\mathbf{A} - \mathbf{A}_k\|_F = \sqrt{\sum_{i=k+1}^{r} \sigma_i^2}$。
+
+> **举例 1.6**（SVD 计算）：取 $\mathbf{A} = \begin{pmatrix} 3 & 0 \\ 4 & 0 \end{pmatrix}$。$\mathbf{A}^T \mathbf{A} = \begin{pmatrix} 25 & 0 \\ 0 & 0 \end{pmatrix}$，特征值 $\sigma_1^2 = 25$，$\sigma_2^2 = 0$，故 $\sigma_1 = 5$，$r = 1$。
+>
+> $\mathbf{v}_1 = (1, 0)^T$，$\mathbf{v}_2 = (0, 1)^T$，即 $\mathbf{V} = \mathbf{I}$。
+>
+> $\mathbf{u}_1 = \frac{1}{\sigma_1} \mathbf{A} \mathbf{v}_1 = (0.6, 0.8)^T$，补齐 $\mathbf{u}_2 = (-0.8, 0.6)^T$。
+>
+> SVD：$\mathbf{A} = \begin{pmatrix} 0.6 & -0.8 \\ 0.8 & 0.6 \end{pmatrix} \begin{pmatrix} 5 & 0 \\ 0 & 0 \end{pmatrix} \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}^T$。

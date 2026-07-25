@@ -1,6 +1,6 @@
-import { getCategoryLabel, getCardLabel } from "../utils/helpers";
+import { getCategoryLabel, getCardLabel, getArticleSequence } from "../utils/helpers";
 
-export function ArticleCard({ article, onClick }) {
+export function ArticleCard({ article, onClick, showSequence = false }) {
   return (
     <article
       className="mag-card cursor-pointer group"
@@ -17,7 +17,9 @@ export function ArticleCard({ article, onClick }) {
           className="text-xs tracking-wider uppercase block mb-2"
           style={{ color: "var(--accent)", fontFamily: "'Inter', sans-serif" }}
         >
-          {getCategoryLabel(article.category)}
+          {showSequence && getArticleSequence(article.file)
+            ? `${getCategoryLabel(article.category)} | ${getArticleSequence(article.file)}`
+            : getCategoryLabel(article.category)}
         </span>
         <h3 className="font-display text-lg font-bold mb-2 group-hover:text-[var(--accent)] transition-colors">
           {article.title}
