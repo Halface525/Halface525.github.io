@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import remarkBreaks from "remark-breaks";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useArticle } from "../hooks/useArticle";
 import { GiscusComments } from "../components/GiscusComments";
@@ -149,7 +150,7 @@ export function ArticlePage() {
 
           {data?.content && (
             <ReactMarkdown
-              remarkPlugins={[remarkGfm, remarkMath]}
+              remarkPlugins={[remarkGfm, remarkMath, remarkBreaks]}
               components={{
                 hr: ArticleDivider,
                 code: ({ className, children }) => {

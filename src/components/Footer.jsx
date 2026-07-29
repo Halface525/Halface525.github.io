@@ -8,7 +8,7 @@ export function Footer() {
               Halface
             </div>
             <div className="text-sm" style={{ color: "var(--muted)" }}>
-              志向做一个伟大的人，努力做一个真诚的人，一定做一个善良的人
+              志向做一个伟大的人，努力做一个真诚的人，一定做一个善良的人，最好做一个死人
             </div>
           </div>
 
