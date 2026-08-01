@@ -46,7 +46,7 @@ export const learningTimeline = [
   { time: "2025.02 - 2025.10", status: "已完成", title: "数学建模", desc: "学习线性代数、概率统计、优化理论，参加数学建模竞赛，将数学应用于实际问题求解。", skills: ["MATLAB", "线性代数", "概率统计", "优化算法"] },
   { time: "2025.10 - 2026.01", status: "已完成", title: "机器学习基础", desc: "系统学习监督学习、无监督学习、强化学习基础算法，掌握 Scikit-learn 和基础神经网络。", skills: ["Python", "Scikit-learn", "回归/分类", "聚类"] },
   { time: "2026.01 - 至今", status: "进行中", title: "深度学习", desc: "深入学习神经网络架构、Transformer、大语言模型，探索深度学习在计算机视觉和自然语言处理中的应用。", skills: ["PyTorch", "Transformer", "CNN", "RNN"] },
-  { time: "2026.07 - 至今", status: "进行中", title: "信号处理与凸优化", desc: "学习凸优化理论与算法，理解其在滤波器设计、压缩感知、谱估计等信号处理问题中的应用。", skills: ["凸优化", "信号处理", "CVX", "MATLAB"] },
+  { time: "2026.07 - 至今", status: "进行中", title: "信号处理与凸优化", desc: "学习凸优化理论与算法，理解其在滤波器设计、压缩感知、谱估计等信号处理问题中的应用，并同步深入阵列信号处理。", skills: ["凸优化", "信号处理", "阵列处理", "CVX", "MATLAB"] },
 ];
 
 // 全局搜索索引
@@ -67,6 +67,7 @@ export const searchIndex = [
   { title: "整数规划", file: "content/study/modeling/02-zhengshuguihua.md", category: "modeling", section: "半学", date: "2026.01.07" },
   { title: "引言：信号处理与通信中的凸优化", file: "content/study/signal/convex-optimization/00-yinyan.md", category: "convex", section: "半学", date: "2026.07.23" },
   { title: "数学基础", file: "content/study/signal/convex-optimization/01-shuxuejichu.md", category: "convex", section: "半学", date: "2026.07.25" },
+  { title: "阵列与空域滤波器", file: "content/study/signal/array-processing/01-zhenlieyukongyu.md", category: "array", section: "半学", date: "2026.07.30" },
   { title: "写在某个夜晚", file: "content/writing/thinking/01-xiezaimougeye.md", category: "thinking", section: "半文", date: "2025.02.09" },
   { title: "没有遗憾", file: "content/writing/thinking/02-meiyouyihan.md", category: "thinking", section: "半文", date: "2025.09.21" },
   { title: "春分", file: "content/writing/thinking/03-chunfen.md", category: "thinking", section: "半文", date: "2026.03.22" },
@@ -78,9 +79,9 @@ export const searchIndex = [
 
 // 首页最近更新数据（按日期倒序，最多保留 5 条）
 export const updatesData = [
-  { id: "01", title: "Markdown 渲染升级 v3.1.0", desc: "手写解析器 → react-markdown + gray-matter + remark-gfm + remark-math，公式更稳、排版更标准", date: "2026.07.25", action: { type: "navigate", target: "/" } },
-  { id: "02", title: "新增《信号处理中的凸优化》系列", desc: "半学栏目新系列：从数学基础出发，探索信号处理与通信中的凸优化问题", date: "2026.07.25", action: { type: "navigate", target: "/study" } },
-  { id: "03", title: "博客重构 v3.0.0", desc: "静态 HTML 三件套 → React + Vite + Tailwind CSS，组件化与工程化升级", date: "2026.07.22", action: { type: "navigate", target: "/" } },
-  { id: "04", title: "新增《我选择死亡》", desc: "半思栏目新诗：我已经失去了春天，夏天的太阳也变得冰冷...", date: "2026.06.29", action: { type: "article", file: "content/writing/thinking/04-woxuanzesiwang.md", category: "thinking" } },
-  { id: "05", title: "网站风格焕新 v2.0.0", desc: "手绘风格 → 杂志排版风格，Playfair Display + Noto Serif SC，聚光灯互动效果", date: "2026.06.16", action: { type: "navigate", target: "/" } },
+  { id: "01", title: "新增《阵列处理》系列", desc: "半学栏目新系列：从阵列与空域滤波器出发，覆盖波束成形、阵列流形、窄带近似等核心基础", date: "2026.07.30", action: { type: "navigate", target: "/study" } },
+  { id: "02", title: "Markdown 渲染升级 v3.1.0", desc: "手写解析器 → react-markdown + gray-matter + remark-gfm + remark-math，公式更稳、排版更标准", date: "2026.07.25", action: { type: "navigate", target: "/" } },
+  { id: "03", title: "新增《信号处理中的凸优化》系列", desc: "半学栏目新系列：从数学基础出发，探索信号处理与通信中的凸优化问题", date: "2026.07.25", action: { type: "navigate", target: "/study" } },
+  { id: "04", title: "博客重构 v3.0.0", desc: "静态 HTML 三件套 → React + Vite + Tailwind CSS，组件化与工程化升级", date: "2026.07.22", action: { type: "navigate", target: "/" } },
+  { id: "05", title: "新增《我选择死亡》", desc: "半思栏目新诗：我已经失去了春天，夏天的太阳也变得冰冷...", date: "2026.06.29", action: { type: "article", file: "content/writing/thinking/04-woxuanzesiwang.md", category: "thinking" } },
 ];

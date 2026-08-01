@@ -1,4 +1,5 @@
 export const techArticlesData = [
+  { file: "content/study/signal/array-processing/01-zhenlieyukongyu.md", category: "array", title: "阵列与空域滤波器", date: "2026-07-30", readTime: "40 min", emoji: "", desc: "阵列与孔径、平面波入射模型、波数向量、阵列流形向量、频率-波数响应、波束方向图与窄带近似，阵列信号处理的核心基础..." },
   { file: "content/study/signal/convex-optimization/00-yinyan.md", category: "convex", title: "引言：信号处理与通信中的凸优化", date: "2026-07-23", readTime: "8 min", emoji: "", desc: "开坑说明、主要参考书目、后续更新计划，以及对旧系列烂尾的坦诚与对新系列的期待..." },
   { file: "content/study/signal/convex-optimization/01-shuxuejichu.md", category: "convex", title: "数学基础", date: "2026-07-25", readTime: "25 min", emoji: "", desc: "向量与矩阵范数、内积空间、梯度与复梯度、特征值分解与奇异值分解，凸优化的数学前置知识..." },
   { file: "content/study/ml/10-jiangweiyuduliangxuexi.md", category: "ml", title: "降维与度量学习", date: "2026-01-26", readTime: "14 min", emoji: "", desc: "k近邻学习、低维嵌入、主成分分析、核化线性降维、流形学习、度量学习..." },

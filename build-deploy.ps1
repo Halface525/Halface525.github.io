@@ -28,6 +28,8 @@ Copy-Item dist/assets . -Recurse -Force
 Copy-Item dist/audio/* audio/ -Recurse -Force
 Copy-Item dist/content/* content/ -Recurse -Force
 Copy-Item dist/images/* images/ -Recurse -Force
+New-Item -ItemType Directory -Force -Path pic | Out-Null
+Copy-Item dist/pic/* pic/ -Recurse -Force
 Copy-Item dist/vite.svg vite.svg -Force
 Write-Host "[5/5] Synced dist/ to root"
 

@@ -3,6 +3,7 @@ export function getCategoryLabel(category) {
     ml: "机器学习",
     modeling: "数学建模",
     convex: "凸优化",
+    array: "阵列处理",
     thinking: "半思",
     reading: "半读",
     travel: "半游",

@@ -13,6 +13,7 @@ const FILTERS = [
   { value: "ml", label: "机器学习" },
   { value: "modeling", label: "数学建模" },
   { value: "convex", label: "凸优化" },
+  { value: "array", label: "阵列处理" },
 ];
 
 export function StudyPage() {
