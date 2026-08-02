@@ -29,6 +29,12 @@ export function sortByDateDesc(items, key = "date") {
   return [...items].sort((a, b) => {
     const da = String(a[key]).replace(/\./g, "-");
     const db = String(b[key]).replace(/\./g, "-");
-    return new Date(db) - new Date(da);
+    const diff = new Date(db) - new Date(da);
+    if (diff !== 0) return diff;
+    // 日期相同时按文章序号降序，最新的（序号大）排前面，避免依赖 sort 的稳定性
+    const sa = Number(getArticleSequence(a.file));
+    const sb = Number(getArticleSequence(b.file));
+    if (!Number.isNaN(sa) && !Number.isNaN(sb)) return sb - sa;
+    return 0;
   });
 }

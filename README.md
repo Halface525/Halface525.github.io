@@ -35,7 +35,7 @@ web/
 │   │   │   ├── modeling/            # 数学建模系列（3篇）
 │   │   │   └── signal/              # 信号处理
 │   │   │       ├── convex-optimization/  # 凸优化系列（1篇，持续更新）
-│   │   │       └── array-processing/     # 阵列处理系列（2篇，持续更新）
+│   │   │       └── array-processing/     # 阵列处理系列（4篇，持续更新）
 │   │   └── writing/     # 随笔文章
 │   │       ├── thinking/# 半思（4篇）
 │   │       ├── reading/ # 半读（1篇）
@@ -483,4 +483,4 @@ MIT License
 ---
 
 *Made with ❤️ and ☕*
-*Last updated: 2026-08-02*
+*Last updated: 2026-08-03*
