@@ -13,6 +13,8 @@
 ```
 web/
 ├── index.html              # React 开发入口 HTML（构建后也是部署主页面）
+├── index.dev.html          # 开发专用入口（npm run dev 时自动恢复）
+├── build-deploy.ps1        # 一键部署脚本（构建 + 同步到根目录）
 ├── package.json            # 项目依赖与脚本
 ├── vite.config.js          # Vite 配置
 ├── eslint.config.js        # ESLint 配置
@@ -33,21 +35,23 @@ web/
 │   │   │   ├── modeling/            # 数学建模系列（3篇）
 │   │   │   └── signal/              # 信号处理
 │   │   │       ├── convex-optimization/  # 凸优化系列（1篇，持续更新）
-│   │   │       └── array-processing/     # 阵列处理系列（1篇，持续更新）
+│   │   │       └── array-processing/     # 阵列处理系列（2篇，持续更新）
 │   │   └── writing/     # 随笔文章
 │   │       ├── thinking/# 半思（4篇）
 │   │       ├── reading/ # 半读（1篇）
 │   │       ├── travel/  # 半游（2篇）
 │   │       └── movie/   # 半影（预留）
-│   └── images/            # 图片资源
-│       ├── avatar.png     # 头像
-│       └── wechat-qr.jpg  # 公众号二维码
+│   ├── images/            # 图片资源
+│   │   ├── avatar.png     # 头像
+│   │   └── wechat-qr.jpg  # 公众号二维码
+│   └── pic/               # 文章插图（阵列处理等）
 ├── assets/                 # React 构建产物（JS/CSS/字体等）
+├── pic/                    # 部署后的文章插图（GitHub Pages 读取）
 ├── legacy/                 # 原静态站点备份（HTML/CSS/JS 三件套）
 └── dist/                   # Vite 构建输出目录（.gitignore 忽略）
 ```
 
-> **说明**：根目录的 `index.html` 和 `assets/` 是 `npm run build` 后的构建产物，已替代原来的静态 HTML/CSS/JS 三件套。原静态站点备份在 `legacy/` 目录中。源码入口是 `src/main.jsx`，静态资源放在 `public/`。
+> **说明**：根目录的 `index.html` 和 `assets/` 是 `npm run build` 后的构建产物，已替代原来的静态 HTML/CSS/JS 三件套。原静态站点备份在 `legacy/` 目录中。源码入口是 `src/main.jsx`，静态资源放在 `public/`。开发时使用 `npm run dev`（自动恢复 `index.dev.html` 为开发入口），部署时使用 `npm run build:deploy`（构建产物同步到根目录）。
 
 ---
 
@@ -87,7 +91,7 @@ web/
 | 板块           | 内容                 | 数量     |
 | -------------- | -------------------- | -------- |
 | **半面** | 个人介绍、关于我     | -        |
-| **半学** | 技术博客、学习路径   | 17篇文章 |
+| **半学** | 技术博客、学习路径   | 18篇文章 |
 | **半文** | 随笔、读书笔记、游记 | 7篇文章  |
 | **半趣** | 项目展示、兴趣爱好   | 2个项目  |
 
@@ -130,9 +134,15 @@ npm run build
 
 构建产物输出到 `dist/` 目录。
 
-### 根目录同步（用于 GitHub Pages 部署）
+### 一键构建并部署（推荐）
 
-由于 GitHub Pages 从仓库根目录部署，需要将 `dist/` 中的内容同步到根目录：
+```powershell
+npm run build:deploy
+```
+
+该命令依次完成：恢复开发入口 → `npm run build` 生成 `dist/` → 将 `dist/` 中的 `index.html`、`assets/`、`content/`、`audio/`、`images/`、`pic/`、`vite.svg` 同步到仓库根目录。
+
+### 手动同步（等价操作）
 
 ```powershell
 npm run build
@@ -141,6 +151,9 @@ Copy-Item dist/assets . -Recurse -Force
 Copy-Item dist/audio/* audio/ -Recurse -Force
 Copy-Item dist/content/* content/ -Recurse -Force
 Copy-Item dist/images/* images/ -Recurse -Force
+New-Item -ItemType Directory -Force -Path pic | Out-Null
+Copy-Item dist/pic/* pic/ -Recurse -Force
+Copy-Item dist/vite.svg vite.svg -Force
 ```
 
 > 说明：`public/` 中的静态资源会在构建时自动复制到 `dist/`，再同步到根目录用于部署。
@@ -470,4 +483,4 @@ MIT License
 ---
 
 *Made with ❤️ and ☕*
-*Last updated: 2026-07-25*
+*Last updated: 2026-08-02*

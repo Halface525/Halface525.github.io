@@ -90,7 +90,7 @@ Bagging是**Bootstrap Aggregating**的缩写，其核心思想直观而有效。
         - 使用 $D_t$ 训练一个基学习器 $h_t$。
 3. **输出：** 最终分类器 $$H(x) = \text{argmax}_{y \in \mathcal{Y}} \sum_{t=1}^T \mathbb{I}(h_t(x)=y) (分类任务) $$或 $$H(x) = \frac{1}{T}\sum_{t=1}^T h_t(x) (回归任务)$$
 
-[[01 模型评估与选择#C. 自助法 (Bootstrapping)|自助采样（Bootstrap Sampling）]]是Bagging的关键。对于一个包含 `m` 个样本的原始数据集，有放回地随机抽取 `m` 次，构成一个新的训练子集。在此过程中，某个特定样本在 `m` 次抽样中一次都未被抽中的概率为 $(1 - 1/m)^m$。当 $m$ 趋于无穷大时，这个概率收敛于 $1/e ≈ 0.368$。
+[[09 模型评估与选择#C. 自助法 (Bootstrapping)|自助采样（Bootstrap Sampling）]]是Bagging的关键。对于一个包含 `m` 个样本的原始数据集，有放回地随机抽取 `m` 次，构成一个新的训练子集。在此过程中，某个特定样本在 `m` 次抽样中一次都未被抽中的概率为 $(1 - 1/m)^m$。当 $m$ 趋于无穷大时，这个概率收敛于 $1/e ≈ 0.368$。
 $$
 \lim_{m\to\infty} \left(1-\frac{1}{m}\right)^m = \frac{1}{e} \approx 0.368
 $$
