@@ -131,8 +131,16 @@ export function HomePage() {
       raf = requestAnimationFrame(tick);
     };
 
-    const handleTouch = (e) => {
-      // 阻止页面随手指滚动，确保透镜跟随不被页面滚动打断
+    const handleTouchStart = (e) => {
+      const rect = hero.getBoundingClientRect();
+      const touch = e.touches[0];
+      if (!touch) return;
+      following = true;
+      tx = touch.clientX - rect.left;
+      ty = touch.clientY - rect.top;
+    };
+    const handleTouchMove = (e) => {
+      // 阻止页面随手指滚动（不拦截 touchstart，否则按钮点击失效）
       if (e.cancelable) e.preventDefault();
       const rect = hero.getBoundingClientRect();
       const touch = e.touches[0];
@@ -146,14 +154,14 @@ export function HomePage() {
     };
 
     raf = requestAnimationFrame(tick);
-    hero.addEventListener("touchstart", handleTouch, { passive: false });
-    hero.addEventListener("touchmove", handleTouch, { passive: false });
+    hero.addEventListener("touchstart", handleTouchStart, { passive: true });
+    hero.addEventListener("touchmove", handleTouchMove, { passive: false });
     hero.addEventListener("touchend", handleTouchEnd);
     hero.addEventListener("touchcancel", handleTouchEnd);
     return () => {
       cancelAnimationFrame(raf);
-      hero.removeEventListener("touchstart", handleTouch);
-      hero.removeEventListener("touchmove", handleTouch);
+      hero.removeEventListener("touchstart", handleTouchStart);
+      hero.removeEventListener("touchmove", handleTouchMove);
       hero.removeEventListener("touchend", handleTouchEnd);
       hero.removeEventListener("touchcancel", handleTouchEnd);
     };
