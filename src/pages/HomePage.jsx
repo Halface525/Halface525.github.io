@@ -50,23 +50,112 @@ export function HomePage() {
     const circle = circleRef.current;
     if (!hero || !circle) return;
 
-    const handleMove = (e) => {
+    // 有 hover 能力的设备（桌面/触控笔）：鼠标跟随透镜
+    if (window.matchMedia("(hover: hover)").matches) {
+      let hideTimer;
+      let inside = false;
+
+      const handleMove = (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        clearTimeout(hideTimer);
+        if (!inside) {
+          // 从外部进入：先就位（44px 透明、无过渡），再平滑放大淡入
+          inside = true;
+          circle.style.transition = "none";
+          circle.style.display = "block";
+          circle.style.left = `${x}px`;
+          circle.style.top = `${y}px`;
+          void circle.offsetWidth; // 强制 reflow 记录当前状态
+          circle.style.transition =
+            "opacity 0.35s ease, width 0.35s ease, height 0.35s ease";
+          circle.style.opacity = "1";
+          circle.style.width = "280px";
+          circle.style.height = "280px";
+          return;
+        }
+        // 透镜内移动：仅更新位置，不触发过渡
+        circle.style.left = `${x}px`;
+        circle.style.top = `${y}px`;
+      };
+      const handleLeave = () => {
+        // 平滑缩小淡出，衔接自定义光标
+        inside = false;
+        circle.style.transition =
+          "opacity 0.35s ease, width 0.35s ease, height 0.35s ease";
+        circle.style.opacity = "0";
+        circle.style.width = "44px";
+        circle.style.height = "44px";
+        hideTimer = setTimeout(() => {
+          circle.style.display = "none";
+        }, 380);
+      };
+
+      hero.addEventListener("mousemove", handleMove);
+      hero.addEventListener("mouseleave", handleLeave);
+      return () => {
+        clearTimeout(hideTimer);
+        hero.removeEventListener("mousemove", handleMove);
+        hero.removeEventListener("mouseleave", handleLeave);
+      };
+    }
+
+    // 无 hover 设备（移动端）：自动漫游 + 触摸跟随
+    circle.style.width = "200px";
+    circle.style.height = "200px";
+    circle.style.display = "block";
+
+    let raf;
+    let t = 0;
+    let following = false;
+    let tx = 0;
+    let ty = 0;
+
+    const tick = () => {
+      t += 0.008;
       const rect = hero.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      circle.style.display = "block";
+      let x, y;
+      if (following) {
+        x = tx;
+        y = ty;
+      } else {
+        // Lissajous 轨迹缓慢游动
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        x = cx + rect.width * 0.42 * Math.sin(t);
+        y = cy + rect.height * 0.36 * Math.sin(1.6 * t + 1.2);
+      }
       circle.style.left = `${x}px`;
       circle.style.top = `${y}px`;
-    };
-    const handleLeave = () => {
-      circle.style.display = "none";
+      raf = requestAnimationFrame(tick);
     };
 
-    hero.addEventListener("mousemove", handleMove);
-    hero.addEventListener("mouseleave", handleLeave);
+    const handleTouch = (e) => {
+      // 阻止页面随手指滚动，确保透镜跟随不被页面滚动打断
+      if (e.cancelable) e.preventDefault();
+      const rect = hero.getBoundingClientRect();
+      const touch = e.touches[0];
+      if (!touch) return;
+      following = true;
+      tx = touch.clientX - rect.left;
+      ty = touch.clientY - rect.top;
+    };
+    const handleTouchEnd = () => {
+      following = false;
+    };
+
+    raf = requestAnimationFrame(tick);
+    hero.addEventListener("touchstart", handleTouch, { passive: false });
+    hero.addEventListener("touchmove", handleTouch, { passive: false });
+    hero.addEventListener("touchend", handleTouchEnd);
+    hero.addEventListener("touchcancel", handleTouchEnd);
     return () => {
-      hero.removeEventListener("mousemove", handleMove);
-      hero.removeEventListener("mouseleave", handleLeave);
+      cancelAnimationFrame(raf);
+      hero.removeEventListener("touchstart", handleTouch);
+      hero.removeEventListener("touchmove", handleTouch);
+      hero.removeEventListener("touchend", handleTouchEnd);
+      hero.removeEventListener("touchcancel", handleTouchEnd);
     };
   }, []);
 
@@ -74,6 +163,12 @@ export function HomePage() {
   const latestWriting = sortByDateDesc(writingArticlesData)[0];
   const projectKey = "project2";
   const project = projectsData[projectKey];
+
+  const goRandomArticle = () => {
+    const pool = [...techArticlesData, ...writingArticlesData];
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    navigate(`/article/${pick.file}`);
+  };
 
   const featured = [
     { type: "article", data: latestStudy, label: getCategoryLabel(latestStudy.category) },
@@ -154,8 +249,8 @@ export function HomePage() {
               赚一点钱，收到一束花，然后自杀。
             </p>
             <div className="mt-12 flex justify-center gap-4 animate-fade-up delay-300">
-              <button className="mag-btn accent" onClick={() => navigate("/study")}>
-                浏览文章
+              <button className="mag-btn accent" onClick={goRandomArticle}>
+                随机文章
               </button>
               <button className="mag-btn" onClick={() => navigate("/face")}>
                 关于作者

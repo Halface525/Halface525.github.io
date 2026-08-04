@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router";
 import { useTheme } from "../hooks/useTheme";
 import { useSearch } from "../hooks/useSearch";
 import { useMusicPlayer } from "../hooks/useMusicPlayer";
@@ -5,11 +7,18 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { SearchModal } from "./SearchModal";
 import { MusicPlayer } from "./MusicPlayer";
+import { CursorGlow } from "./CursorGlow";
 
 export function Layout({ children }) {
   const { isDark, toggleTheme } = useTheme();
   const search = useSearch();
   const music = useMusicPlayer();
+  const { pathname } = useLocation();
+
+  // 路由切换时回到页面顶部
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--paper)" }}>
@@ -34,6 +43,8 @@ export function Layout({ children }) {
       />
 
       <MusicPlayer {...music} />
+
+      <CursorGlow />
     </div>
   );
 }

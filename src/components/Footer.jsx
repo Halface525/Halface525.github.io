@@ -74,7 +74,7 @@ export function Footer() {
           className="text-center mt-12 text-xs tracking-wider"
           style={{ color: "var(--muted)", fontFamily: "'Inter', sans-serif" }}
         >
-          &copy; 2026 Made by Halface | v3.1.0
+          &copy; 2026 Made by Halface | v3.2.0
         </div>
       </div>
     </footer>
