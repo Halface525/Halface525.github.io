@@ -24,11 +24,23 @@ export function CursorGlow() {
     if (!cursor) return;
 
     const handleMove = (e) => {
-      const inHero = !!e.target.closest(".magazine-hero");
-      const clickable = !inHero && e.target.closest(CLICKABLE_SELECTOR);
+      // 与 HomePage 透镜过渡带一致：鼠标在 hero 边界外 W px 内时透镜仍可见（渐变中），光标隐藏
+      const W = 110;
+      let lensVisible = false;
+      // 导航栏区域由光标接管（透镜不显示）
+      if (!e.target.closest(".site-navbar")) {
+        const hero = document.querySelector(".magazine-hero");
+        if (hero) {
+          const rect = hero.getBoundingClientRect();
+          const dx = Math.max(rect.left - e.clientX, 0, e.clientX - rect.right);
+          const dy = Math.max(rect.top - e.clientY, 0, e.clientY - rect.bottom);
+          lensVisible = Math.hypot(dx, dy) < W;
+        }
+      }
+      const clickable = !lensVisible && e.target.closest(CLICKABLE_SELECTOR);
       // 实时位置（仅操作 transform，走合成层）
       cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
-      cursor.style.opacity = inHero ? "0" : "1";
+      cursor.style.opacity = lensVisible ? "0" : "1";
       cursor.classList.toggle("is-shrink", !!clickable);
     };
 

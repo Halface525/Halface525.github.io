@@ -763,3 +763,583 @@ body {
     height: 3px;
   }
 }
+
+/* ===== 书架视图（半学 demo）—— 杂志纸墨风，明暗自适应 ===== */
+.bookshelf {
+  position: relative;
+  background: var(--paper);
+  padding: 40px 24px 0;
+  width: 500px;
+  max-width: 100%;
+}
+/* 左右侧板：与隔板同材质，形成完整书架框架 */
+.bookshelf::before,
+.bookshelf::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  background: color-mix(in srgb, var(--ink) 16%, var(--paper));
+  border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+}
+.bookshelf::before {
+  left: 0;
+  border-right: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+}
+.bookshelf::after {
+  right: 0;
+  border-left: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+}
+.shelf-row {
+  display: flex;
+  flex-direction: column;
+}
+.books {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 22px;
+  padding-bottom: 8px;
+}
+/* 书脊：扁平纸墨风 —— 亮色为浅纸灰、暗色为深墨；系列色只保留在顶部小色条 */
+.book {
+  position: relative;
+  border-radius: 2px;
+  cursor: pointer;
+  --spine: color-mix(in srgb, var(--ink) 10%, var(--paper));
+  --spine-border: var(--line);
+  --spine-title: var(--ink);
+  --spine-count: color-mix(in srgb, var(--ink) 45%, transparent);
+  background: var(--spine);
+  border: 1px solid var(--spine-border);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 0.9, 0.35, 1.2),
+    opacity 0.3s ease;
+  transform-origin: bottom center;
+  flex-shrink: 0;
+}
+.dark .book {
+  /* 暗色下 --paper 为深色、--ink 为浅色，书脊以深色为主 */
+  --spine: color-mix(in srgb, var(--paper) 88%, var(--ink));
+  --spine-border: color-mix(in srgb, var(--ink) 14%, transparent);
+  --spine-title: var(--ink);
+  --spine-count: color-mix(in srgb, var(--ink) 45%, transparent);
+}
+/* 搁板：扁平纸底 + 细线，横向延伸到侧板（负边距抵消侧板内侧留白） */
+.shelf-board {
+  height: 24px;
+  background: color-mix(in srgb, var(--ink) 16%, var(--paper));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  /* 横向延伸到左右侧板内侧（bookshelf 内边距 24px - 侧板宽 16px） */
+  margin: 0 -8px 6px;
+}
+.book:hover {
+  transform: translateY(-12px);
+}
+/* 书脊顶部的系列色小标签（唯一保留的彩色） */
+.book-tag {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 7px;
+  border-radius: 1px;
+}
+.book-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.3em;
+  font-family: "Playfair Display", "Noto Serif SC", serif;
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--spine-title);
+}
+.book-count {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.1em;
+  color: var(--spine-count);
+}
+/* 拿起书：上浮放大 */
+.book.lift {
+  transform: translateY(-90px) scale(1.15) rotate(-2deg);
+  z-index: 30;
+}
+.book.open {
+  z-index: 30;
+}
+/* 半趣：斜着靠在左边的书上（顶部向左倾，但避免遮住左边书） */
+.book.lean {
+  transform: rotate(-5deg) translateX(8px);
+  transform-origin: bottom center;
+}
+.book.lean:hover {
+  transform: rotate(-4deg) translateX(8px) translateY(-22px);
+}
+.book.lift.lean {
+  transform: translateY(-90px) scale(1.15) rotate(-2deg);
+}
+/* 书被翻开时，书架上的其它书变暗 */
+.books:has(.book.open) .book:not(.open) {
+  opacity: 0.3;
+}
+/* 展开的内页面板：居中从书的位置"翻"出来 */
+.book-panel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, 92%);
+  max-height: 380px;
+  overflow-y: auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 28px 32px;
+  z-index: 40;
+  transform-origin: bottom center;
+  animation: bookOpen 0.45s cubic-bezier(0.22, 0.9, 0.35, 1.15) both;
+}
+@keyframes bookOpen {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.6) rotateX(35deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotateX(0);
+  }
+}
+.book-panel-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.book-panel-close:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.book-panel-head {
+  padding-right: 40px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.book-panel-list {
+  display: flex;
+  flex-direction: column;
+}
+.book-panel-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  color: var(--ink);
+}
+.book-panel-item:hover {
+  color: var(--accent);
+  padding-left: 14px;
+}
+.book-panel-meta {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: "Inter", sans-serif;
+  white-space: nowrap;
+}
+
+/* ===== 收音机（播放器拟物化，书架页右侧） ===== */
+.radio-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  /* 画框下方给收音机让位：318px 对齐半文层下侧 + 12px 间距 */
+  padding-top: 330px;
+}
+/* 收音机正上方的画框：单频复正弦平面波（挂画效果） */
+.picture-frame {
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* 画框下侧正好落在距顶 318px（书架半文层下侧） */
+  bottom: calc(100% - 318px);
+  margin: 0;
+  background: var(--paper);
+  /* 画框条：与挂绳同色（var(--muted)），避免色差造成的穿模感 */
+  border: 4px solid var(--muted);
+  outline: 1px solid var(--muted);
+  padding: 12px;
+  /* 挂画的离墙投影 */
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+}
+.dark .picture-frame {
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.5);
+}
+/* 顶部挂绳：从画框左右两侧汇聚到钉子（SVG 绝对定位在框顶上方） */
+.pf-hanger {
+  position: absolute;
+  top: -28px;
+  left: 0;
+  width: 100%;
+  height: 28px;
+  z-index: 3;
+  pointer-events: none;
+}
+@media (max-width: 1023px) {
+  .radio-wrap {
+    padding-top: 0;
+  }
+  .picture-frame {
+    position: static;
+    margin-bottom: 24px;
+  }
+}
+.pf-label {
+  display: block;
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+/* 七段数码时钟 */
+.digital-clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 8px 0 6px;
+  padding: 14px 18px;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+}
+.dc-digit {
+  display: block;
+  width: 34px;
+  height: 63px;
+}
+.dc-colon {
+  position: relative;
+  align-self: center;
+  width: 5px;
+  height: 63px;
+  margin: 0 2px;
+}
+.dc-colon::before,
+.dc-colon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.dc-colon::before {
+  top: 20px;
+}
+.dc-colon::after {
+  bottom: 20px;
+}
+.dc-colon {
+  animation: dc-blink 1s steps(2, start) infinite;
+}
+@keyframes dc-blink {
+  to {
+    opacity: 0;
+  }
+}
+.pf-logo {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-family: "Playfair Display", "Noto Serif SC", serif;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: var(--accent);
+}
+.pf-caption {
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.radio {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+/* 顶部提手 */
+.radio-handle {
+  width: 64%;
+  height: 12px;
+  margin: 0 auto -1px;
+  border: 1px solid var(--ink);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  opacity: 0.9;
+}
+.radio-body {
+  position: relative;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  border-radius: 2px;
+  padding: 14px 14px 10px;
+}
+.radio-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+/* 喇叭：细线同心圆网纹 */
+.radio-speaker {
+  position: relative;
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  opacity: 1;
+  background:
+    radial-gradient(circle, var(--paper) 0 28%, transparent 29%),
+    repeating-radial-gradient(circle, color-mix(in srgb, var(--ink) 32%, transparent) 0 1px, transparent 1px 4px);
+}
+.radio-speaker::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+/* 调谐刻度盘：轻量刻度线 */
+.radio-dial {
+  position: relative;
+  flex: 1;
+  height: 72px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  overflow: hidden;
+  cursor: pointer;
+  background:
+    radial-gradient(circle, var(--paper) 0 56%, transparent 57%),
+    repeating-conic-gradient(color-mix(in srgb, var(--ink) 32%, transparent) 0 0.75deg, transparent 0.75deg 11.25deg);
+  opacity: 1;
+}
+.radio-dial-needle {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 2px;
+  height: 40%;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(-60deg);
+  background: var(--accent);
+  transition: transform 0.3s ease;
+}
+.radio-dial-hub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--ink);
+}
+/* 指示灯 + 旋钮 */
+.radio-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.radio-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: transparent;
+  transition: all 0.3s;
+}
+.radio-led.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+.radio-knob {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--ink);
+  transition: all 0.2s;
+}
+.radio-knob:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.radio-knob-indicator {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 2px;
+  height: 45%;
+  transform-origin: bottom center;
+  transform: rotate(-135deg);
+  background: var(--ink);
+}
+/* 曲目信息 */
+.radio-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.radio-track-title {
+  font-family: "Playfair Display", "Noto Serif SC", serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+.radio-track-artist {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: "Inter", sans-serif;
+  margin-left: 8px;
+}
+.radio-time {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  display: flex;
+  gap: 6px;
+}
+/* 控制按钮 */
+.radio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.radio-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.radio-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.radio-btn-play {
+  width: 40px;
+  height: 40px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  font-size: 14px;
+}
+.radio-btn-play:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+/* 播放列表 */
+.radio-playlist {
+  border-top: 1px solid var(--line);
+  max-height: 110px;
+  overflow-y: auto;
+}
+.radio-track-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 2px;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+.radio-track-item:hover {
+  color: var(--accent);
+}
+.radio-track-item.active {
+  color: var(--accent);
+}
+.radio-track-num {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--muted);
+}
+.radio-track-name {
+  flex: 1;
+  font-size: 13px;
+}
+.radio-track-item .radio-track-artist {
+  margin-left: 0;
+  font-size: 10px;
+}

@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { projectsList } from "../data/siteData";
 import { getCardLabel } from "../utils/helpers";
 
 export function FunPage() {
   useDocumentTitle("半趣 — Halface");
+  const location = useLocation();
   const [selectedId, setSelectedId] = useState(null);
   const selectedProject = projectsList.find((p) => p.id === selectedId);
+
+  // 支持从书架跳转：/fun?project=xxx 时自动打开对应项目
+  useEffect(() => {
+    const id = new URLSearchParams(location.search).get("project");
+    if (id) setSelectedId(id);
+  }, [location.search]);
 
   return (
     <section id="fun" className="page active py-16 md:py-24 max-w-6xl mx-auto px-6">

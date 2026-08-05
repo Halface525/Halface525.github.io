@@ -11,11 +11,16 @@ const navItems = [
 export function Navbar({ isDark, toggleTheme, onToggleSearch, onToggleMusic }) {
   const location = useLocation();
   const currentPage =
-    navItems.find((item) => item.path === location.pathname)?.id || "home";
+    navItems.find((item) => item.path === location.pathname)?.id ||
+    (location.pathname.includes("/content/study/")
+      ? "study"
+      : location.pathname.includes("/content/writing/")
+        ? "writing"
+        : "home");
 
   return (
     <nav
-      className="sticky top-0 z-50 border-b"
+      className="site-navbar sticky top-0 z-50 border-b"
       style={{
         borderColor: "var(--line)",
         background: isDark ? "rgba(15,15,15,0.92)" : "rgba(250,249,247,0.92)",

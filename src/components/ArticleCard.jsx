@@ -1,6 +1,7 @@
-import { getCategoryLabel, getCardLabel, getArticleSequence } from "../utils/helpers";
+import { getCategoryLabel, getCardLabel, getArticleSequence, CATEGORY_TONES } from "../utils/helpers";
 
 export function ArticleCard({ article, onClick, showSequence = false }) {
+  const tone = CATEGORY_TONES[article.category];
   return (
     <article
       className="mag-card cursor-pointer group"
@@ -15,7 +16,7 @@ export function ArticleCard({ article, onClick, showSequence = false }) {
       <div className="p-6">
         <span
           className="text-xs tracking-wider uppercase block mb-2"
-          style={{ color: "var(--accent)", fontFamily: "'Inter', sans-serif" }}
+          style={{ color: tone || "var(--accent)", fontFamily: "'Inter', sans-serif" }}
         >
           {showSequence && getArticleSequence(article.file)
             ? `${getCategoryLabel(article.category)} | ${getArticleSequence(article.file)}`

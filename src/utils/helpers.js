@@ -11,6 +11,14 @@ export function getCategoryLabel(category) {
   return labels[category] || category;
 }
 
+// 半学各系列的标识色（与书架书脊一致）
+export const CATEGORY_TONES = {
+  ml: "#7a1f1f",
+  modeling: "#1f6a8a",
+  convex: "#3d7a52",
+  array: "#7a5cc4",
+};
+
 export function getCardLabel(title) {
   return /^[一-龥]/.test(title) ? title : title.split(" ")[0];
 }

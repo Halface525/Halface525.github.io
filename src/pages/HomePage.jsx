@@ -52,52 +52,51 @@ export function HomePage() {
 
     // 有 hover 能力的设备（桌面/触控笔）：鼠标跟随透镜
     if (window.matchMedia("(hover: hover)").matches) {
-      let hideTimer;
-      let inside = false;
+      // 桌面端允许透镜溢出封面边界，完整显示（移动端保持裁剪）
+      hero.style.overflow = "visible";
+
+      const W = 110; // 过渡带宽度：鼠标越过边界后，透镜在 W px 内逐渐收缩变透明
+      const FULL = 280;
+      const MIN = 44;
+
+      // 鼠标到矩形区域的距离（0 = 在区域内）
+      const distToRect = (w, h, x, y) => {
+        const dx = Math.max(-x, 0, x - w);
+        const dy = Math.max(-y, 0, y - h);
+        return Math.hypot(dx, dy);
+      };
+
+      // 渐变由 t 驱动：0 = 区域内（全尺寸不透明），1 = 完全出界（缩小到光标并透明）
+      circle.style.transition =
+        "opacity 0.2s ease, width 0.2s ease, height 0.2s ease";
 
       const handleMove = (e) => {
         const rect = hero.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        clearTimeout(hideTimer);
-        if (!inside) {
-          // 从外部进入：先就位（44px 透明、无过渡），再平滑放大淡入
-          inside = true;
-          circle.style.transition = "none";
-          circle.style.display = "block";
-          circle.style.left = `${x}px`;
-          circle.style.top = `${y}px`;
-          void circle.offsetWidth; // 强制 reflow 记录当前状态
-          circle.style.transition =
-            "opacity 0.35s ease, width 0.35s ease, height 0.35s ease";
-          circle.style.opacity = "1";
-          circle.style.width = "280px";
-          circle.style.height = "280px";
+
+        // 导航栏（z-50 悬浮在封面上方）区域由光标接管，隐藏透镜
+        if (e.target.closest(".site-navbar")) {
+          circle.style.opacity = "0";
           return;
         }
-        // 透镜内移动：仅更新位置，不触发过渡
+
+        const t = Math.min(1, distToRect(rect.width, rect.height, x, y) / W);
+
+        if (circle.style.display !== "block") circle.style.display = "block";
+        // 透镜中心跟随鼠标
         circle.style.left = `${x}px`;
         circle.style.top = `${y}px`;
-      };
-      const handleLeave = () => {
-        // 平滑缩小淡出，衔接自定义光标
-        inside = false;
-        circle.style.transition =
-          "opacity 0.35s ease, width 0.35s ease, height 0.35s ease";
-        circle.style.opacity = "0";
-        circle.style.width = "44px";
-        circle.style.height = "44px";
-        hideTimer = setTimeout(() => {
-          circle.style.display = "none";
-        }, 380);
+        // 出界后按距离逐渐收缩 + 变透明
+        const size = FULL - (FULL - MIN) * t;
+        circle.style.opacity = (1 - t).toFixed(3);
+        circle.style.width = `${size}px`;
+        circle.style.height = `${size}px`;
       };
 
-      hero.addEventListener("mousemove", handleMove);
-      hero.addEventListener("mouseleave", handleLeave);
+      window.addEventListener("mousemove", handleMove);
       return () => {
-        clearTimeout(hideTimer);
-        hero.removeEventListener("mousemove", handleMove);
-        hero.removeEventListener("mouseleave", handleLeave);
+        window.removeEventListener("mousemove", handleMove);
       };
     }
 

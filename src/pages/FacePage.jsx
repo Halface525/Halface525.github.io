@@ -1,18 +1,24 @@
+import { useNavigate } from "react-router";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export function FacePage() {
   useDocumentTitle("半面 — Halface");
+  const navigate = useNavigate();
   return (
     <section id="face" className="page active py-16 md:py-24 max-w-6xl mx-auto px-6">
       <div className="grid md:grid-cols-12 gap-12">
         {/* 左侧头像区 */}
         <div className="md:col-span-4">
           <div className="sticky top-28">
-            <div className="aspect-[3/4] overflow-hidden mb-6" style={{ border: "1px solid var(--line)" }}>
+            <div
+              className="aspect-[3/4] overflow-hidden mb-6 cursor-pointer group"
+              style={{ border: "1px solid var(--line)" }}
+              onClick={() => navigate("/bookshelf")}
+            >
               <img
                 src="/images/avatar.jpg"
                 alt="头像"
-                className="w-full h-full object-cover md:grayscale md:hover:grayscale-0 transition-all duration-700"
+                className="w-full h-full object-cover md:grayscale md:hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
                 onError={(e) => {
                   e.target.src = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4";
                 }}

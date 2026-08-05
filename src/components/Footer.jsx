@@ -1,4 +1,18 @@
+import { useEffect, useRef, useState } from "react";
+
 export function Footer() {
+  const [showQr, setShowQr] = useState(false);
+  const qrRef = useRef(null);
+
+  // 点击二维码区域外部时关闭（移动端无 hover，靠点击切换）
+  useEffect(() => {
+    const onDocClick = (e) => {
+      if (qrRef.current && !qrRef.current.contains(e.target)) setShowQr(false);
+    };
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, []);
+
   return (
     <footer className="border-t mt-24 py-16" style={{ borderColor: "var(--line)" }}>
       <div className="max-w-6xl mx-auto px-6">
@@ -32,12 +46,16 @@ export function Footer() {
               <i className="fab fa-github"></i>
             </a>
             <div
+              ref={qrRef}
               className="relative group w-11 h-11 flex items-center justify-center transition-all hover:border-[var(--accent)] hover:text-[var(--accent)] cursor-pointer"
               style={{ border: "1px solid var(--line)", color: "var(--muted)" }}
+              onClick={() => setShowQr((v) => !v)}
             >
               <i className="fab fa-weixin"></i>
               <div
-                className="absolute hidden group-hover:block p-3 rounded-lg shadow-xl z-50"
+                className={`absolute p-3 rounded-lg shadow-xl z-50 ${
+                  showQr ? "block" : "hidden md:group-hover:block"
+                }`}
                 style={{
                   bottom: "calc(100% + 12px)",
                   left: "50%",
@@ -74,7 +92,7 @@ export function Footer() {
           className="text-center mt-12 text-xs tracking-wider"
           style={{ color: "var(--muted)", fontFamily: "'Inter', sans-serif" }}
         >
-          &copy; 2026 Made by Halface | v3.2.0
+          &copy; 2026 Made by Halface | v3.3.0
         </div>
       </div>
     </footer>
