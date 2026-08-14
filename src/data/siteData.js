@@ -33,11 +33,21 @@ export const projectsData = {
     link: "#",
     github: "#",
   },
+  project4: {
+    title: "SkillNexus",
+    icon: "",
+    description: "统一管理多 Agent 技能库的跨平台桌面工具：一套技能库，接入所有 Agent。",
+    details:
+      '<p class="mb-4">统一管理 AI 编码 Agent（Claude Code、Codex、Gemini CLI、DeepSeek Harness、Cursor、Cline……）技能库的跨平台桌面工具。一个 <code>~/.agents/skills</code> 目录作为权威源，通过 junction / symlink 映射到各 Agent 的技能目录。</p><h4 class="font-bold mb-2">功能特性</h4><ul class="list-disc list-inside mb-4 space-y-1"><li>统一技能库：一处管理，多处生效</li><li>一键同步：自动为 junction 类 Agent 创建链接</li><li>扫描检测：检测本机 Agent 及技能目录同步状态</li><li>SKILL.md 渲染：详情面板完整渲染 Markdown</li><li>亮 / 暗 / 跟随系统三种主题，中英双语</li></ul>',
+    link: "#",
+    github: "https://github.com/Halface525/skill-nexus",
+  },
 };
 
 export const projectsList = [
   { id: "project2", ...projectsData.project2 },
   { id: "project3", ...projectsData.project3 },
+  { id: "project4", ...projectsData.project4 },
 ];
 
 // 学习路径时间线数据
@@ -84,9 +94,9 @@ export const searchIndex = [
 
 // 首页最近更新数据（按日期倒序，最多保留 5 条）
 export const updatesData = [
-  { id: "01", title: "阵列处理系列更新至 6 篇", desc: "新增《自适应波束形成器》：SMI 与 RMB 2N 规则、RLS/QRD、LMS、AIC/MDL 信号子空间检测，从数据估计到自适应权值", date: "2026.08.03", action: { type: "navigate", target: "/study" } },
-  { id: "02", title: "Markdown 渲染升级 v3.1.0", desc: "手写解析器 → react-markdown + gray-matter + remark-gfm + remark-math，公式更稳、排版更标准", date: "2026.07.25", action: { type: "navigate", target: "/" } },
-  { id: "03", title: "新增《信号处理中的凸优化》系列", desc: "半学栏目新系列：从数学基础出发，探索信号处理与通信中的凸优化问题", date: "2026.07.25", action: { type: "navigate", target: "/study" } },
-  { id: "04", title: "博客重构 v3.0.0", desc: "静态 HTML 三件套 → React + Vite + Tailwind CSS，组件化与工程化升级", date: "2026.07.22", action: { type: "navigate", target: "/" } },
-  { id: "05", title: "新增《我选择死亡》", desc: "半思栏目新诗：我已经失去了春天，夏天的太阳也变得冰冷...", date: "2026.06.29", action: { type: "article", file: "content/writing/thinking/04-woxuanzesiwang.md", category: "thinking" } },
+  { id: "01", title: "新增项目 SkillNexus", desc: "半趣栏目新项目：统一管理多 Agent 技能库的跨平台桌面工具（Tauri），一套技能库接入所有 Agent", date: "2026.08.05", action: { type: "navigate", target: "/fun" } },
+  { id: "02", title: "阵列处理系列更新至 6 篇", desc: "新增《自适应波束形成器》：SMI 与 RMB 2N 规则、RLS/QRD、LMS、AIC/MDL 信号子空间检测，从数据估计到自适应权值", date: "2026.08.03", action: { type: "navigate", target: "/study" } },
+  { id: "03", title: "Markdown 渲染升级 v3.1.0", desc: "手写解析器 → react-markdown + gray-matter + remark-gfm + remark-math，公式更稳、排版更标准", date: "2026.07.25", action: { type: "navigate", target: "/" } },
+  { id: "04", title: "新增《信号处理中的凸优化》系列", desc: "半学栏目新系列：从数学基础出发，探索信号处理与通信中的凸优化问题", date: "2026.07.25", action: { type: "navigate", target: "/study" } },
+  { id: "05", title: "博客重构 v3.0.0", desc: "静态 HTML 三件套 → React + Vite + Tailwind CSS，组件化与工程化升级", date: "2026.07.22", action: { type: "navigate", target: "/" } },
 ];

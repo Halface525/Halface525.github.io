@@ -168,7 +168,7 @@ export function HomePage() {
 
   const latestStudy = sortByDateDesc(techArticlesData)[0];
   const latestWriting = sortByDateDesc(writingArticlesData)[0];
-  const projectKey = "project2";
+  const projectKey = "project4";
   const project = projectsData[projectKey];
 
   const goRandomArticle = () => {
