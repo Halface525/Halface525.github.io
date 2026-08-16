@@ -87,6 +87,7 @@ export const searchIndex = [
   { title: "没有遗憾", file: "content/writing/thinking/02-meiyouyihan.md", category: "thinking", section: "半文", date: "2025.09.21" },
   { title: "春分", file: "content/writing/thinking/03-chunfen.md", category: "thinking", section: "半文", date: "2026.03.22" },
   { title: "我选择死亡", file: "content/writing/thinking/04-woxuanzesiwang.md", category: "thinking", section: "半文", date: "2026.06.29" },
+  { title: "最后的话 260731（一）", file: "content/writing/thinking/05-zuihoudehua-1.md", category: "thinking", section: "半文", date: "2026.07.31" },
   { title: "永远生猛的黄金时代", file: "content/writing/reading/01-yongyuanshengmeng.md", category: "reading", section: "半文", date: "2025.04.20" },
   { title: "满江红·游四姑娘山", file: "content/writing/travel/01-manjianghong-siguniangshan.md", category: "travel", section: "半文", date: "2025.10.03" },
   { title: "水调歌头·剑门", file: "content/writing/travel/02-shuidiaogetou-jianmen.md", category: "travel", section: "半文", date: "2025.04.05" },
@@ -96,7 +97,7 @@ export const searchIndex = [
 export const updatesData = [
   { id: "01", title: "新增项目 SkillNexus", desc: "半趣栏目新项目：统一管理多 Agent 技能库的跨平台桌面工具（Tauri），一套技能库接入所有 Agent", date: "2026.08.05", action: { type: "navigate", target: "/fun" } },
   { id: "02", title: "阵列处理系列更新至 6 篇", desc: "新增《自适应波束形成器》：SMI 与 RMB 2N 规则、RLS/QRD、LMS、AIC/MDL 信号子空间检测，从数据估计到自适应权值", date: "2026.08.03", action: { type: "navigate", target: "/study" } },
-  { id: "03", title: "Markdown 渲染升级 v3.1.0", desc: "手写解析器 → react-markdown + gray-matter + remark-gfm + remark-math，公式更稳、排版更标准", date: "2026.07.25", action: { type: "navigate", target: "/" } },
-  { id: "04", title: "新增《信号处理中的凸优化》系列", desc: "半学栏目新系列：从数学基础出发，探索信号处理与通信中的凸优化问题", date: "2026.07.25", action: { type: "navigate", target: "/study" } },
-  { id: "05", title: "博客重构 v3.0.0", desc: "静态 HTML 三件套 → React + Vite + Tailwind CSS，组件化与工程化升级", date: "2026.07.22", action: { type: "navigate", target: "/" } },
+  { id: "03", title: "新增《最后的话 260731（一）》", desc: "半思栏目新文：一份写给将来的遗书。生活无非是痛苦和美丽…", date: "2026.07.31", action: { type: "article", file: "content/writing/thinking/05-zuihoudehua-1.md", category: "thinking" } },
+  { id: "04", title: "Markdown 渲染升级 v3.1.0", desc: "手写解析器 → react-markdown + gray-matter + remark-gfm + remark-math，公式更稳、排版更标准", date: "2026.07.25", action: { type: "navigate", target: "/" } },
+  { id: "05", title: "新增《信号处理中的凸优化》系列", desc: "半学栏目新系列：从数学基础出发，探索信号处理与通信中的凸优化问题", date: "2026.07.25", action: { type: "navigate", target: "/study" } },
 ];

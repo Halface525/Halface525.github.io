@@ -37,7 +37,7 @@ web/
 │   │   │       ├── convex-optimization/  # 凸优化系列（1篇，持续更新）
 │   │   │       └── array-processing/     # 阵列处理系列（6篇，持续更新）
 │   │   └── writing/     # 随笔文章
-│   │       ├── thinking/# 半思（4篇）
+│   │       ├── thinking/# 半思（5篇）
 │   │       ├── reading/ # 半读（1篇）
 │   │       ├── travel/  # 半游（2篇）
 │   │       └── movie/   # 半影（预留）
