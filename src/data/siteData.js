@@ -83,6 +83,7 @@ export const searchIndex = [
   { title: "空时过程的特性", file: "content/study/signal/array-processing/04-kongshiguochengdetexing.md", category: "array", section: "半学", date: "2026.08.03" },
   { title: "最优波形估计", file: "content/study/signal/array-processing/05-zuiyouboxingguji.md", category: "array", section: "半学", date: "2026.08.03" },
   { title: "自适应波束形成器", file: "content/study/signal/array-processing/06-zishiyingboshuxingchengqi.md", category: "array", section: "半学", date: "2026.08.03" },
+  { title: "参数估计（I）：最大似然估计", file: "content/study/signal/array-processing/07-canliangguji.md", category: "array", section: "半学", date: "2026.08.17" },
   { title: "写在某个夜晚", file: "content/writing/thinking/01-xiezaimougeye.md", category: "thinking", section: "半文", date: "2025.02.09" },
   { title: "没有遗憾", file: "content/writing/thinking/02-meiyouyihan.md", category: "thinking", section: "半文", date: "2025.09.21" },
   { title: "春分", file: "content/writing/thinking/03-chunfen.md", category: "thinking", section: "半文", date: "2026.03.22" },
@@ -95,8 +96,8 @@ export const searchIndex = [
 
 // 首页最近更新数据（按日期倒序，最多保留 5 条）
 export const updatesData = [
-  { id: "01", title: "新增项目 SkillNexus", desc: "半趣栏目新项目：统一管理多 Agent 技能库的跨平台桌面工具（Tauri），一套技能库接入所有 Agent", date: "2026.08.05", action: { type: "navigate", target: "/fun" } },
-  { id: "02", title: "阵列处理系列更新至 6 篇", desc: "新增《自适应波束形成器》：SMI 与 RMB 2N 规则、RLS/QRD、LMS、AIC/MDL 信号子空间检测，从数据估计到自适应权值", date: "2026.08.03", action: { type: "navigate", target: "/study" } },
+  { id: "01", title: "阵列处理系列更新至 7 篇", desc: "新增《参数估计（I）：最大似然估计》：ML/MAP 与 CRB 估计理论、AML/CML、WSF/MODE、IQML、AIC/MDL 信号数检测与自校准，DOA 参数估计的理论框架", date: "2026.08.17", action: { type: "navigate", target: "/study" } },
+  { id: "02", title: "新增项目 SkillNexus", desc: "半趣栏目新项目：统一管理多 Agent 技能库的跨平台桌面工具（Tauri），一套技能库接入所有 Agent", date: "2026.08.05", action: { type: "navigate", target: "/fun" } },
   { id: "03", title: "新增《最后的话 260731（一）》", desc: "半思栏目新文：一份写给将来的遗书。生活无非是痛苦和美丽…", date: "2026.07.31", action: { type: "article", file: "content/writing/thinking/05-zuihoudehua-1.md", category: "thinking" } },
   { id: "04", title: "Markdown 渲染升级 v3.1.0", desc: "手写解析器 → react-markdown + gray-matter + remark-gfm + remark-math，公式更稳、排版更标准", date: "2026.07.25", action: { type: "navigate", target: "/" } },
   { id: "05", title: "新增《信号处理中的凸优化》系列", desc: "半学栏目新系列：从数学基础出发，探索信号处理与通信中的凸优化问题", date: "2026.07.25", action: { type: "navigate", target: "/study" } },

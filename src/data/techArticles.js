@@ -1,4 +1,5 @@
 export const techArticlesData = [
+  { file: "content/study/signal/array-processing/07-canliangguji.md", category: "array", title: "参数估计（I）：最大似然估计", date: "2026-08-17", readTime: "30 min", emoji: "", desc: "ML/MAP 与 CRB 估计理论基础、四种信号模型 S1–S4、Stoica–Nehorai CRB、AML/CML 与 WSF/MODE、梯度法/交替投影/EM 计算、IQML 多项式参数化、AIC/MDL 信号数检测、空间扩展信号、波束空间估计与自校准，参数估计的完整理论框架..." },
   { file: "content/study/signal/array-processing/01-zhenlieyukongyu.md", category: "array", title: "阵列与空域滤波器", date: "2026-07-30", readTime: "50 min", emoji: "", desc: "阵列与孔径、平面波入射模型、波数向量、阵列流形向量、频率-波数响应、波束方向图与窄带近似，阵列信号处理的核心基础..." },
   { file: "content/study/signal/array-processing/02-hecheng.md", category: "array", title: "线性阵列与孔径的合成", date: "2026-08-02", readTime: "30 min", emoji: "", desc: "谱加权、阵列多项式与 z 变换、Woodward 采样、Dolph-Chebychev/Taylor/Villeneuve 分布、最小二乘与极小极大合成、零点调向、差波束与宽带阵列，确定性阵列合成的完整工具箱..." },
   { file: "content/study/signal/array-processing/03-pingmianzhenlieyukongjing.md", category: "array", title: "平面阵列与孔径", date: "2026-08-03", readTime: "20 min", emoji: "", desc: "矩形阵列与可分离设计、二维栅瓣网格、圆对称方向图与 Hankel 变换、Tseng-Cheng 变换、圆阵相位模式、圆孔径 Airy 方向图与 Taylor 合成、二维差波束、六边形与非平面阵列，从一维线阵到二维平面阵列的空域滤波扩展..." },
