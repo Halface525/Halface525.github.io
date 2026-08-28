@@ -1,4 +1,5 @@
 export const techArticlesData = [
+  { file: "content/study/signal/array-processing/08-shiyongsuanfa.md", category: "array", title: "参数估计（II）：实用算法", date: "2026-08-28", readTime: "25 min", emoji: "", desc: "Bartlett/MVDR 与求根 MVDR 二次型算法、MUSIC/求根MUSIC/最小范数、LS 与 TLS-ESPRIT、酉阵实数实现、线性预测、分辨概率与门限渐近分析、空间平滑去相干、波束空间与二维 DOA 估计，DOA 估计的实用算法工具箱..." },
   { file: "content/study/signal/array-processing/07-canliangguji.md", category: "array", title: "参数估计（I）：最大似然估计", date: "2026-08-17", readTime: "30 min", emoji: "", desc: "ML/MAP 与 CRB 估计理论基础、四种信号模型 S1–S4、Stoica–Nehorai CRB、AML/CML 与 WSF/MODE、梯度法/交替投影/EM 计算、IQML 多项式参数化、AIC/MDL 信号数检测、空间扩展信号、波束空间估计与自校准，参数估计的完整理论框架..." },
   { file: "content/study/signal/array-processing/01-zhenlieyukongyu.md", category: "array", title: "阵列与空域滤波器", date: "2026-07-30", readTime: "50 min", emoji: "", desc: "阵列与孔径、平面波入射模型、波数向量、阵列流形向量、频率-波数响应、波束方向图与窄带近似，阵列信号处理的核心基础..." },
   { file: "content/study/signal/array-processing/02-hecheng.md", category: "array", title: "线性阵列与孔径的合成", date: "2026-08-02", readTime: "30 min", emoji: "", desc: "谱加权、阵列多项式与 z 变换、Woodward 采样、Dolph-Chebychev/Taylor/Villeneuve 分布、最小二乘与极小极大合成、零点调向、差波束与宽带阵列，确定性阵列合成的完整工具箱..." },

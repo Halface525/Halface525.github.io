@@ -1,4 +1,5 @@
 export const writingArticlesData = [
+  { file: "content/writing/thinking/06-huyanluanyu.md", category: "thinking", title: "八月二十七日胡言乱语", date: "2026-08-27", readTime: "4 min", emoji: "", desc: "丢了好多东西，面对好多选择，被迫接受好多情绪…一场天地颠倒的梦，黑白面具的你，海天一色的红。中元节的雨，最后一次拥抱。" },
   { file: "content/writing/thinking/03-chunfen.md", category: "thinking", title: "春分", date: "2026-03-22", readTime: "5 min", emoji: "", desc: "有时候乌云占着天空，落下几粒雨水。有时候雨水打湿头发，混了汗或者泪..." },
   { file: "content/writing/thinking/04-woxuanzesiwang.md", category: "thinking", title: "我选择死亡", date: "2026-06-29", readTime: "3 min", emoji: "", desc: "我已经失去了春天，夏天的太阳也变得冰冷。疯长的季节里，我选择死亡..." },
   { file: "content/writing/thinking/05-zuihoudehua-1.md", category: "thinking", title: "最后的话 260731（一）", date: "2026-07-31", readTime: "7 min", emoji: "", desc: "本人如果在 2028 年 1 月 1 日前去世，这是我的遗书。生活无非是痛苦和美丽..." },
