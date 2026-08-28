@@ -144,6 +144,10 @@ export function ArticlePage() {
                 {meta.category && (
                   <span>{getCategoryLabel(meta.category)}</span>
                 )}
+                <span>
+                  <i className="fas fa-eye mr-1"></i>
+                  <span id="busuanzi_value_page_pv"></span> 次浏览
+                </span>
               </div>
             )}
           </div>

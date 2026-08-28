@@ -92,7 +92,11 @@ export function Footer() {
           className="text-center mt-12 text-xs tracking-wider"
           style={{ color: "var(--muted)", fontFamily: "'Inter', sans-serif" }}
         >
-          &copy; 2026 Made by Halface | v3.3.0
+          &copy; 2026 Made by Halface | v3.3.0 |{" "}
+          <i className="fas fa-eye mr-1"></i>总访问量{" "}
+          <span id="busuanzi_value_site_pv"></span> 人次 ·{" "}
+          <i className="fas fa-user mr-1"></i>访客{" "}
+          <span id="busuanzi_value_site_uv"></span> 人
         </div>
       </div>
     </footer>
