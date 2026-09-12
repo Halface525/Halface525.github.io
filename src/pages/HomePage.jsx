@@ -253,7 +253,7 @@ export function HomePage() {
               className="text-lg md:text-xl max-w-xl mx-auto leading-relaxed animate-fade-up delay-300"
               style={{ color: "var(--muted)" }}
             >
-              赚一点钱，收到一束花，然后自杀。
+              我真应该好好地长久活着，然后在一瞬间死去。
             </p>
             <div className="mt-12 flex justify-center gap-4 animate-fade-up delay-300">
               <button className="mag-btn accent" onClick={goRandomArticle}>
