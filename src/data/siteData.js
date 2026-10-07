@@ -42,12 +42,22 @@ export const projectsData = {
     link: "#",
     github: "https://github.com/Halface525/skill-nexus",
   },
+  project5: {
+    title: "Halface Prize",
+    icon: "",
+    description: "一个只奖励「有趣」的奖项：不比功绩，只问是否有趣。个人出资，每轮奖金为账户全部余额，抽奖后归零。",
+    details:
+      '<p class="mb-4">Halface Prize 是一个只奖励「有趣」的奖项——It rewards interesting, not merit。委员会不给「有趣」下定义，只说明它不是什么：不比较、不累积、不展示、不可优化、不上简历。</p><h4 class="font-bold mb-2">奖项特点</h4><ul class="list-disc list-inside mb-4 space-y-1"><li>只奖励有趣，不奖励功绩</li><li>面向人、动物、人工智能与器物</li><li>由 halface 个人储蓄全额出资，不接受任何来源的捐赠</li><li>每轮奖金 = 抽奖时账户的全部余额，获奖者平分</li><li>每轮抽奖后账户归零——账户里的钱不会变得更有趣</li></ul>',
+    link: "https://halface525.github.io/prize",
+    github: "#",
+  },
 };
 
 export const projectsList = [
   { id: "project2", ...projectsData.project2 },
   { id: "project3", ...projectsData.project3 },
   { id: "project4", ...projectsData.project4 },
+  { id: "project5", ...projectsData.project5 },
 ];
 
 // 学习路径时间线数据
@@ -91,6 +101,7 @@ export const searchIndex = [
   { title: "我选择死亡", file: "content/writing/thinking/04-woxuanzesiwang.md", category: "thinking", section: "半文", date: "2026.06.29" },
   { title: "最后的话260731（一）", file: "content/writing/thinking/05-zuihoudehua-1.md", category: "thinking", section: "半文", date: "2026.07.31" },
   { title: "八月二十七日胡言乱语", file: "content/writing/thinking/06-huyanluanyu.md", category: "thinking", section: "半文", date: "2026.08.27" },
+  { title: "九月以来的几个梦", file: "content/writing/thinking/08-jiuyueyilaidejigemeng.md", category: "thinking", section: "半文", date: "2026.09.15" },
   { title: "永远生猛的黄金时代", file: "content/writing/reading/01-yongyuanshengmeng.md", category: "reading", section: "半文", date: "2025.04.20" },
   { title: "满江红·游四姑娘山", file: "content/writing/travel/01-manjianghong-siguniangshan.md", category: "travel", section: "半文", date: "2025.10.03" },
   { title: "水调歌头·剑门", file: "content/writing/travel/02-shuidiaogetou-jianmen.md", category: "travel", section: "半文", date: "2025.04.05" },
@@ -98,9 +109,9 @@ export const searchIndex = [
 
 // 首页最近更新数据（按日期倒序，最多保留 5 条）
 export const updatesData = [
-  { id: "01", title: "阵列处理系列更新至 8 篇", desc: "新增《参数估计（II）：实用算法》：Bartlett/MVDR、MUSIC/求根MUSIC、LS 与 TLS-ESPRIT、空间平滑去相干、波束空间与二维 DOA 估计，DOA 估计的实用算法工具箱", date: "2026.08.28", action: { type: "navigate", target: "/study" } },
-  { id: "02", title: "新增《八月二十七日胡言乱语》", desc: "半思栏目新文：一场天地颠倒的梦，黑白面具的你与海天一色的红。中元节的雨，最后一次拥抱", date: "2026.08.27", action: { type: "article", file: "content/writing/thinking/06-huyanluanyu.md", category: "thinking" } },
-  { id: "03", title: "新增项目 SkillNexus", desc: "半趣栏目新项目：统一管理多 Agent 技能库的跨平台桌面工具（Tauri），一套技能库接入所有 Agent", date: "2026.08.05", action: { type: "navigate", target: "/fun" } },
-  { id: "04", title: "新增《最后的话 260731（一）》", desc: "半思栏目新文：一份写给将来的遗书。生活无非是痛苦和美丽…", date: "2026.07.31", action: { type: "article", file: "content/writing/thinking/05-zuihoudehua-1.md", category: "thinking" } },
-  { id: "05", title: "Markdown 渲染升级 v3.1.0", desc: "手写解析器 → react-markdown + gray-matter + remark-gfm + remark-math，公式更稳、排版更标准", date: "2026.07.25", action: { type: "navigate", target: "/" } },
+  { id: "01", title: "新增项目 Halface Prize", desc: "半趣栏目新项目：一个只奖励「有趣」的奖项——不比功绩，只问是否有趣。个人出资，每轮奖金为账户全部余额，抽奖后归零", date: "2026.10.07", action: { type: "navigate", target: "/fun" } },
+  { id: "02", title: "新增《九月以来的几个梦》", desc: "半思栏目新文：失眠的九月，记下两个梦——只有风的世界里被推向死寂，结满柠檬的树下尝到极酸", date: "2026.09.15", action: { type: "article", file: "content/writing/thinking/08-jiuyueyilaidejigemeng.md", category: "thinking" } },
+  { id: "03", title: "阵列处理系列更新至 8 篇", desc: "新增《参数估计（II）：实用算法》：Bartlett/MVDR、MUSIC/求根MUSIC、LS 与 TLS-ESPRIT、空间平滑去相干、波束空间与二维 DOA 估计，DOA 估计的实用算法工具箱", date: "2026.08.28", action: { type: "navigate", target: "/study" } },
+  { id: "04", title: "新增《八月二十七日胡言乱语》", desc: "半思栏目新文：一场天地颠倒的梦，黑白面具的你与海天一色的红。中元节的雨，最后一次拥抱", date: "2026.08.27", action: { type: "article", file: "content/writing/thinking/06-huyanluanyu.md", category: "thinking" } },
+  { id: "05", title: "新增项目 SkillNexus", desc: "半趣栏目新项目：统一管理多 Agent 技能库的跨平台桌面工具（Tauri），一套技能库接入所有 Agent", date: "2026.08.05", action: { type: "navigate", target: "/fun" } },
 ];

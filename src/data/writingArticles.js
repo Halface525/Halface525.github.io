@@ -1,4 +1,5 @@
 export const writingArticlesData = [
+  { file: "content/writing/thinking/08-jiuyueyilaidejigemeng.md", category: "thinking", title: "九月以来的几个梦", date: "2026-09-15", readTime: "5 min", emoji: "", desc: "九月以来失眠越来越严重了，能睡着的几个小时里也疯狂做梦。只有风的世界里，我被一次次推向死寂的点，直至消失；结满柠檬的树下，那唯一不同的果实，酸到眼眶都湿了。" },
   { file: "content/writing/thinking/06-huyanluanyu.md", category: "thinking", title: "八月二十七日胡言乱语", date: "2026-08-27", readTime: "4 min", emoji: "", desc: "丢了好多东西，面对好多选择，被迫接受好多情绪…一场天地颠倒的梦，黑白面具的你，海天一色的红。中元节的雨，最后一次拥抱。" },
   { file: "content/writing/thinking/03-chunfen.md", category: "thinking", title: "春分", date: "2026-03-22", readTime: "5 min", emoji: "", desc: "有时候乌云占着天空，落下几粒雨水。有时候雨水打湿头发，混了汗或者泪..." },
   { file: "content/writing/thinking/04-woxuanzesiwang.md", category: "thinking", title: "我选择死亡", date: "2026-06-29", readTime: "3 min", emoji: "", desc: "我已经失去了春天，夏天的太阳也变得冰冷。疯长的季节里，我选择死亡..." },
